@@ -4,19 +4,20 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using toofz.NecroDancer.Leaderboards.Properties;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public static class LeaderboardsResources
     {
-        #region Categories
+        #region Leaderboard Categories
 
-        public static Categories ReadCategories(string path)
+        public static Categories ReadLeaderboardCategories()
         {
-            using (var file = File.OpenText(path))
+            var serializer = new JsonSerializer();
+            using (var sr = new StringReader(Resources.LeaderboardCategories))
             {
-                var serializer = new JsonSerializer();
-                var response = ((CategoriesResponse)serializer.Deserialize(file, typeof(CategoriesResponse)));
+                var response = ((CategoriesResponse)serializer.Deserialize(sr, typeof(CategoriesResponse)));
 
                 return response.categories;
             }
@@ -31,12 +32,12 @@ namespace toofz.NecroDancer.Leaderboards
 
         #region Leaderboard Headers
 
-        public static LeaderboardHeaders ReadLeaderboardHeaders(string path)
+        public static LeaderboardHeaders ReadLeaderboardHeaders()
         {
-            using (var file = File.OpenText(path))
+            var serializer = new JsonSerializer();
+            using (var sr = new StringReader(Resources.LeaderboardHeaders))
             {
-                var serializer = new JsonSerializer();
-                var response = ((LeaderboardHeadersResponse)serializer.Deserialize(file, typeof(LeaderboardHeadersResponse)));
+                var response = ((LeaderboardHeadersResponse)serializer.Deserialize(sr, typeof(LeaderboardHeadersResponse)));
 
                 return response.leaderboards;
             }
@@ -51,12 +52,14 @@ namespace toofz.NecroDancer.Leaderboards
 
         #region Daily Leaderboard Headers
 
-        public static DailyLeaderboardHeaders ReadDailyLeaderboardHeaders(string path)
+        public static DailyLeaderboardHeaders ReadDailyLeaderboardHeaders()
         {
-            using (var file = File.OpenText(path))
+            var serializer = new JsonSerializer();
+            using (var sr = new StringReader(Resources.DailyLeaderboardHeaders))
             {
-                var serializer = new JsonSerializer();
-                var response = ((DailyLeaderboardHeadersResponse)serializer.Deserialize(file, typeof(DailyLeaderboardHeadersResponse)));
+                var response = ((DailyLeaderboardHeadersResponse)serializer.Deserialize(
+                    sr,
+                    typeof(DailyLeaderboardHeadersResponse)));
 
                 return response.leaderboards;
             }

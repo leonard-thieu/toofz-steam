@@ -89,6 +89,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Steam\ClientApi\CallbackManagerAdapter.cs">
       <DependentUpon>ICallbackManager.cs</DependentUpon>
     </Compile>
@@ -165,20 +174,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="daily-leaderboard-headers.json" />
-    <Content Include="daily-leaderboard-headers.min.json">
+    <None Include="daily-leaderboard-headers.min.json">
       <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="leaderboard-categories.json" />
-    <Content Include="leaderboard-categories.min.json">
+    <None Include="leaderboard-categories.min.json">
       <DependentUpon>leaderboard-categories.json</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="leaderboard-headers.json" />
-    <Content Include="leaderboard-headers.min.json">
+    <None Include="leaderboard-headers.min.json">
       <DependentUpon>leaderboard-headers.json</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityFramework\DailyEntryConfiguration.cs" />

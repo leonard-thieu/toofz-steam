@@ -18,15 +18,15 @@ namespace toofz.NecroDancer.Leaderboards.EntityFramework.Migrations
         protected override void Seed(LeaderboardsContext context)
         {
             base.Seed(context);
-            
-            var dailyLeaderboardHeaders = LeaderboardsResources.ReadDailyLeaderboardHeaders("daily-leaderboard-headers.min.json");
+
+            var dailyLeaderboardHeaders = LeaderboardsResources.ReadDailyLeaderboardHeaders();
             var existing = (from l in context.DailyLeaderboards
                             select l.LeaderboardId)
                             .ToList();
             var newDailies = from h in dailyLeaderboardHeaders
                              where !existing.Contains(h.id)
                              select h;
-            var categories = LeaderboardsResources.ReadCategories("leaderboard-categories.min.json");
+            var leaderboardCategories = LeaderboardsResources.ReadLeaderboardCategories();
 
             foreach (var newDaily in newDailies)
             {
@@ -37,7 +37,7 @@ namespace toofz.NecroDancer.Leaderboards.EntityFramework.Migrations
                     Date = newDaily.date,
                     IsProduction = newDaily.production,
                 };
-                leaderboard.ProductId = categories.GetItemId("products", newDaily.product);
+                leaderboard.ProductId = leaderboardCategories.GetItemId("products", newDaily.product);
                 context.DailyLeaderboards.AddOrUpdate(leaderboard);
             }
 
