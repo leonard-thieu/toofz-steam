@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>toofz.NecroDancer.Leaderboards</id>
+        <version>2.0.0</version>
+        <title>toofz.NecroDancer.Leaderboards</title>
+        <authors>Leonard Thieu</authors>
+        <owners>Leonard Thieu</owners>
+        <licenseUrl>https://github.com/leonard-thieu/toofz-necrodancer-leaderboards/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/leonard-thieu/toofz-necrodancer-leaderboards</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Provides types for working with Crypt of the NecroDancer leaderboards.</description>
+        <copyright>Copyright 2017</copyright>
+        <tags>toofz necrodancer leaderboards</tags>
+    </metadata>
+</package>
