@@ -165,20 +165,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="daily-leaderboard-headers.json" />
-    <None Include="daily-leaderboard-headers.min.json">
+    <Content Include="daily-leaderboard-headers.min.json">
       <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="leaderboard-categories.json" />
-    <None Include="leaderboard-categories.min.json">
+    <Content Include="leaderboard-categories.min.json">
       <DependentUpon>leaderboard-categories.json</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="leaderboard-headers.json" />
-    <None Include="leaderboard-headers.min.json">
+    <Content Include="leaderboard-headers.min.json">
       <DependentUpon>leaderboard-headers.json</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityFramework\DailyEntryConfiguration.cs" />
