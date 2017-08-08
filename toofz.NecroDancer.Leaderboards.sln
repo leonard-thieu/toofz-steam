@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "toofz.NecroDancer.Leaderboards", "toofz.NecroDancer.Leaderboards\toofz.NecroDancer.Leaderboards.csproj", "{2B492909-63E4-4F96-898E-802EC5A37B0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "toofz.NecroDancer.Leaderboards.Tests", "toofz.NecroDancer.Leaderboards.Tests\toofz.NecroDancer.Leaderboards.Tests.csproj", "{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B492909-63E4-4F96-898E-802EC5A37B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B492909-63E4-4F96-898E-802EC5A37B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B492909-63E4-4F96-898E-802EC5A37B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B492909-63E4-4F96-898E-802EC5A37B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
