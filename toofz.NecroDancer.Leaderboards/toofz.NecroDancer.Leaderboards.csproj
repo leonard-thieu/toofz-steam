@@ -333,14 +333,14 @@
     <Compile Include="EntityFramework\Migrations\201707172139340_LimeZinc﻿AfghanHound.Designer.cs">
       <DependentUpon>201707172139340_LimeZinc﻿AfghanHound.cs</DependentUpon>
     </Compile>
-    <Content Include="EntityFramework\Migrations\CodeCoverageExclusions.tt">
+    <None Include="EntityFramework\Migrations\CodeCoverageExclusions.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CodeCoverageExclusions.cs</LastGenOutput>
-    </Content>
+    </None>
     <Compile Include="EntityFramework\Migrations\CodeCoverageExclusions.cs">
-      <DependentUpon>CodeCoverageExclusions.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>CodeCoverageExclusions.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Migrations\Configuration.cs" />
     <EmbeddedResource Include="EntityFramework\Migrations\201505261737549_InitialCreate.resx">
