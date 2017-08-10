@@ -5,8 +5,6 @@ configuration:
   - Release
 environment:
   PROJECT: toofz.NecroDancer.Leaderboards
-  NUGET_API_KEY:
-    secure: NYFwcZ6c2123bMRxjnMflURWFm9/dgsS42R38FGa+8o=
 cache:
   - packages -> **\packages.config
 notifications:
