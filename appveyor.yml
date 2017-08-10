@@ -24,4 +24,4 @@ test_script:
   - vstest.console /logger:Appveyor "%PROJECT%.Tests\bin\%CONFIGURATION%\%PROJECT%.Tests.dll"
 
 deploy_script:
-  - ps: Publish-NuGet
+  - ps: Publish-NuGet.ps1
