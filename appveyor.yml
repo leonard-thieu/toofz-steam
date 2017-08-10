@@ -1,4 +1,4 @@
-version: 3.0.2.{build}
+version: 3.0.8.{build}
 image: Visual Studio 2017
 
 configuration:
@@ -11,25 +11,43 @@ notifications:
   - provider: Slack
     incoming_webhook:
       secure: c7l1UmXHWpIDLL1awU4r0QYVPToYM/XjV8trFyD1oHArKxs/vBTYiKYScr1EhCUgmEX6sAFBTvkUHF/k5B+cGjzqRBR2XkAO+lzk8cHQ1FI=
-nuget:
-  disable_publish_on_pr: true
 
 before_build:
   - appveyor-retry nuget restore -DisableParallelProcessing
 build:
   project: $(PROJECT).sln
   verbosity: minimal
-after_build:
-  - nuget pack "%APPVEYOR_BUILD_FOLDER%\%PROJECT%\%PROJECT%.csproj" -Properties "Configuration=%CONFIGURATION%;Platform=AnyCPU" -Symbols
 
 test_script:
   - vstest.console /logger:Appveyor "%PROJECT%.Tests\bin\%CONFIGURATION%\%PROJECT%.Tests.dll"
 
-deploy:
-  - provider: NuGet
-    symbol_server: https://ci.appveyor.com/nuget/leonard-thieu-h8hvbe0oe9o1/api/v2/package
-    api_key:
-      secure: NYFwcZ6c2123bMRxjnMflURWFm9/dgsS42R38FGa+8o=
-    artifact: /$(PROJECT).*\.nupkg/
-    on:
-      appveyor_repo_tag: true
+deploy_script:
+  - ps: |
+      $appveyor_repo_tag = $env:APPVEYOR_REPO_TAG
+
+      if ($appveyor_repo_tag -eq "true") {
+        $configuration = $env:CONFIGURATION
+        $platform = $env:PLATFORM
+        $appveyor_build_folder = $env:APPVEYOR_BUILD_FOLDER
+        $project = $env:PROJECT
+
+        if ($configuration -eq "") {
+          $configuration = "Debug";
+        }
+        switch ($platform) {
+          "x86" { break }
+          "x64" { break }
+          default { $platform = "AnyCPU" }
+        }
+
+        nuget pack "$appveyor_build_folder\$project\$project.csproj" -Properties "Configuration=$configuration;Platform=$platform"
+
+        [xml]$nuspec = Get-Content -Path "$appveyor_build_folder\$project\$project.nuspec"
+        $version = $nuspec.package.metadata.version
+
+        $api_key = $env:NUGET_API_KEY
+
+        Push-AppveyorArtifact "$appveyor_build_folder\$project.$version.nupkg"
+      } else {
+        Write-Host ""NuGet" deployment has been skipped as environment variable has not matched ("appveyor_repo_tag" is "$appveyor_repo_tag", should be "true")"
+      }
