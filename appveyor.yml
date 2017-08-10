@@ -19,6 +19,8 @@ before_build:
 build:
   project: $(PROJECT).sln
   verbosity: minimal
+after_build:
+  - nuget pack "%APPVEYOR_BUILD_FOLDE%\%PROJECT%\%PROJECT%.csproj" -Properties "Configuration=%CONFIGURATION%;Platform=AnyCPU" -Symbols
 
 test_script:
   - vstest.console /logger:Appveyor "%PROJECT%.Tests\bin\%CONFIGURATION%\%PROJECT%.Tests.dll"
