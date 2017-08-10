@@ -5,6 +5,9 @@ configuration:
   - Release
 environment:
   PROJECT: toofz.NecroDancer.Leaderboards
+artifacts:
+  - path: $(PROJECT)*.nupkg
+    name: NuGetPackage
 cache:
   - packages -> **\packages.config
 notifications:
