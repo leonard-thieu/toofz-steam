@@ -49,7 +49,7 @@ deploy_script:
 
         $api_key = $env:NUGET_API_KEY
 
-        nuget push "$appveyor_build_folder\$project.$version.nupkg" -Source "https://ci.appveyor.com/nuget/leonard-thieu-h8hvbe0oe9o1/api/v2/package" -ApiKey "$api_key" -NonInteractive
+        Push-AppveyorArtifact "$appveyor_build_folder\$project.$version.nupkg"
       } else {
         Write-Host ""NuGet" deployment has been skipped as environment variable has not matched ("appveyor_repo_tag" is "$appveyor_repo_tag", should be "true")"
       }
