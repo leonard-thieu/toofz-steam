@@ -3,6 +3,8 @@ image: Visual Studio 2017
 
 configuration:
   - Release
+environment:
+  PROJECT: toofz.NecroDancer.Leaderboards
 cache:
   - packages -> **\packages.config
 notifications:
@@ -15,17 +17,19 @@ nuget:
 before_build:
   - appveyor-retry nuget restore -DisableParallelProcessing
 build:
-  project: toofz.NecroDancer.Leaderboards.sln
+  project: $(PROJECT).sln
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: minimal
 
 test_script:
-  - vstest.console /logger:Appveyor "toofz.NecroDancer.Leaderboards.Tests\bin\%CONFIGURATION%\toofz.NecroDancer.Leaderboards.Tests.dll"
+  - vstest.console /logger:Appveyor "%PROJECT%.Tests\bin\%CONFIGURATION%\%PROJECT%.Tests.dll"
 
 deploy:
   - provider: NuGet
     symbol_server: https://ci.appveyor.com/nuget/leonard-thieu-h8hvbe0oe9o1/api/v2/package
     api_key:
       secure: NYFwcZ6c2123bMRxjnMflURWFm9/dgsS42R38FGa+8o=
-    artifact: /.*\.symbols\.nupkg/
+    artifact: /$(PROJECT).*\.nupkg/
+    on:
+      appveyor_repo_tag: true
