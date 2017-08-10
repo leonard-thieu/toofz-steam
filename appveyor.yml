@@ -8,6 +8,7 @@ environment:
 artifacts:
   - path: $(PROJECT)*.nupkg
     name: NuGetPackage
+    type: File
 cache:
   - packages -> **\packages.config
 notifications:
@@ -30,6 +31,7 @@ test_script:
 
 deploy:
   - provider: NuGet
+    server: https://ci.appveyor.com/nuget/leonard-thieu-h8hvbe0oe9o1/api/v2/package
     symbol_server: https://ci.appveyor.com/nuget/leonard-thieu-h8hvbe0oe9o1/api/v2/package
     api_key:
       secure: NYFwcZ6c2123bMRxjnMflURWFm9/dgsS42R38FGa+8o=
