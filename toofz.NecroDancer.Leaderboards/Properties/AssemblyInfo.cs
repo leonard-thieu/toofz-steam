@@ -11,6 +11,6 @@ using System.Runtime.InteropServices;
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyTitle("toofz.NecroDancer.Leaderboards")]
 [assembly: AssemblyProduct("toofz.NecroDancer.Leaderboards")]
-[assembly: AssemblyVersion("3.0.*")]
+[assembly: AssemblyVersion("3.0.2.*")]
 
 [assembly: InternalsVisibleTo("toofz.NecroDancer.Leaderboards.Tests")]
