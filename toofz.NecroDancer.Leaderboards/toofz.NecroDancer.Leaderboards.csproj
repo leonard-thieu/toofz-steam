@@ -92,6 +92,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -173,16 +174,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="daily-leaderboard-headers.json" />
-    <None Include="daily-leaderboard-headers.min.json">
+    <None Include="data\daily-leaderboard-headers.json" />
+    <None Include="data\daily-leaderboard-headers.min.json">
       <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
     </None>
-    <None Include="leaderboard-categories.json" />
-    <None Include="leaderboard-categories.min.json">
+    <None Include="data\leaderboard-categories.json" />
+    <None Include="data\leaderboard-categories.min.json">
       <DependentUpon>leaderboard-categories.json</DependentUpon>
     </None>
-    <None Include="leaderboard-headers.json" />
-    <None Include="leaderboard-headers.min.json">
+    <None Include="data\leaderboard-headers.json" />
+    <None Include="data\leaderboard-headers.min.json">
       <DependentUpon>leaderboard-headers.json</DependentUpon>
     </None>
   </ItemGroup>
