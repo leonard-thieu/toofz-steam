@@ -22,6 +22,8 @@ before_build:
   - appveyor-retry nuget restore -DisableParallelProcessing
 build:
   project: $(PROJECT).sln
+  publish_nuget: false
+  publish_nuget_symbols: false
   verbosity: minimal
 after_build:
   - nuget pack "%APPVEYOR_BUILD_FOLDER%\%PROJECT%\%PROJECT%.csproj" -Properties "Configuration=%CONFIGURATION%;Platform=AnyCPU" -Symbols
