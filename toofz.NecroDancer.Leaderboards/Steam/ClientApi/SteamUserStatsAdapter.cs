@@ -4,6 +4,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     sealed class SteamUserStatsAdapter : ISteamUserStats
     {
         /// <summary>
