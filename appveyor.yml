@@ -5,6 +5,10 @@ configuration:
   - Release
 environment:
   PROJECT: toofz.NecroDancer.Leaderboards
+  COVERALLS_REPO_TOKEN:
+    secure: spJGSvGHMkfuzJo78zMDv7TyXbJsT8ZTGKctut/XGRNdA5wupoIOjsnBmDmhqvMu
+  COVERALLS_SERVICE_NAME: appveyor
+  COVERALLS_SERVICE_JOB_ID: '%APPVEYOR_JOB_ID%'
 cache:
   - packages -> **\packages.config
 notifications:
@@ -19,33 +23,9 @@ build:
   verbosity: minimal
 
 test_script:
-  - vstest.console /logger:Appveyor "%PROJECT%.Tests\bin\%CONFIGURATION%\%PROJECT%.Tests.dll"
+  - ps: .\Test-Project.ps1 -Assembly $env:PROJECT
+after_test:
+  - ps: .\Submit-CodeCoverageResults.ps1
 
 deploy_script:
-  - ps: |
-      $appveyor_repo_tag = $env:APPVEYOR_REPO_TAG
-
-      if ($appveyor_repo_tag -ne 'true') {
-        Write-Warning """NuGet"" deployment has been skipped as environment variable has not matched (""appveyor_repo_tag"" is ""$appveyor_repo_tag"", should be ""true"")"
-      } else {
-        $configuration = $env:CONFIGURATION
-        $platform = $env:PLATFORM
-        $appveyor_build_folder = $env:APPVEYOR_BUILD_FOLDER
-        $project = $env:PROJECT
-
-        if ($configuration -eq '') { $configuration = 'Debug' }
-
-        switch ($platform) {
-          'x86' { break }
-          'x64' { break }
-          default { $platform = 'AnyCPU' }
-        }
-
-        nuget.exe pack "$appveyor_build_folder\$project\$project.csproj" -Properties "Configuration=$configuration;Platform=$platform"
-        if ($LASTEXITCODE -ne 0) { throw "Execution failed with exit code $LASTEXITCODE" }
-
-        [xml]$nuspec = Get-Content -Path "$appveyor_build_folder\$project\$project.nuspec"
-        $version = $nuspec.package.metadata.version
-
-        Push-AppveyorArtifact "$appveyor_build_folder\$project.$version.nupkg"
-      }
+  - ps: .\Deploy-NuGetPackage.ps1
