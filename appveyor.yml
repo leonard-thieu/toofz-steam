@@ -26,7 +26,7 @@ build:
 test_script:
   - ps: .\Scripts\Test-Project.ps1
 after_test:
-  - codecov -f results.xml
+  - codecov --file results.xml
 
 deploy_script:
   - ps: .\Scripts\Deploy-NuGetPackage.ps1
