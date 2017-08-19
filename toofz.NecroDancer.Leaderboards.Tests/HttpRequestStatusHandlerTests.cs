@@ -46,16 +46,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 var mockRequest = new Mock<HttpRequestMessage>();
 
-                // Act
-                var ex = await Record.ExceptionAsync(async () =>
+                // Act -> Assert
+                var ex = await Assert.ThrowsExceptionAsync<HttpRequestStatusException>(() =>
                 {
-                    await handler.TestSendAsync(mockRequest.Object);
+                    return handler.TestSendAsync(mockRequest.Object);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
-                var e = (HttpRequestStatusException)ex;
-                Assert.AreEqual(e.StatusCode, HttpStatusCode.BadRequest);
+                Assert.AreEqual(ex.StatusCode, HttpStatusCode.BadRequest);
             }
         }
     }

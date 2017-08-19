@@ -22,14 +22,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 var ugcHttpClient = new UgcHttpClient(handler);
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
                     return ugcHttpClient.GetUgcFileAsync(null);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException));
             }
 
             [TestMethod]

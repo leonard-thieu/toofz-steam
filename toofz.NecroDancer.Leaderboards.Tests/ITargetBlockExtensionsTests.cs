@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
@@ -13,14 +12,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             [TestMethod]
             public async Task TargetIsNull_ThrowsArgumentNullException()
             {
-                // Arrange -> Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Arrange -> Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
                     return ITargetBlockExtensions.CheckSendAsync(null, (object)null);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException));
             }
         }
     }

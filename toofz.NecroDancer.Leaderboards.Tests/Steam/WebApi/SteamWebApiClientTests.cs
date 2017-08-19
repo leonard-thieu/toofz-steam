@@ -24,14 +24,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 
                 var steamWebApiClient = new SteamWebApiClient(handler);
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
                 {
                     return steamWebApiClient.GetPlayerSummariesAsync(new long[0]);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(InvalidOperationException));
             }
 
             [TestMethod]
@@ -41,14 +38,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamWebApiClient = new SteamWebApiClient(new MockHttpMessageHandler());
                 steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
                     return steamWebApiClient.GetPlayerSummariesAsync(null);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException));
             }
 
             [TestMethod]
@@ -60,14 +54,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamWebApiClient = new SteamWebApiClient(handler);
                 steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentException>(() =>
                 {
                     return steamWebApiClient.GetPlayerSummariesAsync(new long[SteamWebApiClient.MaxPlayerSummariesPerRequest + 1]);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentException));
             }
 
             [TestMethod]
@@ -101,14 +92,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 
                 var steamWebApiClient = new SteamWebApiClient(handler);
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
                 {
                     return steamWebApiClient.GetUgcFileDetailsAsync(247080, 22837952671856412);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(InvalidOperationException));
             }
 
             [TestMethod]

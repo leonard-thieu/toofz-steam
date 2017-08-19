@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
-using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
@@ -18,14 +17,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var listener = new ProgressDebugNetworkListener();
 
-                // Act
-                var ex = Record.Exception(() =>
-                {
-                    listener.OnIncomingNetworkMessage(EMsg.AdminCmd, new byte[0]);
-                });
-
-                // Assert
-                Assert.IsNull(ex);
+                // Act -> Assert
+                listener.OnIncomingNetworkMessage(EMsg.AdminCmd, new byte[0]);
             }
 
             [TestMethod]

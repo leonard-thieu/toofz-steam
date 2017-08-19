@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
-using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
@@ -20,14 +19,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 string userName = null;
                 string password = "password";
 
-                // Act
-                var ex = Record.Exception(() =>
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentNullException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException));
             }
 
             [TestMethod]
@@ -37,14 +33,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 string userName = "userName";
                 string password = null;
 
-                // Act
-                var ex = Record.Exception(() =>
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentNullException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException));
             }
 
             [TestMethod]
@@ -107,16 +100,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     .Setup(le => le.Result)
                     .Returns(EResult.Fail);
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                var ex = await Assert.ThrowsExceptionAsync<SteamClientApiException>(() =>
                 {
                     return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(SteamClientApiException));
-                var e = (SteamClientApiException)ex;
-                Assert.AreEqual(EResult.Fail, e.Result);
+                Assert.AreEqual(EResult.Fail, ex.Result);
             }
 
             [TestMethod]
@@ -180,16 +169,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     .Setup(le => le.Result)
                     .Returns(EResult.Fail);
 
-                // Act
-                var ex = await Record.ExceptionAsync(() =>
+                // Act -> Assert
+                var ex = await Assert.ThrowsExceptionAsync<SteamClientApiException>(() =>
                 {
                     return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
                 });
-
-                // Assert
-                Assert.IsInstanceOfType(ex, typeof(SteamClientApiException));
-                var e = (SteamClientApiException)ex;
-                Assert.AreEqual(EResult.Fail, e.Result);
+                Assert.AreEqual(EResult.Fail, ex.Result);
             }
 
             [TestMethod]
