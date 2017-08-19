@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace toofz.NecroDancer.Leaderboards.EntityFramework
 {
     [ExcludeFromCodeCoverage]
-    class DailyEntryConfiguration : EntityTypeConfiguration<DailyEntry>
+    sealed class DailyEntryConfiguration : EntityTypeConfiguration<DailyEntry>
     {
         public DailyEntryConfiguration()
         {
