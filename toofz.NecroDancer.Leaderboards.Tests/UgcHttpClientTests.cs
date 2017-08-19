@@ -30,7 +30,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             }
 
             [TestMethod]
-            public async Task ValidParams_ReturnsUgcFile()
+            public async Task ReturnsUgcFile()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();

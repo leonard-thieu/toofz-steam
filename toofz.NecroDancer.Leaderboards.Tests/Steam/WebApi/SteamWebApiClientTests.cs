@@ -62,7 +62,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             }
 
             [TestMethod]
-            public async Task ValidParams_ReturnsPlayerSummaries()
+            public async Task ReturnsPlayerSummaries()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
@@ -100,7 +100,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             }
 
             [TestMethod]
-            public async Task ValidParams_ReturnsUgcFileDetails()
+            public async Task ReturnsUgcFileDetails()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();

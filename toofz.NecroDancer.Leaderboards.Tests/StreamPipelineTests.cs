@@ -14,7 +14,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         public class CreateRequestBlock
         {
             [TestMethod]
-            public async Task Returns_Response()
+            public async Task ReturnsResponse()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
@@ -43,7 +43,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         public class CreateDownloadBlock
         {
             [TestMethod]
-            public async Task Returns_Content()
+            public async Task ReturnsContent()
             {
                 // Arrange
                 var response = new HttpResponseMessage { Content = new StringContent("fakeContent") };
@@ -67,7 +67,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         public class CreateProcessContentBlock
         {
             [TestMethod]
-            public async Task Returns_Stream()
+            public async Task ReturnsStream()
             {
                 // Arrange
                 var httpContent = new StringContent("fakeContent");

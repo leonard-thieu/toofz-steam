@@ -11,7 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class IsTransient
         {
             [TestMethod]
-            public void ExIsSteamClientApiException_WithTaskCanceledExceptionAsInnerException_ReturnsTrue()
+            public void ExIsSteamClientApiExceptionWithTaskCanceledExceptionAsInnerException_ReturnsTrue()
             {
                 // Arrange
                 var strategy = new SteamClientApiTransientErrorDetectionStrategy();
@@ -25,7 +25,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ExIsSteamClientApiException_WithoutTaskCanceledExceptionAsInnerException_ReturnsFalse()
+            public void ExIsSteamClientApiExceptionWithoutTaskCanceledExceptionAsInnerException_ReturnsFalse()
             {
                 // Arrange
                 var strategy = new SteamClientApiTransientErrorDetectionStrategy();

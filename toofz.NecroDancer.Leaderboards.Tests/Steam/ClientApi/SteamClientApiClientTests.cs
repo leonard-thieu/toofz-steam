@@ -41,7 +41,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ValidParams_ReturnsSteamClientApiClient()
+            public void ReturnsSteamClientApiClient()
             {
                 // Arrange
                 string userName = "userName";
