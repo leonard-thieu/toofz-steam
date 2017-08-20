@@ -13,28 +13,56 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class Constructor
         {
             [TestMethod]
-            public void UsernameIsNull_ThrowsArgumentNullException()
+            public void UserNameIsNull_ThrowsArgumentException()
             {
                 // Arrange
                 string userName = null;
                 string password = "password";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsException<ArgumentException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
             }
 
             [TestMethod]
-            public void PasswordIsNull_ThrowsArgumentNullException()
+            public void UserNameIsEmpty_ThrowsArgumentException()
+            {
+                // Arrange
+                string userName = "";
+                string password = "password";
+
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentException>(() =>
+                {
+                    new SteamClientApiClient(userName, password);
+                });
+            }
+
+            [TestMethod]
+            public void PasswordIsNull_ThrowsArgumentException()
             {
                 // Arrange
                 string userName = "userName";
                 string password = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsException<ArgumentException>(() =>
+                {
+                    new SteamClientApiClient(userName, password);
+                });
+            }
+
+            [TestMethod]
+            public void PasswordIsEmpty_ThrowsArgumentException()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "";
+
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
