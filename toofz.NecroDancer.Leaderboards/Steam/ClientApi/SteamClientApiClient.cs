@@ -24,16 +24,21 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// The callback manager associated with this instance. If <paramref name="manager"/> is null, a default callback manager 
         /// will be created.
         /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="userName"/> is null.
+        /// <exception cref="System.ArgumentException">
+        /// <paramref name="userName"/> cannot be null or empty.
         /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="password"/> is null.
+        /// <exception cref="System.ArgumentException">
+        /// <paramref name="password"/> cannot be null or empty.
         /// </exception>
         public SteamClientApiClient(string userName, string password, ICallbackManager manager = null)
         {
-            this.userName = userName ?? throw new ArgumentNullException(nameof(userName), $"{nameof(userName)} is null.");
-            this.password = password ?? throw new ArgumentNullException(nameof(password), $"{nameof(password)} is null.");
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentException($"{nameof(userName)} cannot be null or empty.", nameof(userName));
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException($"{nameof(password)} cannot be null or empty.", nameof(password));
+
+            this.userName = userName;
+            this.password = password;
 
             manager = manager ?? new CallbackManagerAdapter();
             manager.SteamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
@@ -47,6 +52,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         readonly ISteamClient steamClient;
         readonly ISteamUserStats steamUserStats;
 
+        /// <summary>
+        /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
+        /// </summary>
         public IProgress<long> Progress
         {
             get => steamClient.ProgressDebugNetworkListener?.Progress;
@@ -183,6 +191,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
         }
 
+        /// <summary>
+        /// Disconnects from Steam.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

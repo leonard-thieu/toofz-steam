@@ -6,6 +6,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
     public interface ISteamClientApiClient : IDisposable
     {
+        /// <summary>
+        /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
+        /// </summary>
         IProgress<long> Progress { get; set; }
 
         /// <summary>

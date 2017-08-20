@@ -15,8 +15,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         bool IsLoggedOn { get; }
         /// <summary>
-        /// Gets or sets the network listening interface. Use this for debugging only. For
-        /// your convenience, you can use <see cref="NetHookNetworkListener"/> class.
+        /// Gets or sets the network listening interface.
         /// </summary>
         ProgressDebugNetworkListener ProgressDebugNetworkListener { get; set; }
         /// <summary>
