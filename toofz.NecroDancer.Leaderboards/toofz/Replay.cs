@@ -1,6 +1,6 @@
 ﻿namespace toofz.NecroDancer.Leaderboards.toofz
 {
-    public class Replay
+    public sealed class Replay
     {
         public long id { get; set; }
         public int? error { get; set; }

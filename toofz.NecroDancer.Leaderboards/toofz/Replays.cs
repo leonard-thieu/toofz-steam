@@ -2,7 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
-    public class Replays
+    public sealed class Replays
     {
         public int total { get; set; }
         public IEnumerable<Replay> replays { get; set; } = new List<Replay>();

@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the response of a bulk store operation.
     /// </summary>
-    public class BulkStore
+    public sealed class BulkStore
     {
         /// <summary>
         /// The number of rows affected.

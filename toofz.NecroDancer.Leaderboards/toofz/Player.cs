@@ -5,7 +5,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     /// <summary>
     /// A Steam player.
     /// </summary>
-    public class Player
+    public sealed class Player
     {
         /// <summary>
         /// The player's Steam ID.
