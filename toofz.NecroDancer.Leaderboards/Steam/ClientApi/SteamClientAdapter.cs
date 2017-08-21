@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using log4net;
@@ -9,7 +10,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     /// <summary>
     /// Wraps an instance of <see cref="SteamClient"/> and presents a testable interface through <see cref="ISteamClient"/>.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     sealed class SteamClientAdapter : ISteamClient
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientAdapter));

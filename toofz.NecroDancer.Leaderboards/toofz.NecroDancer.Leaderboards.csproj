@@ -88,6 +88,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categories.cs" />
+    <Compile Include="Category.cs" />
+    <Compile Include="CategoryItem.cs" />
+    <Compile Include="DailyLeaderboardHeader.cs" />
+    <Compile Include="DailyLeaderboardHeaders.cs" />
+    <Compile Include="HttpErrorException.cs" />
+    <Compile Include="LeaderboardHeader.cs" />
+    <Compile Include="LeaderboardHeaders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -127,16 +135,25 @@
       <DependentUpon>ISteamUserStats.cs</DependentUpon>
     </Compile>
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsData.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaries.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesResponse.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummary.cs" />
     <Compile Include="Steam\WebApi\ISteamWebApiClient.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiClient.cs">
       <DependentUpon>ISteamWebApiClient.cs</DependentUpon>
     </Compile>
     <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategy.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandler.cs" />
+    <Compile Include="toofz\BulkStore.cs" />
+    <Compile Include="toofz\GetPlayersParams.cs" />
+    <Compile Include="toofz\GetReplaysParams.cs" />
+    <Compile Include="toofz\IPagination.cs" />
     <Compile Include="toofz\IToofzApiClient.cs" />
-    <Compile Include="toofz\Objects.cs" />
-    <Compile Include="toofz\Parameters.cs" />
+    <Compile Include="toofz\Player.cs" />
+    <Compile Include="toofz\Players.cs" />
+    <Compile Include="toofz\Replay.cs" />
+    <Compile Include="toofz\Replays.cs" />
     <Compile Include="toofz\ToofzApiClient.cs">
       <DependentUpon>IToofzApiClient.cs</DependentUpon>
     </Compile>

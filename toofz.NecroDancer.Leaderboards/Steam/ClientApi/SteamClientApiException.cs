@@ -3,7 +3,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    public class SteamClientApiException : Exception
+    public sealed class SteamClientApiException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientApiException"/> class.

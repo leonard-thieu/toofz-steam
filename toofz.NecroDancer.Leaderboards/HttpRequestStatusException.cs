@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    public class HttpRequestStatusException : HttpRequestException
+    public sealed class HttpRequestStatusException : HttpRequestException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpRequestStatusException"/> class.

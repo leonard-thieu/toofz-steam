@@ -20,7 +20,7 @@ install:
   - git clone https://github.com/leonard-thieu/toofz-build.git Scripts
   
 before_build:
-  - appveyor-retry nuget restore -Verbosity quiet -NonInteractive
+  - appveyor-retry nuget restore -Verbosity quiet
 build:
   project: $(PROJECT).sln
   verbosity: minimal
