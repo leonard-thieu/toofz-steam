@@ -21,7 +21,6 @@ install:
   
 before_build:
   - appveyor-retry nuget restore -Verbosity quiet
-  - choco install codecov --limit-output
 build:
   project: $(PROJECT).sln
   verbosity: minimal
@@ -29,7 +28,7 @@ build:
 test_script:
   - ps: .\Scripts\Test-Project.ps1
 after_test:
-  - codecov --file results.xml
+  - ps: .\Scripts\Submit-CodeCoverageResults.ps1
 
 deploy_script:
   - ps: .\Scripts\Deploy-NuGetPackage.ps1
