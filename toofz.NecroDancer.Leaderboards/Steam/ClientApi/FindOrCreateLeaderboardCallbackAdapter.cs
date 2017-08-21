@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using SteamKit2;
 using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     sealed class FindOrCreateLeaderboardCallbackAdapter : IFindOrCreateLeaderboardCallback
     {
         /// <summary>

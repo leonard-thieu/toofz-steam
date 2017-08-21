@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using SteamKit2;
 using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     sealed class LeaderboardEntriesCallbackAdapter : ILeaderboardEntriesCallback
     {
         /// <summary>
