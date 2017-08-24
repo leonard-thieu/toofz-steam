@@ -52,7 +52,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
                 mockHandler
                     .Expect(Constants.FakeUri)
-                    .Respond(response);
+                    .Respond(req => response);
 
                 mockHandler
                     .Expect(new Uri(Constants.FakeUri, "/token"))
