@@ -15,13 +15,14 @@ namespace toofz.NecroDancer.Leaderboards
             {
                 var response = ((CategoriesResponse)serializer.Deserialize(sr, typeof(CategoriesResponse)));
 
-                return response.categories;
+                return response.Categories;
             }
         }
 
         sealed class CategoriesResponse
         {
-            public Categories categories { get; set; }
+            [JsonProperty("categories")]
+            public Categories Categories { get; set; }
         }
 
         #endregion
@@ -35,13 +36,14 @@ namespace toofz.NecroDancer.Leaderboards
             {
                 var response = ((LeaderboardHeadersResponse)serializer.Deserialize(sr, typeof(LeaderboardHeadersResponse)));
 
-                return response.leaderboards;
+                return response.Leaderboards;
             }
         }
 
         sealed class LeaderboardHeadersResponse
         {
-            public LeaderboardHeaders leaderboards { get; } = new LeaderboardHeaders();
+            [JsonProperty("leaderboards")]
+            public LeaderboardHeaders Leaderboards { get; } = new LeaderboardHeaders();
         }
 
         #endregion
@@ -57,13 +59,14 @@ namespace toofz.NecroDancer.Leaderboards
                     sr,
                     typeof(DailyLeaderboardHeadersResponse)));
 
-                return response.leaderboards;
+                return response.Leaderboards;
             }
         }
 
         sealed class DailyLeaderboardHeadersResponse
         {
-            public DailyLeaderboardHeaders leaderboards { get; } = new DailyLeaderboardHeaders();
+            [JsonProperty("leaderboards")]
+            public DailyLeaderboardHeaders Leaderboards { get; } = new DailyLeaderboardHeaders();
         }
 
         #endregion
