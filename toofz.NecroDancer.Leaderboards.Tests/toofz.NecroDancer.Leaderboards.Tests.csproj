@@ -117,6 +117,7 @@
     <Compile Include="EntryTests.cs" />
     <Compile Include="HttpContentExtensionsTests.cs" />
     <Compile Include="LeaderboardsResourcesTests.cs" />
+    <Compile Include="LeaderboardTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
