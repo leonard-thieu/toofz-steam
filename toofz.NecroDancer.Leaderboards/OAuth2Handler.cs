@@ -62,12 +62,13 @@ namespace toofz.NecroDancer.Leaderboards
                 { "password", Password },
             };
             var content = new FormUrlEncodedContent(loginData);
-
+            
             var response = await PostAsync(authUri, content, cancellationToken).ConfigureAwait(false);
 
             var accessToken = await response.Content.ReadAsAsync<OAuth2AccessToken>(cancellationToken).ConfigureAwait(false);
 
-            if (!(accessToken.TokenType == "bearer" && accessToken.UserName == UserName))
+            if (!((accessToken.TokenType == "bearer") &&
+                  (accessToken.UserName == UserName)))
             {
                 throw new InvalidDataException("Did not receive a valid bearer token.");
             }
