@@ -97,10 +97,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void GetSetBehavior()
             {
                 // Arrange -> Act
-                var dailyEntry = new DailyEntry { Score = 10 };
+                var entry = new Entry { Score = 10 };
 
                 // Act -> Assert
-                Assert.AreEqual(10, dailyEntry.Score);
+                Assert.AreEqual(10, entry.Score);
             }
         }
 
@@ -111,10 +111,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void GetSetBehavior()
             {
                 // Arrange -> Act
-                var dailyEntry = new DailyEntry { Zone = 1 };
+                var entry = new Entry { Zone = 1 };
 
                 // Act -> Assert
-                Assert.AreEqual(1, dailyEntry.Zone);
+                Assert.AreEqual(1, entry.Zone);
             }
         }
 
@@ -125,10 +125,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void GetSetBehavior()
             {
                 // Arrange -> Act
-                var dailyEntry = new DailyEntry { Level = 2 };
+                var entry = new Entry { Level = 2 };
 
                 // Act -> Assert
-                Assert.AreEqual(2, dailyEntry.Level);
+                Assert.AreEqual(2, entry.Level);
             }
         }
     }
