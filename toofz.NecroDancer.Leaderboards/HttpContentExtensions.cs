@@ -8,6 +8,7 @@ namespace toofz.NecroDancer.Leaderboards
 {
     static class HttpContentExtensions
     {
+        // TODO: Can this be refactored into an HttpMessageHandler?
         /// <summary>
         /// Copies the content to a seekable stream and reports progress.
         /// </summary>
@@ -20,7 +21,7 @@ namespace toofz.NecroDancer.Leaderboards
         public static async Task<Stream> ProcessContentAsync(this HttpContent content, IProgress<long> progress)
         {
             if (content == null)
-                throw new ArgumentNullException(nameof(content), $"{nameof(content)} is null.");
+                throw new ArgumentNullException(nameof(content));
 
             var contentStream = new MemoryStream();
             await content.CopyToAsync(contentStream).ConfigureAwait(false);
