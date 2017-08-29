@@ -41,7 +41,7 @@ namespace toofz.NecroDancer.Leaderboards
 
             download.LinkTo(processData, new DataflowLinkOptions { PropagateCompletion = true });
 
-            await download.CheckSendAsync(new Uri(url)).ConfigureAwait(false);
+            await download.SendAsync(new Uri(url), cancellationToken).ConfigureAwait(false);
 
             download.Complete();
             await processData.Completion.ConfigureAwait(false);

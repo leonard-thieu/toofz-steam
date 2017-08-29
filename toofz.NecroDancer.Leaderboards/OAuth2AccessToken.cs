@@ -2,7 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    public sealed class OAuth2AccessToken
+    sealed class OAuth2AccessToken
     {
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }

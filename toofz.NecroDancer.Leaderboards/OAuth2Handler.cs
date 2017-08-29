@@ -15,10 +15,21 @@ namespace toofz.NecroDancer.Leaderboards
         static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
         static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
 
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public OAuth2Handler(string userName, string password)
+        {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentException($"'{nameof(userName)}' is null or empty.", nameof(userName));
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException($"'{nameof(password)}' is null or empty.", nameof(password));
 
-        public OAuth2AccessToken BearerToken { get; internal set; }
+            this.userName = userName;
+            this.password = password;
+        }
+
+        readonly string userName;
+        readonly string password;
+
+        internal OAuth2AccessToken BearerToken { get; set; }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -58,8 +69,8 @@ namespace toofz.NecroDancer.Leaderboards
             var loginData = new Dictionary<string, string>
             {
                 { "grant_type", "password" },
-                { "userName", UserName },
-                { "password", Password },
+                { "userName", userName },
+                { "password", password },
             };
             var content = new FormUrlEncodedContent(loginData);
 
@@ -67,7 +78,8 @@ namespace toofz.NecroDancer.Leaderboards
 
             var accessToken = await response.Content.ReadAsAsync<OAuth2AccessToken>(cancellationToken).ConfigureAwait(false);
 
-            if (!(accessToken.TokenType == "bearer" && accessToken.UserName == UserName))
+            if (!((accessToken.TokenType == "bearer") &&
+                  (accessToken.UserName == userName)))
             {
                 throw new InvalidDataException("Did not receive a valid bearer token.");
             }
