@@ -168,7 +168,6 @@
     <Compile Include="LeaderboardsStoreClient.cs">
       <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="ITargetBlockExtensions.cs" />
     <Compile Include="IUgcHttpClient.cs" />
     <Compile Include="UgcHttpClient.cs">
       <DependentUpon>IUgcHttpClient.cs</DependentUpon>

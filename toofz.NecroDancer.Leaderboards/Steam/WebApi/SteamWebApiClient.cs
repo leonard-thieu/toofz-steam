@@ -112,7 +112,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                 { "key", SteamWebApiKey },
                 { "steamIds", string.Join(",", ids) },
             });
-            await download.CheckSendAsync(url).ConfigureAwait(false);
+            await download.SendAsync(url, cancellationToken).ConfigureAwait(false);
 
             download.Complete();
             await processData.Completion.ConfigureAwait(false);
@@ -175,7 +175,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                 { "appId", appId.ToString() },
                 { "ugcId", ugcId.ToString() },
             });
-            await download.CheckSendAsync(url).ConfigureAwait(false);
+            await download.SendAsync(url, cancellationToken).ConfigureAwait(false);
 
             download.Complete();
             await processData.Completion.ConfigureAwait(false);
