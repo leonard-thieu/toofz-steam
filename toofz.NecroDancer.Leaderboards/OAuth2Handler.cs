@@ -15,8 +15,19 @@ namespace toofz.NecroDancer.Leaderboards
         static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
         static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
 
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public OAuth2Handler(string userName, string password)
+        {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentException($"'{nameof(userName)}' is null or empty.", nameof(userName));
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException($"'{nameof(password)}' is null or empty.", nameof(password));
+
+            this.userName = userName;
+            this.password = password;
+        }
+
+        readonly string userName;
+        readonly string password;
 
         internal OAuth2AccessToken BearerToken { get; set; }
 
@@ -58,17 +69,17 @@ namespace toofz.NecroDancer.Leaderboards
             var loginData = new Dictionary<string, string>
             {
                 { "grant_type", "password" },
-                { "userName", UserName },
-                { "password", Password },
+                { "userName", userName },
+                { "password", password },
             };
             var content = new FormUrlEncodedContent(loginData);
-            
+
             var response = await PostAsync(authUri, content, cancellationToken).ConfigureAwait(false);
 
             var accessToken = await response.Content.ReadAsAsync<OAuth2AccessToken>(cancellationToken).ConfigureAwait(false);
 
             if (!((accessToken.TokenType == "bearer") &&
-                  (accessToken.UserName == UserName)))
+                  (accessToken.UserName == userName)))
             {
                 throw new InvalidDataException("Did not receive a valid bearer token.");
             }
