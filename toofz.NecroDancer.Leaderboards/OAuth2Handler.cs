@@ -18,7 +18,7 @@ namespace toofz.NecroDancer.Leaderboards
         public string UserName { get; set; }
         public string Password { get; set; }
 
-        public OAuth2AccessToken BearerToken { get; internal set; }
+        internal OAuth2AccessToken BearerToken { get; set; }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
