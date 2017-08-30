@@ -6,7 +6,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     /// <summary>
     /// A page of Steam players.
     /// </summary>
-    public sealed class PlayersDTO
+    public sealed class PlayersEnvelope
     {
         /// <summary>
         /// Total number of players.

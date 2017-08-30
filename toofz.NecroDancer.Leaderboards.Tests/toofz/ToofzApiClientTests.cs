@@ -20,7 +20,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "players?limit=20&sort=updated_at"))
-                    .RespondJson(new PlayersDTO());
+                    .RespondJson(new PlayersEnvelope());
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
 
@@ -33,7 +33,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 });
 
                 // Assert
-                Assert.IsInstanceOfType(players, typeof(PlayersDTO));
+                Assert.IsInstanceOfType(players, typeof(PlayersEnvelope));
             }
         }
 
@@ -70,7 +70,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "replays?limit=20"))
-                    .RespondJson(new ReplaysDTO());
+                    .RespondJson(new ReplaysEnvelope());
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
 
@@ -81,7 +81,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 });
 
                 // Assert
-                Assert.IsInstanceOfType(replayIds, typeof(ReplaysDTO));
+                Assert.IsInstanceOfType(replayIds, typeof(ReplaysEnvelope));
             }
         }
 

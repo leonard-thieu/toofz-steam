@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
 {
@@ -10,7 +10,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         /// <summary>
         /// 64-bit SteamID of the user
         /// </summary>
-        [JsonProperty("steamid")]
+        [DataMember(Name = "steamid")]
         public long SteamId { get; set; }
         /// <summary>
         /// This represents whether the profile is visible or not, and if it is visible, why you are allowed to see it. 
@@ -21,42 +21,42 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         ///   The community visibility state this API returns is different than the privacy state. It's the effective visibility state from 
         ///   the account making the request to the account being viewed given the requesting account's relationship to the viewed account.
         /// </summary>
-        [JsonProperty("communityvisibilitystate")]
+        [DataMember(Name = "communityvisibilitystate")]
         public int CommunityVisibilityState { get; set; }
         /// <summary>
         /// If set, indicates the user has a community profile configured (will be set to '1')
         /// </summary>
-        [JsonProperty("profilestate")]
+        [DataMember(Name = "profilestate")]
         public int ProfileState { get; set; }
         /// <summary>
         /// The player's persona name (display name)
         /// </summary>
-        [JsonProperty("personaname")]
+        [DataMember(Name = "personaname")]
         public string PersonaName { get; set; }
         /// <summary>
         /// The last time the user was online, in unix time.
         /// </summary>
-        [JsonProperty("lastlogoff")]
+        [DataMember(Name = "lastlogoff")]
         public int LastLogOff { get; set; }
         /// <summary>
         /// The full URL of the player's Steam Community profile.
         /// </summary>
-        [JsonProperty("profileurl")]
+        [DataMember(Name = "profileurl")]
         public string ProfileUrl { get; set; }
         /// <summary>
         /// The full URL of the player's 32x32px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [JsonProperty("avatar")]
+        [DataMember(Name = "avatar")]
         public string Avatar { get; set; }
         /// <summary>
         /// The full URL of the player's 64x64px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [JsonProperty("avatarmedium")]
+        [DataMember(Name = "avatarmedium")]
         public string AvatarMedium { get; set; }
         /// <summary>
         /// The full URL of the player's 184x184px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [JsonProperty("avatarfull")]
+        [DataMember(Name = "avatarfull")]
         public string AvatarFull { get; set; }
         /// <summary>
         /// The user's current status.
@@ -70,39 +70,39 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         /// If the player's profile is private, this will always be "0", except if the user has set their status to Looking to Trade or Looking to Play, 
         /// because a bug makes those status appear even if the profile is private.
         /// </summary>
-        [JsonProperty("personastate")]
+        [DataMember(Name = "personastate")]
         public int PersonaState { get; set; }
         /// <summary>
         /// The player's "Real Name", if they have set it.
         /// </summary>
-        [JsonProperty("realname")]
+        [DataMember(Name = "realname")]
         public string RealName { get; set; }
         /// <summary>
         /// The player's primary group, as configured in their Steam Community profile.
         /// </summary>
-        [JsonProperty("primaryclanid")]
+        [DataMember(Name = "primaryclanid")]
         public ulong PrimaryClanId { get; set; }
         /// <summary>
         /// The time the player's account was created.
         /// </summary>
-        [JsonProperty("timecreated")]
+        [DataMember(Name = "timecreated")]
         public int TimeCreated { get; set; }
-        [JsonProperty("personastateflags")]
+        [DataMember(Name = "personastateflags")]
         public int PersonaStateFlags { get; set; }
         /// <summary>
         /// If set on the user's Steam Community profile, The user's country of residence, 2-character ISO country code
         /// </summary>
-        [JsonProperty("loccountrycode")]
+        [DataMember(Name = "loccountrycode")]
         public string LocCountryCode { get; set; }
         /// <summary>
         /// If set on the user's Steam Community profile, The user's state of residence
         /// </summary>
-        [JsonProperty("locstatecode")]
+        [DataMember(Name = "locstatecode")]
         public string LocStateCode { get; set; }
         /// <summary>
         /// An internal code indicating the user's city of residence. A future update will provide this data in a more useful way.
         /// </summary>
-        [JsonProperty("loccityid")]
+        [DataMember(Name = "loccityid")]
         public int LocCityId { get; set; }
     }
 }

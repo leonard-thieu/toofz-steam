@@ -5,7 +5,7 @@ using toofz.NecroDancer.Leaderboards.Tests.Properties;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
 {
-    class PlayerSummariesTests
+    class PlayerSummariesEnvelopeTests
     {
         [TestClass]
         public class Deserialization
@@ -18,11 +18,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
 
                 // Act
                 var playerSummaries = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
-                var response = playerSummaries.Response;
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(PlayerSummaries));
-                Assert.IsNotNull(response.Players);
+                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummariesEnvelope));
+                Assert.IsNotNull(playerSummaries.Response);
             }
         }
     }

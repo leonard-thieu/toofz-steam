@@ -25,7 +25,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         #region Players
 
-        public async Task<PlayersDTO> GetPlayersAsync(
+        public async Task<PlayersEnvelope> GetPlayersAsync(
             GetPlayersParams @params = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -40,7 +40,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await GetAsync(url, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<PlayersDTO>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<PlayersEnvelope>(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<BulkStoreDTO> PostPlayersAsync(
@@ -59,7 +59,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         #region Replays
 
-        public async Task<ReplaysDTO> GetReplaysAsync(
+        public async Task<ReplaysEnvelope> GetReplaysAsync(
             GetReplaysParams @params = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -74,7 +74,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await GetAsync(url, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<ReplaysDTO>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<ReplaysEnvelope>(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<BulkStoreDTO> PostReplaysAsync(

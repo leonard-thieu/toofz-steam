@@ -135,10 +135,10 @@
     <Compile Include="Steam\ClientApi\SteamUserStatsAdapter.cs">
       <DependentUpon>ISteamUserStats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsData.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaries.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesResponse.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummary.cs" />
     <Compile Include="Steam\WebApi\ISteamWebApiClient.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiClient.cs">
@@ -152,9 +152,9 @@
     <Compile Include="toofz\IPagination.cs" />
     <Compile Include="toofz\IToofzApiClient.cs" />
     <Compile Include="toofz\PlayerDTO.cs" />
-    <Compile Include="toofz\PlayersDTO.cs" />
+    <Compile Include="toofz\PlayersEnvelope.cs" />
     <Compile Include="toofz\ReplayDTO.cs" />
-    <Compile Include="toofz\ReplaysDTO.cs" />
+    <Compile Include="toofz\ReplaysEnvelope.cs" />
     <Compile Include="toofz\ToofzApiClient.cs">
       <DependentUpon>IToofzApiClient.cs</DependentUpon>
     </Compile>

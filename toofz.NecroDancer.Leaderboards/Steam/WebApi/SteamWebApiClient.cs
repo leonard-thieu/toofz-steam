@@ -80,7 +80,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="System.ArgumentException">
         /// Unable to request more than <see cref="MaxPlayerSummariesPerRequest"/> player summaries.
         /// </exception>
-        public async Task<PlayerSummaries> GetPlayerSummariesAsync(
+        public async Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
             IEnumerable<long> steamIds,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -96,12 +96,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
             var download = StreamPipeline.Create(this, progress, cancellationToken);
 
-            PlayerSummaries playerSummaries = null;
+            PlayerSummariesEnvelope playerSummaries = null;
             var processData = new ActionBlock<Stream>(data =>
             {
                 using (var sr = new StreamReader(data))
                 {
-                    playerSummaries = JsonConvert.DeserializeObject<PlayerSummaries>(sr.ReadToEnd());
+                    playerSummaries = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(sr.ReadToEnd());
                 }
             });
 
@@ -147,7 +147,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="System.InvalidOperationException">
         /// <see cref="GetUgcFileDetailsAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
-        public async Task<UgcFileDetails> GetUgcFileDetailsAsync(
+        public async Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
             uint appId,
             long ugcId,
             IProgress<long> progress = null,
@@ -158,12 +158,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
             var download = StreamPipeline.Create(this, progress, cancellationToken);
 
-            UgcFileDetails ugcFileDetails = null;
+            UgcFileDetailsEnvelope ugcFileDetails = null;
             var processData = new ActionBlock<Stream>(data =>
             {
                 using (var sr = new StreamReader(data))
                 {
-                    ugcFileDetails = JsonConvert.DeserializeObject<UgcFileDetails>(sr.ReadToEnd());
+                    ugcFileDetails = JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(sr.ReadToEnd());
                 }
             });
 

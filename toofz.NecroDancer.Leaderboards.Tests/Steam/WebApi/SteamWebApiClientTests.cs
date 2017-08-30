@@ -77,7 +77,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(new long[] { 76561197960435530 });
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummaries));
+                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummariesEnvelope));
             }
         }
 
@@ -115,7 +115,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var ugcFileDetails = await steamWebApiClient.GetUgcFileDetailsAsync(247080, 22837952671856412);
 
                 // Assert
-                Assert.IsInstanceOfType(ugcFileDetails, typeof(UgcFileDetails));
+                Assert.IsInstanceOfType(ugcFileDetails, typeof(UgcFileDetailsEnvelope));
             }
         }
     }
