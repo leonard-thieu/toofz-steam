@@ -35,7 +35,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="System.ArgumentException">
         /// Unable to request more than 100 player summaries.
         /// </exception>
-        Task<PlayerSummaries> GetPlayerSummariesAsync(
+        Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
             IEnumerable<long> steamIds,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default(CancellationToken));
@@ -57,7 +57,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="System.InvalidOperationException">
         /// <see cref="GetUgcFileDetailsAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
-        Task<UgcFileDetails> GetUgcFileDetailsAsync(
+        Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
             uint appId,
             long ugcId,
             IProgress<long> progress = null,

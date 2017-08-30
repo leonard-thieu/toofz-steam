@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
     /// <summary>
     /// A page of Steam players.
     /// </summary>
-    public sealed class Players
+    public sealed class PlayersEnvelope
     {
         /// <summary>
         /// Total number of players.
         /// </summary>
-        public int total { get; set; }
+        [DataMember(Name = "total")]
+        public int Total { get; set; }
         /// <summary>
         /// A collection of players.
         /// </summary>
-        public IEnumerable<Player> players { get; set; } = new List<Player>();
+        [DataMember(Name = "players")]
+        public IEnumerable<PlayerDTO> Players { get; set; } = new List<PlayerDTO>();
     }
 }
