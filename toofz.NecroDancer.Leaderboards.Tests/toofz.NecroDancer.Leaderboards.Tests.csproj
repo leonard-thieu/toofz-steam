@@ -128,6 +128,7 @@
     <None Include="Resources\2_9_2014_score191_zone1_level2" />
     <None Include="Resources\GetPlayerSummaries.json" />
     <None Include="Resources\GetUgcFileDetails.json" />
+    <Compile Include="ReplayTests.cs" />
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListenerTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
