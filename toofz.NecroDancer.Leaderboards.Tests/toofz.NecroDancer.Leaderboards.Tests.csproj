@@ -112,14 +112,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="DailyEntryTests.cs" />
-    <Compile Include="DailyLeaderboardTests.cs" />
-    <Compile Include="EntryTests.cs" />
-    <Compile Include="HttpContentExtensionsTests.cs" />
-    <Compile Include="LeaderboardsResourcesTests.cs" />
-    <Compile Include="LeaderboardTests.cs" />
-    <Compile Include="LoggingHandlerTests.cs" />
-    <Compile Include="PlayerTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -128,7 +120,14 @@
     <None Include="Resources\2_9_2014_score191_zone1_level2" />
     <None Include="Resources\GetPlayerSummaries.json" />
     <None Include="Resources\GetUgcFileDetails.json" />
-    <Compile Include="ReplayTests.cs" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListenerTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
@@ -138,18 +137,21 @@
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="HttpRequestStatusHandlerTests.cs" />
-    <Compile Include="OAuth2HandlerTests.cs" />
-    <Compile Include="StreamPipelineTests.cs" />
     <Compile Include="toofz\ToofzApiClientTests.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DailyEntryTests.cs" />
+    <Compile Include="DailyLeaderboardTests.cs" />
+    <Compile Include="EntryTests.cs" />
+    <Compile Include="HttpContentExtensionsTests.cs" />
+    <Compile Include="HttpRequestStatusHandlerTests.cs" />
+    <Compile Include="LeaderboardTests.cs" />
+    <Compile Include="LeaderboardsResourcesTests.cs" />
+    <Compile Include="LoggingHandlerTests.cs" />
+    <Compile Include="OAuth2HandlerTests.cs" />
+    <Compile Include="PlayerTests.cs" />
+    <Compile Include="ReplayTests.cs" />
+    <Compile Include="StreamPipelineTests.cs" />
     <Compile Include="UgcHttpClientTests.cs" />
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

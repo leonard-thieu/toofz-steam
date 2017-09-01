@@ -32,9 +32,6 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -92,11 +89,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DailyLeaderboardHeader.cs" />
-    <Compile Include="DailyLeaderboardHeaders.cs" />
-    <Compile Include="HttpErrorException.cs" />
-    <Compile Include="LeaderboardHeader.cs" />
-    <Compile Include="LeaderboardHeaders.cs" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,81 +103,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Steam\ClientApi\CallbackManagerAdapter.cs">
-      <DependentUpon>ICallbackManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\FindOrCreateLeaderboardCallbackAdapter.cs">
-      <DependentUpon>IFindOrCreateLeaderboardCallback.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ICallbackManager.cs" />
-    <Compile Include="Steam\ClientApi\IFindOrCreateLeaderboardCallback.cs" />
-    <Compile Include="Steam\ClientApi\ILeaderboardEntriesCallback.cs" />
-    <Compile Include="Steam\ClientApi\ISteamClient.cs" />
-    <Compile Include="Steam\ClientApi\ISteamClientApiClient.cs" />
-    <Compile Include="Steam\ClientApi\ISteamUserStats.cs" />
-    <Compile Include="Steam\ClientApi\LeaderboardEntriesCallbackAdapter.cs">
-      <DependentUpon>ILeaderboardEntriesCallback.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientAdapter.cs">
-      <DependentUpon>ISteamClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\SteamClientApiClient.cs">
-      <DependentUpon>ISteamClientApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
-    <Compile Include="Steam\ClientApi\SteamUserStatsAdapter.cs">
-      <DependentUpon>ISteamUserStats.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaries.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummary.cs" />
-    <Compile Include="Steam\WebApi\ISteamWebApiClient.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiClient.cs">
-      <DependentUpon>ISteamWebApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategy.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandler.cs" />
-    <Compile Include="toofz\BulkStoreDTO.cs" />
-    <Compile Include="toofz\GetPlayersParams.cs" />
-    <Compile Include="toofz\GetReplaysParams.cs" />
-    <Compile Include="toofz\IPagination.cs" />
-    <Compile Include="toofz\IToofzApiClient.cs" />
-    <Compile Include="toofz\PlayerDTO.cs" />
-    <Compile Include="toofz\PlayersEnvelope.cs" />
-    <Compile Include="toofz\ReplayDTO.cs" />
-    <Compile Include="toofz\ReplaysEnvelope.cs" />
-    <Compile Include="toofz\ToofzApiClient.cs">
-      <DependentUpon>IToofzApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DailyEntry.cs" />
-    <Compile Include="DailyLeaderboard.cs" />
-    <Compile Include="Entry.cs" />
-    <Compile Include="HttpContentExtensions.cs" />
-    <Compile Include="HttpError.cs" />
-    <Compile Include="HttpRequestStatusException.cs" />
-    <Compile Include="HttpRequestStatusHandler.cs" />
-    <Compile Include="ILeaderboardsStoreClient.cs" />
-    <Compile Include="LeaderboardsStoreClient.cs">
-      <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IUgcHttpClient.cs" />
-    <Compile Include="UgcHttpClient.cs">
-      <DependentUpon>IUgcHttpClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Leaderboard.cs" />
-    <Compile Include="LeaderboardsResources.cs" />
-    <Compile Include="LoggingHandler.cs" />
-    <Compile Include="OAuth2AccessToken.cs" />
-    <Compile Include="OAuth2Handler.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Replay.cs" />
-    <Compile Include="StreamPipeline.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -204,6 +124,86 @@
     <None Include="data\leaderboard-headers.min.json">
       <DependentUpon>leaderboard-headers.json</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Steam\ClientApi\ICallbackManager.cs" />
+    <Compile Include="Steam\ClientApi\CallbackManagerAdapter.cs">
+      <DependentUpon>ICallbackManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\IFindOrCreateLeaderboardCallback.cs" />
+    <Compile Include="Steam\ClientApi\FindOrCreateLeaderboardCallbackAdapter.cs">
+      <DependentUpon>IFindOrCreateLeaderboardCallback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\ILeaderboardEntriesCallback.cs" />
+    <Compile Include="Steam\ClientApi\LeaderboardEntriesCallbackAdapter.cs">
+      <DependentUpon>ILeaderboardEntriesCallback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\ISteamClient.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientAdapter.cs">
+      <DependentUpon>ISteamClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\ISteamClientApiClient.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientApiClient.cs">
+      <DependentUpon>ISteamClientApiClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\ISteamUserStats.cs" />
+    <Compile Include="Steam\ClientApi\SteamUserStatsAdapter.cs">
+      <DependentUpon>ISteamUserStats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaries.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummary.cs" />
+    <Compile Include="Steam\WebApi\ISteamWebApiClient.cs" />
+    <Compile Include="Steam\WebApi\SteamWebApiClient.cs">
+      <DependentUpon>ISteamWebApiClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandler.cs" />
+    <Compile Include="toofz\BulkStoreDTO.cs" />
+    <Compile Include="toofz\GetPlayersParams.cs" />
+    <Compile Include="toofz\GetReplaysParams.cs" />
+    <Compile Include="toofz\IPagination.cs" />
+    <Compile Include="toofz\IToofzApiClient.cs" />
+    <Compile Include="toofz\ToofzApiClient.cs">
+      <DependentUpon>IToofzApiClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="toofz\PlayerDTO.cs" />
+    <Compile Include="toofz\PlayersEnvelope.cs" />
+    <Compile Include="toofz\ReplayDTO.cs" />
+    <Compile Include="toofz\ReplaysEnvelope.cs" />
+    <Compile Include="DailyEntry.cs" />
+    <Compile Include="DailyLeaderboard.cs" />
+    <Compile Include="DailyLeaderboardHeader.cs" />
+    <Compile Include="DailyLeaderboardHeaders.cs" />
+    <Compile Include="Entry.cs" />
+    <Compile Include="HttpContentExtensions.cs" />
+    <Compile Include="HttpError.cs" />
+    <Compile Include="HttpErrorException.cs" />
+    <Compile Include="HttpRequestStatusException.cs" />
+    <Compile Include="HttpRequestStatusHandler.cs" />
+    <Compile Include="ILeaderboardsStoreClient.cs" />
+    <Compile Include="LeaderboardsStoreClient.cs">
+      <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IUgcHttpClient.cs" />
+    <Compile Include="UgcHttpClient.cs">
+      <DependentUpon>IUgcHttpClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Leaderboard.cs" />
+    <Compile Include="LeaderboardHeader.cs" />
+    <Compile Include="LeaderboardHeaders.cs" />
+    <Compile Include="LeaderboardsResources.cs" />
+    <Compile Include="LoggingHandler.cs" />
+    <Compile Include="OAuth2AccessToken.cs" />
+    <Compile Include="OAuth2Handler.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Replay.cs" />
+    <Compile Include="StreamPipeline.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
