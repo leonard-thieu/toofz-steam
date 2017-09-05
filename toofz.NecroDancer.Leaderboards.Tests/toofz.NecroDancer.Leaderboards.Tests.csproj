@@ -68,8 +68,8 @@
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RichardSzalay.MockHttp, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RichardSzalay.MockHttp.1.5.1\lib\net45\RichardSzalay.MockHttp.dll</HintPath>
+    <Reference Include="RichardSzalay.MockHttp, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RichardSzalay.MockHttp.3.2.0\lib\net45\RichardSzalay.MockHttp.dll</HintPath>
     </Reference>
     <Reference Include="SteamKit2, Version=1.8.3.0, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
       <HintPath>..\packages\SteamKit2.1.8.3\lib\net45\SteamKit2.dll</HintPath>
@@ -93,8 +93,8 @@
     <Reference Include="toofz, Version=6.2.0.163, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\toofz.6.2.0\lib\net45\toofz.dll</HintPath>
     </Reference>
-    <Reference Include="toofz.TestsShared, Version=2.0.1.61, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.TestsShared.2.0.1\lib\net45\toofz.TestsShared.dll</HintPath>
+    <Reference Include="toofz.TestsShared, Version=3.0.0.76, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.TestsShared.3.0.0\lib\net45\toofz.TestsShared.dll</HintPath>
     </Reference>
     <Reference Include="WebApiContrib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebApiContrib.2.0.0\lib\net45\WebApiContrib.dll</HintPath>
