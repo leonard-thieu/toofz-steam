@@ -84,8 +84,24 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         }
 
         [TestClass]
-        public class ProgressProperty
+        public class ProgressGetter
         {
+            [TestMethod]
+            public void IsDisposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                var client = new SteamClientApiClient(userName, password);
+                client.Dispose();
+
+                // Act -> Assert
+                Assert.ThrowsException<ObjectDisposedException>(() =>
+                {
+                    client.Progress.ToString();
+                });
+            }
+
             [TestMethod]
             public void ProgressDebugNetworkListenerIsNull_ReturnsNull()
             {
@@ -154,6 +170,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Assert
                 Assert.IsInstanceOfType(progress, typeof(IProgress<long>));
             }
+        }
+
+        [TestClass]
+        public class ProgressSetter
+        {
+            [TestMethod]
+            public void IsDisposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                var client = new SteamClientApiClient(userName, password);
+                client.Dispose();
+
+                // Act -> Assert
+                Assert.ThrowsException<ObjectDisposedException>(() =>
+                {
+                    client.Progress = null;
+                });
+            }
 
             [TestMethod]
             public void ProgressDebugNetworkListenerIsNull_ThrowsInvalidOperationException()
@@ -203,7 +239,48 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         }
 
         [TestClass]
-        public class FindLeaderboardAsync
+        public class DisconnectMethod
+        {
+            [TestMethod]
+            public void IsDisposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                var client = new SteamClientApiClient(userName, password);
+                client.Dispose();
+
+                // Act -> Assert
+                Assert.ThrowsException<ObjectDisposedException>(() =>
+                {
+                    client.Disconnect();
+                });
+            }
+
+            [TestMethod]
+            public void DisconnectsFromSteam()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+                mockManager
+                    .Setup(m => m.SteamClient)
+                    .Returns(mockSteamClient.Object);
+                ICallbackManager manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                client.Disconnect();
+
+                // Assert
+                mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
+            }
+        }
+
+        [TestClass]
+        public class FindLeaderboardAsyncMethod
         {
             const string UserName = "userName";
             const string Password = "password";
@@ -240,6 +317,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
+            public async Task IsDisposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                steamClientApiClient.Dispose();
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                });
+            }
+
+            [TestMethod]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
@@ -272,7 +362,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         }
 
         [TestClass]
-        public class GetLeaderboardEntriesAsync
+        public class GetLeaderboardEntriesAsyncMethod
         {
             const string UserName = "userName";
             const string Password = "password";
@@ -309,6 +399,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
+            public async Task IsDisposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                steamClientApiClient.Dispose();
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                });
+            }
+
+            [TestMethod]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
@@ -337,6 +440,31 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 Assert.IsInstanceOfType(leaderboardEntries, typeof(ILeaderboardEntriesCallback));
+            }
+        }
+
+        [TestClass]
+        public class DisposeMethod
+        {
+            [TestMethod]
+            public void DisconnectsFromSteam()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+                mockManager
+                    .Setup(m => m.SteamClient)
+                    .Returns(mockSteamClient.Object);
+                ICallbackManager manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                client.Dispose();
+
+                // Assert
+                mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
             }
         }
     }

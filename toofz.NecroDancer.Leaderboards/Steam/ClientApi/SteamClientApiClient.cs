@@ -76,9 +76,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         public IProgress<long> Progress
         {
-            get => steamClient.ProgressDebugNetworkListener?.Progress;
+            get
+            {
+                if (disposed)
+                    throw new ObjectDisposedException(nameof(SteamClientApiClient));
+
+                return steamClient.ProgressDebugNetworkListener?.Progress;
+            }
             set
             {
+                if (disposed)
+                    throw new ObjectDisposedException(nameof(SteamClientApiClient));
                 if (steamClient.ProgressDebugNetworkListener == null)
                     throw new InvalidOperationException($"{nameof(steamClient)}.{nameof(steamClient.ProgressDebugNetworkListener)} is null.");
 
@@ -114,6 +122,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
         }
 
+        /// <summary>
+        /// Disconnects from Steam.
+        /// </summary>
+        public void Disconnect()
+        {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(SteamClientApiClient));
+
+            steamClient.Disconnect();
+        }
+
         #endregion
 
         /// <summary>
@@ -130,6 +149,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             string name,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(SteamClientApiClient));
+
             await ConnectAndLogOnAsync(cancellationToken).ConfigureAwait(false);
 
             var leaderboard =
@@ -167,6 +189,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             int lbid,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(SteamClientApiClient));
+
             await ConnectAndLogOnAsync(cancellationToken).ConfigureAwait(false);
 
             var leaderboardEntries =
