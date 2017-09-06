@@ -20,30 +20,49 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="userName"/> is null or empty.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="password"/> is null or empty.
+        /// </exception>
+        public SteamClientApiClient(string userName, string password) : this(userName, password, null) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
+        /// with the specified user name and password.
+        /// </summary>
+        /// <param name="userName">The user name to log on to Steam with.</param>
+        /// <param name="password">The password to log on to Steam with.</param>
         /// <param name="manager">
         /// The callback manager associated with this instance. If <paramref name="manager"/> is null, a default callback manager 
         /// will be created.
         /// </param>
-        /// <exception cref="System.ArgumentException">
-        /// <paramref name="userName"/> cannot be null or empty.
+        /// <exception cref="ArgumentException">
+        /// <paramref name="userName"/> is null or empty.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// <paramref name="password"/> cannot be null or empty.
+        /// <exception cref="ArgumentException">
+        /// <paramref name="password"/> is null or empty.
         /// </exception>
-        public SteamClientApiClient(string userName, string password, ICallbackManager manager = null)
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="manager"/>.<see cref="ICallbackManager.SteamClient"/> is null.
+        /// </exception>
+        internal SteamClientApiClient(string userName, string password, ICallbackManager manager)
         {
             if (string.IsNullOrEmpty(userName))
-                throw new ArgumentException($"{nameof(userName)} cannot be null or empty.", nameof(userName));
+                throw new ArgumentException($"{nameof(userName)} is null or empty.", nameof(userName));
             if (string.IsNullOrEmpty(password))
-                throw new ArgumentException($"{nameof(password)} cannot be null or empty.", nameof(password));
+                throw new ArgumentException($"{nameof(password)} is null or empty.", nameof(password));
 
             this.userName = userName;
             this.password = password;
 
             manager = manager ?? new CallbackManagerAdapter();
-            manager.SteamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
-
+            if (manager.SteamClient == null)
+                throw new ArgumentNullException(nameof(manager.SteamClient));
             steamClient = manager.SteamClient;
+            steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
+
             steamUserStats = steamClient.GetSteamUserStats();
         }
 
