@@ -1,38 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
-using log4net;
 using SqlBulkUpsert;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class LeaderboardsStoreClient : ILeaderboardsStoreClient
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(LeaderboardsStoreClient));
-
-        #region Initialization
-
-        public LeaderboardsStoreClient(string connectionString)
-        {
-            this.connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-        }
-
-        #endregion
-
-        #region Fields
-
-        readonly string connectionString;
-
-        #endregion
-
         #region Leaderboard
 
-        const string LeaderboardsTableName = "Leaderboards";
-
-        static readonly ColumnMappings<Leaderboard> LeaderboardMappings = new ColumnMappings<Leaderboard>
+        public ColumnMappings<Leaderboard> GetLeaderboardMappings() => new ColumnMappings<Leaderboard>("Leaderboards")
         {
             d => d.LeaderboardId,
             d => d.LastUpdate,
@@ -41,18 +20,31 @@ namespace toofz.NecroDancer.Leaderboards
             d => d.Date,
         };
 
-        public Task SaveChangesAsync(IEnumerable<Leaderboard> leaderboards, CancellationToken cancellationToken)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<Leaderboard> leaderboards,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return UpsertAsync(LeaderboardsTableName, LeaderboardMappings, leaderboards, true, cancellationToken);
+            var upserter = new TypedUpserter<Leaderboard>(GetLeaderboardMappings());
+
+            return SaveChangesAsync(upserter, connection, leaderboards, cancellationToken);
+        }
+
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<Leaderboard> upserter,
+            SqlConnection connection,
+            IEnumerable<Leaderboard> leaderboards,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return UpsertAsync(upserter, connection, leaderboards, true, cancellationToken);
         }
 
         #endregion
 
         #region Entry
 
-        const string EntriesTableName = "Entries";
-
-        static readonly ColumnMappings<Entry> EntryMappings = new ColumnMappings<Entry>
+        public ColumnMappings<Entry> GetEntryMappings() => new ColumnMappings<Entry>("Entries")
         {
             d => d.LeaderboardId,
             d => d.Rank,
@@ -63,84 +55,31 @@ namespace toofz.NecroDancer.Leaderboards
             d => d.Level,
         };
 
-        public async Task SaveChangesAsync(IEnumerable<Entry> entries)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<Entry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            var cancellationToken = CancellationToken.None;
+            var upserter = new TypedUpserter<Entry>(GetEntryMappings());
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
-
-                var tableName = GetEntriesTableName();
-                var targetSchema = await SqlTableSchema.LoadFromDatabaseAsync(connection, tableName, cancellationToken).ConfigureAwait(false);
-                var upserter = new TypedUpserter<Entry>(targetSchema, EntryMappings);
-
-                var command = connection.CreateCommand();
-
-                command.CommandText = $@"
-DECLARE @sql AS VARCHAR(MAX)='';
-
-SELECT @sql = @sql + 'ALTER INDEX ' + sys.indexes.name + ' ON ' + sys.objects.name + ' DISABLE;' + CHAR(13) + CHAR(10)
-FROM sys.indexes
-JOIN sys.objects ON sys.indexes.object_id = sys.objects.object_id
-WHERE sys.indexes.type_desc = 'NONCLUSTERED'
-  AND sys.objects.type_desc = 'USER_TABLE'
-  AND sys.objects.name = '{tableName}';
-
-EXEC(@sql);";
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-
-                using (var notifier = new StoreNotifier(Log, EntriesTableName.ToLowerInvariant()))
-                {
-                    await upserter.InsertAsync(connection, entries, notifier.Progress).ConfigureAwait(false);
-                }
-
-                command.CommandText = $@"
-DECLARE @sql AS VARCHAR(MAX)='';
-
-SELECT @sql = @sql + 'ALTER INDEX ' + sys.indexes.name + ' ON ' + sys.objects.name + ' REBUILD;' + CHAR(13) + CHAR(10)
-FROM sys.indexes
-JOIN sys.objects ON sys.indexes.object_id = sys.objects.object_id
-WHERE sys.indexes.type_desc = 'NONCLUSTERED'
-  AND sys.objects.type_desc = 'USER_TABLE'
-  AND sys.objects.name = '{tableName}';
-
-EXEC(@sql);";
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-
-                command.CommandText = $@"
-ALTER VIEW [dbo].[{EntriesTableName}]
-AS
-
-SELECT
-    {nameof(Entry.LeaderboardId)},
-    {nameof(Entry.Rank)},
-    {nameof(Entry.SteamId)},
-    {nameof(Entry.Score)},
-    {nameof(Entry.Zone)},
-    {nameof(Entry.Level)},
-    {nameof(Entry.ReplayId)}
-FROM {tableName};";
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-            }
+            return SaveChangesAsync(upserter, connection, entries, cancellationToken);
         }
 
-        string EntriesSuffix = "_A";
-
-        string GetEntriesTableName()
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<Entry> upserter,
+            SqlConnection connection,
+            IEnumerable<Entry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            var tableName = EntriesTableName + EntriesSuffix;
-            EntriesSuffix = EntriesSuffix == "_A" ? "_B" : "_A";
-            return tableName;
+            return upserter.InsertAsync(connection, entries, cancellationToken);
         }
 
         #endregion
 
         #region DailyLeaderboard
 
-        const string DailyLeaderboardsTableName = "DailyLeaderboards";
-
-        static readonly ColumnMappings<DailyLeaderboard> DailyLeaderboardMappings = new ColumnMappings<DailyLeaderboard>
+        public ColumnMappings<DailyLeaderboard> GetDailyLeaderboardMappings() => new ColumnMappings<DailyLeaderboard>("DailyLeaderboards")
         {
             d => d.LeaderboardId,
             d => d.LastUpdate,
@@ -149,18 +88,31 @@ FROM {tableName};";
             d => d.IsProduction
         };
 
-        public Task SaveChangesAsync(IEnumerable<DailyLeaderboard> leaderboards, CancellationToken cancellationToken)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<DailyLeaderboard> leaderboards,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return UpsertAsync(DailyLeaderboardsTableName, DailyLeaderboardMappings, leaderboards, true, cancellationToken);
+            var upserter = new TypedUpserter<DailyLeaderboard>(GetDailyLeaderboardMappings());
+
+            return SaveChangesAsync(upserter, connection, leaderboards, cancellationToken);
+        }
+
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<DailyLeaderboard> upserter,
+            SqlConnection connection,
+            IEnumerable<DailyLeaderboard> leaderboards,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return UpsertAsync(upserter, connection, leaderboards, true, cancellationToken);
         }
 
         #endregion
 
         #region DailyEntry
 
-        const string DailyEntriesTableName = "DailyEntries";
-
-        static readonly ColumnMappings<DailyEntry> DailyEntryMappings = new ColumnMappings<DailyEntry>
+        public ColumnMappings<DailyEntry> GetDailyEntryMappings() => new ColumnMappings<DailyEntry>("DailyEntries")
         {
             d => d.LeaderboardId,
             d => d.Rank,
@@ -171,18 +123,31 @@ FROM {tableName};";
             d => d.Level,
         };
 
-        public Task SaveChangesAsync(IEnumerable<DailyEntry> entries, CancellationToken cancellationToken)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<DailyEntry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return UpsertAsync(DailyEntriesTableName, DailyEntryMappings, entries, true, cancellationToken);
+            var upserter = new TypedUpserter<DailyEntry>(GetDailyEntryMappings());
+
+            return SaveChangesAsync(upserter, connection, entries, cancellationToken);
+        }
+
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<DailyEntry> upserter,
+            SqlConnection connection,
+            IEnumerable<DailyEntry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return UpsertAsync(upserter, connection, entries, true, cancellationToken);
         }
 
         #endregion
 
         #region Player
 
-        const string PlayersTableName = "Players";
-
-        static readonly ColumnMappings<Player> PlayerMappings = new ColumnMappings<Player>
+        public ColumnMappings<Player> GetPlayerMappings() => new ColumnMappings<Player>("Players")
         {
             d => d.SteamId,
             d => d.Exists,
@@ -191,18 +156,33 @@ FROM {tableName};";
             d => d.Avatar,
         };
 
-        public Task SaveChangesAsync(IEnumerable<Player> players, bool updateOnMatch, CancellationToken cancellationToken)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<Player> players,
+            bool updateOnMatch,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return UpsertAsync(PlayersTableName, PlayerMappings, players, updateOnMatch, cancellationToken);
+            var upserter = new TypedUpserter<Player>(GetPlayerMappings());
+
+            return SaveChangesAsync(upserter, connection, players, updateOnMatch, cancellationToken);
+        }
+
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<Player> upserter,
+            SqlConnection connection,
+            IEnumerable<Player> players,
+            bool updateOnMatch,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return UpsertAsync(upserter, connection, players, updateOnMatch, cancellationToken);
         }
 
         #endregion
 
         #region Replay
 
-        const string ReplaysTableName = "Replays";
-
-        static readonly ColumnMappings<Replay> ReplayMappings = new ColumnMappings<Replay>
+        public ColumnMappings<Replay> GetReplayMappings() => new ColumnMappings<Replay>("Replays")
         {
             d => d.ReplayId,
             d => d.ErrorCode,
@@ -211,27 +191,38 @@ FROM {tableName};";
             d => d.Version,
         };
 
-        public Task SaveChangesAsync(IEnumerable<Replay> replays, bool updateOnMatch, CancellationToken cancellationToken)
+        [ExcludeFromCodeCoverage]
+        public Task<int> SaveChangesAsync(
+            SqlConnection connection,
+            IEnumerable<Replay> replays,
+            bool updateOnMatch,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return UpsertAsync(ReplaysTableName, ReplayMappings, replays, updateOnMatch, cancellationToken);
+            var upserter = new TypedUpserter<Replay>(GetReplayMappings());
+
+            return SaveChangesAsync(upserter, connection, replays, updateOnMatch, cancellationToken);
+        }
+
+        internal Task<int> SaveChangesAsync(
+            ITypedUpserter<Replay> upserter,
+            SqlConnection connection,
+            IEnumerable<Replay> replays,
+            bool updateOnMatch,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return UpsertAsync(upserter, connection, replays, updateOnMatch, cancellationToken);
         }
 
         #endregion
 
-        async Task UpsertAsync<T>(string tableName, ColumnMappings<T> columnMappings, IEnumerable<T> items, bool updateOnMatch, CancellationToken cancellationToken)
+        Task<int> UpsertAsync<T>(
+           ITypedUpserter<T> upserter,
+           SqlConnection connection,
+           IEnumerable<T> items,
+           bool updateOnMatch,
+           CancellationToken cancellationToken)
         {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-
-                var targetSchema = await SqlTableSchema.LoadFromDatabaseAsync(connection, tableName, cancellationToken).ConfigureAwait(false);
-                var upserter = new TypedUpserter<T>(targetSchema, columnMappings);
-
-                using (var activity = new StoreNotifier(Log, tableName.Humanize().Transform(To.LowerCase)))
-                {
-                    await upserter.UpsertAsync(connection, items, activity.Progress, updateOnMatch, cancellationToken).ConfigureAwait(false);
-                }
-            }
+            return upserter.UpsertAsync(connection, items, updateOnMatch, cancellationToken);
         }
     }
 }

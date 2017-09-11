@@ -59,8 +59,8 @@
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="SqlBulkUpsert, Version=2.1.6.56, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SqlBulkUpsert.2.1.6\lib\net45\SqlBulkUpsert.dll</HintPath>
+    <Reference Include="SqlBulkUpsert, Version=4.1.0.101, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.SqlBulkUpsert.4.1.0\lib\net45\SqlBulkUpsert.dll</HintPath>
     </Reference>
     <Reference Include="SteamKit2, Version=1.8.3.0, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
       <HintPath>..\packages\SteamKit2.1.8.3\lib\net45\SteamKit2.dll</HintPath>
@@ -92,6 +92,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILeaderboardsStoreClient.cs" />
+    <Compile Include="LeaderboardsStoreClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -186,10 +188,6 @@
     <Compile Include="HttpErrorException.cs" />
     <Compile Include="HttpRequestStatusException.cs" />
     <Compile Include="HttpRequestStatusHandler.cs" />
-    <Compile Include="ILeaderboardsStoreClient.cs" />
-    <Compile Include="LeaderboardsStoreClient.cs">
-      <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
-    </Compile>
     <Compile Include="IUgcHttpClient.cs" />
     <Compile Include="UgcHttpClient.cs">
       <DependentUpon>IUgcHttpClient.cs</DependentUpon>
