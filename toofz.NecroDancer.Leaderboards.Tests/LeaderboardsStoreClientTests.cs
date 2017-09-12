@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,10 +15,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         public class GetLeaderboardMappingsMethod
         {
             [TestMethod]
+            public void ConnectionIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                SqlConnection connection = null;
+
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentNullException>(() =>
+                {
+                    new LeaderboardsStoreClient(connection);
+                });
+            }
+
+
+            [TestMethod]
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetLeaderboardMappings();
@@ -34,14 +50,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task UpsertsLeaderboards()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Leaderboard>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var leaderboards = new List<Leaderboard>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, leaderboards);
+                await storeClient.SaveChangesAsync(upserter, leaderboards);
 
                 // Assert
                 mockUpserter.Verify(u => u.UpsertAsync(connection, leaderboards, true, It.IsAny<CancellationToken>()), Times.Once);
@@ -51,17 +67,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Leaderboard>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var leaderboards = new List<Leaderboard>();
                 mockUpserter
                     .Setup(u => u.UpsertAsync(connection, leaderboards, true, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(400));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, leaderboards);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, leaderboards);
 
                 // Assert
                 Assert.AreEqual(400, rowsAffected);
@@ -75,7 +91,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetEntryMappings();
@@ -92,14 +109,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task InsertsEntries()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Entry>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var entries = new List<Entry>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, entries);
+                await storeClient.SaveChangesAsync(upserter, entries);
 
                 // Assert
                 mockUpserter.Verify(u => u.InsertAsync(connection, entries, It.IsAny<CancellationToken>()), Times.Once);
@@ -109,17 +126,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Entry>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var entries = new List<Entry>();
                 mockUpserter
                     .Setup(u => u.InsertAsync(connection, entries, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(20000));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, entries);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, entries);
 
                 // Assert
                 Assert.AreEqual(20000, rowsAffected);
@@ -133,7 +150,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetDailyLeaderboardMappings();
@@ -150,14 +168,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task UpsertsDailyLeaderboards()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<DailyLeaderboard>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var dailyLeaderboards = new List<DailyLeaderboard>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, dailyLeaderboards);
+                await storeClient.SaveChangesAsync(upserter, dailyLeaderboards);
 
                 // Assert
                 mockUpserter.Verify(u => u.UpsertAsync(connection, dailyLeaderboards, true, It.IsAny<CancellationToken>()), Times.Once);
@@ -167,17 +185,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<DailyLeaderboard>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var dailyLeaderboards = new List<DailyLeaderboard>();
                 mockUpserter
                     .Setup(u => u.UpsertAsync(connection, dailyLeaderboards, true, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(400));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, dailyLeaderboards);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, dailyLeaderboards);
 
                 // Assert
                 Assert.AreEqual(400, rowsAffected);
@@ -191,7 +209,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetDailyEntryMappings();
@@ -208,14 +227,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task UpsertsDailyEntries()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<DailyEntry>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var dailyEntries = new List<DailyEntry>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, dailyEntries);
+                await storeClient.SaveChangesAsync(upserter, dailyEntries);
 
                 // Assert
                 mockUpserter.Verify(u => u.UpsertAsync(connection, dailyEntries, true, It.IsAny<CancellationToken>()), Times.Once);
@@ -225,17 +244,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<DailyEntry>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var dailyEntries = new List<DailyEntry>();
                 mockUpserter
                     .Setup(u => u.UpsertAsync(connection, dailyEntries, true, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(400));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, dailyEntries);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, dailyEntries);
 
                 // Assert
                 Assert.AreEqual(400, rowsAffected);
@@ -249,7 +268,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetPlayerMappings();
@@ -266,14 +286,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task UpsertsPlayers()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Player>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var players = new List<Player>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, players, true);
+                await storeClient.SaveChangesAsync(upserter, players, true);
 
                 // Assert
                 mockUpserter.Verify(u => u.UpsertAsync(connection, players, true, It.IsAny<CancellationToken>()), Times.Once);
@@ -283,17 +303,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Player>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var players = new List<Player>();
                 mockUpserter
                     .Setup(u => u.UpsertAsync(connection, players, true, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(400));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, players, true);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, players, true);
 
                 // Assert
                 Assert.AreEqual(400, rowsAffected);
@@ -307,7 +327,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
 
                 // Act
                 var mappings = storeClient.GetReplayMappings();
@@ -324,14 +345,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task UpsertsReplays()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Replay>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var replays = new List<Replay>();
 
                 // Act
-                await storeClient.SaveChangesAsync(upserter, connection, replays, true);
+                await storeClient.SaveChangesAsync(upserter, replays, true);
 
                 // Assert
                 mockUpserter.Verify(u => u.UpsertAsync(connection, replays, true, It.IsAny<CancellationToken>()), Times.Once);
@@ -341,17 +362,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsRowsAffected()
             {
                 // Arrange
-                var storeClient = new LeaderboardsStoreClient();
+                var connection = new SqlConnection();
+                var storeClient = new LeaderboardsStoreClient(connection);
                 var mockUpserter = new Mock<ITypedUpserter<Replay>>();
                 var upserter = mockUpserter.Object;
-                var connection = new SqlConnection();
                 var replays = new List<Replay>();
                 mockUpserter
                     .Setup(u => u.UpsertAsync(connection, replays, true, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(400));
 
                 // Act
-                var rowsAffected = await storeClient.SaveChangesAsync(upserter, connection, replays, true);
+                var rowsAffected = await storeClient.SaveChangesAsync(upserter, replays, true);
 
                 // Assert
                 Assert.AreEqual(400, rowsAffected);
