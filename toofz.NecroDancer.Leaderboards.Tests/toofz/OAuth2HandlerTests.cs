@@ -10,7 +10,7 @@ using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
 
-namespace toofz.NecroDancer.Leaderboards.Tests
+namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
     class OAuth2HandlerTests
     {

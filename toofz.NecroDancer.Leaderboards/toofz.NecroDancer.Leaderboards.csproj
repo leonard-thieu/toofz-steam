@@ -95,40 +95,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="toofz.NecroDancer.Leaderboards.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\daily-leaderboard-headers.json" />
-    <None Include="data\daily-leaderboard-headers.min.json">
-      <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
-    </None>
-    <None Include="data\leaderboard-categories.json" />
-    <None Include="data\leaderboard-categories.min.json">
-      <DependentUpon>leaderboard-categories.json</DependentUpon>
-    </None>
-    <None Include="data\leaderboard-headers.json" />
-    <None Include="data\leaderboard-headers.min.json">
-      <DependentUpon>leaderboard-headers.json</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Steam\ClientApi\ICallbackManager.cs" />
     <Compile Include="Steam\ClientApi\CallbackManagerAdapter.cs">
       <DependentUpon>ICallbackManager.cs</DependentUpon>
@@ -167,6 +133,10 @@
     </Compile>
     <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategy.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandler.cs" />
+    <Compile Include="Steam\IUgcHttpClient.cs" />
+    <Compile Include="Steam\UgcHttpClient.cs">
+      <DependentUpon>IUgcHttpClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="toofz\BulkStoreDTO.cs" />
     <Compile Include="toofz\GetPlayersParams.cs" />
     <Compile Include="toofz\GetReplaysParams.cs" />
@@ -195,10 +165,6 @@
     <Compile Include="LeaderboardsStoreClient.cs">
       <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="IUgcHttpClient.cs" />
-    <Compile Include="UgcHttpClient.cs">
-      <DependentUpon>IUgcHttpClient.cs</DependentUpon>
-    </Compile>
     <Compile Include="Leaderboard.cs" />
     <Compile Include="LeaderboardHeader.cs" />
     <Compile Include="LeaderboardHeaders.cs" />
@@ -207,6 +173,40 @@
     <Compile Include="Player.cs" />
     <Compile Include="Replay.cs" />
     <Compile Include="StreamPipeline.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="toofz.NecroDancer.Leaderboards.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\daily-leaderboard-headers.json" />
+    <None Include="data\daily-leaderboard-headers.min.json">
+      <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
+    </None>
+    <None Include="data\leaderboard-categories.json" />
+    <None Include="data\leaderboard-categories.min.json">
+      <DependentUpon>leaderboard-categories.json</DependentUpon>
+    </None>
+    <None Include="data\leaderboard-headers.json" />
+    <None Include="data\leaderboard-headers.min.json">
+      <DependentUpon>leaderboard-headers.json</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
