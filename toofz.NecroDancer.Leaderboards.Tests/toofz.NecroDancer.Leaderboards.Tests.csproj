@@ -116,7 +116,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="LeaderboardsStoreClientTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -142,17 +141,21 @@
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
+    <Compile Include="toofz\HttpErrorExceptionTests.cs" />
+    <Compile Include="toofz\OAuth2HandlerTests.cs" />
     <Compile Include="toofz\ToofzApiClientTests.cs" />
+    <Compile Include="toofz\ToofzHttpErrorHandlerTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DailyEntryTests.cs" />
     <Compile Include="DailyLeaderboardTests.cs" />
     <Compile Include="EntryTests.cs" />
     <Compile Include="HttpContentExtensionsTests.cs" />
-    <Compile Include="HttpRequestStatusHandlerTests.cs" />
+    <Compile Include="HttpErrorHandlerTests.cs" />
+    <Compile Include="HttpRequestStatusExceptionTests.cs" />
     <Compile Include="LeaderboardTests.cs" />
     <Compile Include="LeaderboardsResourcesTests.cs" />
+    <Compile Include="LeaderboardsStoreClientTests.cs" />
     <Compile Include="LoggingHandlerTests.cs" />
-    <Compile Include="OAuth2HandlerTests.cs" />
     <Compile Include="PlayerTests.cs" />
     <Compile Include="ReplayTests.cs" />
     <Compile Include="StreamPipelineTests.cs" />

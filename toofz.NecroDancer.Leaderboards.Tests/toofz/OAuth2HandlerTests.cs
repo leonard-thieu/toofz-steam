@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
+using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
