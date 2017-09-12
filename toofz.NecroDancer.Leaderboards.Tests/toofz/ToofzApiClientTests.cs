@@ -11,7 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
     class ToofzApiClientTests
     {
         [TestClass]
-        public class GetPlayersAsync
+        public class GetPlayersAsyncMethod
         {
             [TestMethod]
             public async Task ReturnsPlayersDTO()
@@ -38,8 +38,23 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class PostPlayersAsync
+        public class PostPlayersAsyncMethod
         {
+            [TestMethod]
+            public async Task PlayersIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                var handler = new MockHttpMessageHandler();
+                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
+                IEnumerable<Player> players = null;
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                {
+                    return toofzApiClient.PostPlayersAsync(players);
+                });
+            }
+
             [TestMethod]
             public async Task ReturnsBulkStoreDTO()
             {
@@ -61,7 +76,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class GetReplaysAsync
+        public class GetReplaysAsyncMethod
         {
             [TestMethod]
             public async Task ReturnsReplaysDTO()
@@ -86,8 +101,23 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class PostReplaysAsync
+        public class PostReplaysAsyncMethod
         {
+            [TestMethod]
+            public async Task ReplaysIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                var handler = new MockHttpMessageHandler();
+                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
+                IEnumerable<Replay> replays = null;
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                {
+                    return toofzApiClient.PostReplaysAsync(replays);
+                });
+            }
+
             [TestMethod]
             public async Task ReturnsBulkStoreDTO()
             {

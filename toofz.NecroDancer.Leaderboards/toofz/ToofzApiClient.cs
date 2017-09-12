@@ -48,7 +48,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (players == null)
-                throw new ArgumentNullException(nameof(players), $"{nameof(players)} is null.");
+                throw new ArgumentNullException(nameof(players));
 
             var response = await this.PostAsJsonAsync("players", players, cancellationToken).ConfigureAwait(false);
 
@@ -82,7 +82,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (replays == null)
-                throw new ArgumentNullException(nameof(replays), $"{nameof(replays)} is null.");
+                throw new ArgumentNullException(nameof(replays));
 
             var response = await this.PostAsJsonAsync("replays", replays, cancellationToken).ConfigureAwait(false);
 
