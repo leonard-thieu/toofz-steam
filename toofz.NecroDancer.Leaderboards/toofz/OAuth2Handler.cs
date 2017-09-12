@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace toofz.NecroDancer.Leaderboards
+namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class OAuth2Handler : DelegatingHandler
     {
