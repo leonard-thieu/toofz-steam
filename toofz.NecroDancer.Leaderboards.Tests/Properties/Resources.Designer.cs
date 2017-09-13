@@ -19,7 +19,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,6 +61,22 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {  
+        ///  &quot;access_token&quot;:&quot;4myAccessToken&quot;,
+        ///  &quot;token_type&quot;:&quot;bearer&quot;,
+        ///  &quot;expires_in&quot;:3599,
+        ///  &quot;userName&quot;:&quot;PlayersService&quot;,
+        ///  &quot;.issued&quot;:&quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;:&quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2AccessToken {
+            get {
+                return ResourceManager.GetString("OAuth2AccessToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {
         ///	&quot;response&quot;: {
         ///		&quot;players&quot;: [
@@ -72,7 +88,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         ///				&quot;lastlogoff&quot;: 1501731437,
         ///				&quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
         ///				&quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
-        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0a [rest of string was truncated]&quot;;.
+        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cb [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PlayerSummaries {
             get {

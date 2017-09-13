@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
+using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
 
@@ -133,16 +134,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 
                 mockHandler
                     .Expect(new Uri(Constants.FakeUri, "/token"))
-                    .RespondJson(new OAuth2AccessToken
-                    {
-                        AccessToken = "fakeToken",
-                        TokenType = "bearer",
-                        UserName = "myUserName",
-                    });
+                    .Respond("application/json", Resources.OAuth2AccessToken);
 
                 mockHandler
                     .Expect(Constants.FakeUri)
-                    .WithHeaders("Authorization", "Bearer fakeToken")
+                    .WithHeaders("Authorization", "Bearer myAccessToken")
                     .Respond(HttpStatusCode.OK);
 
                 var userName = "myUserName";

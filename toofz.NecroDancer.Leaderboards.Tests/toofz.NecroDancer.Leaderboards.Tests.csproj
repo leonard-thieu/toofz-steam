@@ -154,6 +154,7 @@
     <None Include="Resources\2_9_2014_score191_zone1_level2" />
     <None Include="Resources\GetPlayerSummaries.json" />
     <None Include="Resources\GetUgcFileDetails.json" />
+    <None Include="Resources\OAuth2AccessToken.json" />
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>

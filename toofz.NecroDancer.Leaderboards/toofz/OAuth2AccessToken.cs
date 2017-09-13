@@ -2,6 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
+    [DataContract]
     sealed class OAuth2AccessToken
     {
         [DataMember(Name = "access_token")]
