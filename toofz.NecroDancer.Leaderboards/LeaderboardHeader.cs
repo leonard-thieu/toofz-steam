@@ -1,20 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    [DataContract]
     public sealed class LeaderboardHeader
     {
-        [JsonProperty("id")]
+        [DataMember(Name = "id")]
         public int Id { get; set; }
-        [JsonProperty("display_name")]
+        [DataMember(Name = "display_name")]
         public string DisplayName { get; set; }
-        [JsonProperty("product")]
+        [DataMember(Name = "product")]
         public string Product { get; set; }
-        [JsonProperty("mode")]
+        [DataMember(Name = "mode")]
         public string Mode { get; set; }
-        [JsonProperty("run")]
+        [DataMember(Name = "run")]
         public string Run { get; set; }
-        [JsonProperty("character")]
+        [DataMember(Name = "character")]
         public string Character { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
+    [DataContract]
     public sealed class ReplayDTO
     {
         [DataMember(Name = "id")]

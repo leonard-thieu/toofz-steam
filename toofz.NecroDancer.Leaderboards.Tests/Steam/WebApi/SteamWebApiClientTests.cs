@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -68,7 +69,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=mySteamWebApiKey&steamids=76561197960435530")
-                    .RespondJson(Resources.PlayerSummaries);
+                    .Respond("application/json", Resources.PlayerSummaries);
 
                 var steamWebApiClient = new SteamWebApiClient(handler);
                 steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
@@ -77,7 +78,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(new long[] { 76561197960435530 });
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummariesEnvelope));
+                var player = playerSummaries.Response.Players.First();
+                Assert.AreEqual(76561197960435530, player.SteamId);
+                Assert.AreEqual("Robin", player.PersonaName);
+                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg", player.Avatar);
             }
         }
 
@@ -115,7 +119,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var ugcFileDetails = await steamWebApiClient.GetUgcFileDetailsAsync(247080, 22837952671856412);
 
                 // Assert
-                Assert.IsInstanceOfType(ugcFileDetails, typeof(UgcFileDetailsEnvelope));
+                var data = ugcFileDetails.Data;
+                Assert.AreEqual("http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/", data.Url);
             }
         }
     }

@@ -6,6 +6,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     /// <summary>
     /// A Steam player.
     /// </summary>
+    [DataContract]
     public sealed class PlayerDTO
     {
         /// <summary>

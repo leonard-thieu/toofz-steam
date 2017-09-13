@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
+using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
 
@@ -14,18 +16,18 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         public class GetPlayersAsyncMethod
         {
             [TestMethod]
-            public async Task ReturnsPlayersDTO()
+            public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "players?limit=20&sort=updated_at"))
-                    .RespondJson(new PlayersEnvelope());
+                    .Respond("application/json", Resources.PlayersEnvelope);
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
 
                 // Act
-                var players = await toofzApiClient.GetPlayersAsync(new GetPlayersParams
+                var response = await toofzApiClient.GetPlayersAsync(new GetPlayersParams
                 {
                     Limit = 20,
                     Sort = "updated_at",
@@ -33,7 +35,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 });
 
                 // Assert
-                Assert.IsInstanceOfType(players, typeof(PlayersEnvelope));
+                Assert.AreEqual(453681, response.Total);
+                Assert.AreEqual(20, response.Players.Count());
+                var player = response.Players.First();
+                Assert.AreEqual(76561198020278823, player.Id);
+                Assert.AreEqual("Mr.moneybottoms", player.DisplayName);
+                Assert.AreEqual(new DateTime(2017, 9, 13, 12, 48, 1, 350, DateTimeKind.Utc), player.UpdatedAt);
+                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
             }
         }
 
@@ -62,7 +70,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "players"))
-                    .RespondJson(new BulkStoreDTO());
+                    .Respond("application/json", Resources.BulkStoreDTO);
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
                 var players = new List<Player> { new Player { Exists = true, LastUpdate = new DateTime(2016, 1, 1) } };
@@ -71,7 +79,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var bulkStore = await toofzApiClient.PostPlayersAsync(players);
 
                 // Assert
-                Assert.IsInstanceOfType(bulkStore, typeof(BulkStoreDTO));
+                Assert.AreEqual(10, bulkStore.RowsAffected);
             }
         }
 
@@ -79,24 +87,27 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         public class GetReplaysAsyncMethod
         {
             [TestMethod]
-            public async Task ReturnsReplaysDTO()
+            public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "replays?limit=20"))
-                    .RespondJson(new ReplaysEnvelope());
+                    .Respond("application/json", Resources.ReplaysEnvelope);
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
 
                 // Act
-                var replayIds = await toofzApiClient.GetReplaysAsync(new GetReplaysParams
+                var response = await toofzApiClient.GetReplaysAsync(new GetReplaysParams
                 {
                     Limit = 20,
                 });
 
                 // Assert
-                Assert.IsInstanceOfType(replayIds, typeof(ReplaysEnvelope));
+                Assert.AreEqual(43767, response.Total);
+                Assert.AreEqual(20, response.Replays.Count());
+                var replay = response.Replays.First();
+                Assert.AreEqual(844845073340377377, replay.Id);
             }
         }
 
@@ -125,7 +136,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(new Uri(Constants.FakeUri + "replays"))
-                    .RespondJson(new BulkStoreDTO());
+                    .Respond("application/json", Resources.BulkStoreDTO);
 
                 var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = Constants.FakeUri };
                 var replays = new List<Replay> { new Replay() };
@@ -134,7 +145,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var bulkStore = await toofzApiClient.PostReplaysAsync(replays);
 
                 // Assert
-                Assert.IsInstanceOfType(bulkStore, typeof(BulkStoreDTO));
+                Assert.AreEqual(10, bulkStore.RowsAffected);
             }
         }
     }

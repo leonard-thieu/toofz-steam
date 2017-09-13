@@ -5,6 +5,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
     /// <summary>
     /// Basic profile information.
     /// </summary>
+    [DataContract]
     public sealed class PlayerSummary
     {
         /// <summary>

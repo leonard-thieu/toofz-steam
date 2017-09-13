@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
+    [DataContract]
     public sealed class ReplaysEnvelope
     {
         [DataMember(Name = "total")]

@@ -2,6 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage
 {
+    [DataContract]
     public sealed class UgcFileDetailsEnvelope
     {
         /// <summary>

@@ -5,6 +5,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     /// <summary>
     /// Represents the response of a bulk store operation.
     /// </summary>
+    [DataContract]
     public sealed class BulkStoreDTO
     {
         /// <summary>

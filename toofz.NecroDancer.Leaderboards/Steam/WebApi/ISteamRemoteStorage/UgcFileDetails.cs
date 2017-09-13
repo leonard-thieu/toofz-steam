@@ -5,6 +5,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage
     /// <summary>
     /// UGC file information.
     /// </summary>
+    [DataContract]
     public sealed class UgcFileDetails
     {
         /// <summary>

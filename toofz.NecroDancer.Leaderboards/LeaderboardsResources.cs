@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Properties;
 
@@ -10,18 +10,15 @@ namespace toofz.NecroDancer.Leaderboards
 
         public static Categories ReadLeaderboardCategories()
         {
-            var serializer = new JsonSerializer();
-            using (var sr = new StringReader(Resources.LeaderboardCategories))
-            {
-                var response = ((CategoriesResponse)serializer.Deserialize(sr, typeof(CategoriesResponse)));
+            var response = JsonConvert.DeserializeObject<CategoriesResponse>(Resources.LeaderboardCategories);
 
-                return response.Categories;
-            }
+            return response.Categories;
         }
 
+        [DataContract]
         sealed class CategoriesResponse
         {
-            [JsonProperty("categories")]
+            [DataMember(Name = "categories")]
             public Categories Categories { get; set; }
         }
 
@@ -31,18 +28,15 @@ namespace toofz.NecroDancer.Leaderboards
 
         public static LeaderboardHeaders ReadLeaderboardHeaders()
         {
-            var serializer = new JsonSerializer();
-            using (var sr = new StringReader(Resources.LeaderboardHeaders))
-            {
-                var response = ((LeaderboardHeadersResponse)serializer.Deserialize(sr, typeof(LeaderboardHeadersResponse)));
+            var response = JsonConvert.DeserializeObject<LeaderboardHeadersResponse>(Resources.LeaderboardHeaders);
 
-                return response.Leaderboards;
-            }
+            return response.Leaderboards;
         }
 
+        [DataContract]
         sealed class LeaderboardHeadersResponse
         {
-            [JsonProperty("leaderboards")]
+            [DataMember(Name = "leaderboards")]
             public LeaderboardHeaders Leaderboards { get; } = new LeaderboardHeaders();
         }
 
@@ -52,20 +46,15 @@ namespace toofz.NecroDancer.Leaderboards
 
         public static DailyLeaderboardHeaders ReadDailyLeaderboardHeaders()
         {
-            var serializer = new JsonSerializer();
-            using (var sr = new StringReader(Resources.DailyLeaderboardHeaders))
-            {
-                var response = ((DailyLeaderboardHeadersResponse)serializer.Deserialize(
-                    sr,
-                    typeof(DailyLeaderboardHeadersResponse)));
+            var response = JsonConvert.DeserializeObject<DailyLeaderboardHeadersResponse>(Resources.DailyLeaderboardHeaders);
 
-                return response.Leaderboards;
-            }
+            return response.Leaderboards;
         }
 
+        [DataContract]
         sealed class DailyLeaderboardHeadersResponse
         {
-            [JsonProperty("leaderboards")]
+            [DataMember(Name = "leaderboards")]
             public DailyLeaderboardHeaders Leaderboards { get; } = new DailyLeaderboardHeaders();
         }
 

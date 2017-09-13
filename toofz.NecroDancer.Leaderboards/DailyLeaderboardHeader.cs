@@ -1,17 +1,18 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    [DataContract]
     public sealed class DailyLeaderboardHeader
     {
-        [JsonProperty("id")]
+        [DataMember(Name = "id")]
         public int Id { get; set; }
-        [JsonProperty("product")]
+        [DataMember(Name = "product")]
         public string Product { get; set; }
-        [JsonProperty("production")]
+        [DataMember(Name = "production")]
         public bool IsProduction { get; set; }
-        [JsonProperty("date")]
+        [DataMember(Name = "date")]
         public DateTime Date { get; set; }
     }
 }

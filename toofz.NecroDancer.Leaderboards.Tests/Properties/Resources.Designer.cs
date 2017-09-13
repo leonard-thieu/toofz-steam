@@ -61,18 +61,38 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {  
-        ///  &quot;access_token&quot;:&quot;4myAccessToken&quot;,
-        ///  &quot;token_type&quot;:&quot;bearer&quot;,
-        ///  &quot;expires_in&quot;:3599,
-        ///  &quot;userName&quot;:&quot;PlayersService&quot;,
-        ///  &quot;.issued&quot;:&quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
-        ///  &quot;.expires&quot;:&quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///   Looks up a localized string similar to {
+        ///  &quot;rows_affected&quot;: 10
+        ///}.
+        /// </summary>
+        internal static string BulkStoreDTO {
+            get {
+                return ResourceManager.GetString("BulkStoreDTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
         ///}.
         /// </summary>
         internal static string OAuth2AccessToken {
             get {
                 return ResourceManager.GetString("OAuth2AccessToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {&quot;total&quot;:453681,&quot;players&quot;:[{&quot;id&quot;:&quot;76561198020278823&quot;,&quot;display_name&quot;:&quot;Mr.moneybottoms&quot;,&quot;updated_at&quot;:&quot;2017-09-13T12:48:01.35Z&quot;,&quot;avatar&quot;:&quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;},{&quot;id&quot;:&quot;76561198020279203&quot;,&quot;display_name&quot;:&quot;srslycirce&quot;,&quot;updated_at&quot;:&quot;2017-09-13T12:48:01.35Z&quot;,&quot;avatar&quot;:&quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b9/b9917cb765564dcb3c7b2eb9592b085efd4f147b.jpg&quot;},{&quot;id&quot;:&quot;76561198020365632&quot;,&quot;display_n [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayersEnvelope {
+            get {
+                return ResourceManager.GetString("PlayersEnvelope", resourceCulture);
             }
         }
         
@@ -93,6 +113,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         internal static string PlayerSummaries {
             get {
                 return ResourceManager.GetString("PlayerSummaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {&quot;total&quot;:43767,&quot;replays&quot;:[{&quot;id&quot;:&quot;844845073340377377&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340436306&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340472702&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340489317&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340511612&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340512126&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ReplaysEnvelope {
+            get {
+                return ResourceManager.GetString("ReplaysEnvelope", resourceCulture);
             }
         }
         
