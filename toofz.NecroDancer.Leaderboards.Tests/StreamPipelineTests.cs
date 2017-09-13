@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -10,6 +12,40 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 {
     class StreamPipelineTests
     {
+        [TestClass]
+        public class CreateMethod
+        {
+            [TestMethod]
+            public void HttpClientIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                HttpClient httpClient = null;
+                IProgress<long> progress = null;
+                var cancellationToken = CancellationToken.None;
+
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentNullException>(() =>
+                {
+                    StreamPipeline.Create(httpClient, progress, cancellationToken);
+                });
+            }
+
+            [TestMethod]
+            public void ReturnsPipeline()
+            {
+                // Arrange
+                var httpClient = new HttpClient();
+                IProgress<long> progress = null;
+                var cancellationToken = CancellationToken.None;
+
+                // Act
+                var pipeline = StreamPipeline.Create(httpClient, progress, cancellationToken);
+
+                // Assert
+                Assert.IsInstanceOfType(pipeline, typeof(IPropagatorBlock<Uri, Stream>));
+            }
+        }
+
         [TestClass]
         public class CreateRequestBlock
         {
