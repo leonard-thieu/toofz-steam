@@ -6,8 +6,8 @@
     <title>toofz Leaderboards Core</title>
     <authors>Leonard Thieu</authors>
     <owners>Leonard Thieu</owners>
-    <licenseUrl>https://github.com/leonard-thieu/toofz-necrodancer-leaderboards/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/leonard-thieu/toofz-necrodancer-leaderboards</projectUrl>
+    <licenseUrl>https://github.com/leonard-thieu/toofz-leaderboards-core/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/leonard-thieu/toofz-leaderboards-core</projectUrl>
     <iconUrl>https://user-images.githubusercontent.com/5265970/29717713-27e1a95c-897e-11e7-9d28-dae64be705b5.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides types for working with Crypt of the NecroDancer leaderboards.</description>
