@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
+using Flurl;
 using log4net;
-using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
-    public sealed class SteamWebApiClient : HttpClient, ISteamWebApiClient
+    public sealed class SteamWebApiClient : ProgressReporterHttpClient, ISteamWebApiClient
     {
         #region Static Members
 
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
-
-        static readonly Uri SteamApiUri = new Uri("https://api.steampowered.com/");
 
         #endregion
 
@@ -35,8 +29,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// </param>
         public SteamWebApiClient(HttpMessageHandler handler) : base(handler)
         {
-            MaxResponseContentBufferSize = 2 * 1024 * 1024;
-            DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            BaseAddress = new Uri("https://api.steampowered.com/");
         }
 
         #endregion
@@ -51,8 +44,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         #endregion
 
         #region GetPlayerSummaries
-
-        static readonly UriTemplate GetPlayerSummariesUri = new UriTemplate("ISteamUser/GetPlayerSummaries/v0002/?key={key}&steamids={steamIds}");
 
         /// <summary>
         /// The maximum number of Steam IDs allowed per request by <see cref="GetPlayerSummariesAsync"/>.
@@ -71,13 +62,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <param name="cancellationToken">
         /// A cancellation token that can be used by other objects or threads to receive notice of cancellation.
         /// </param>
-        /// <exception cref="System.InvalidOperationException">
+        /// <exception cref="InvalidOperationException">
         /// <see cref="GetPlayerSummariesAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="steamIds"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Unable to request more than <see cref="MaxPlayerSummariesPerRequest"/> player summaries.
         /// </exception>
         public async Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
@@ -89,44 +80,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                 throw new InvalidOperationException($"{nameof(GetPlayerSummariesAsync)} requires {nameof(SteamWebApiKey)} to be set to a valid Steam Web API Key.");
             if (steamIds == null)
                 throw new ArgumentNullException(nameof(steamIds), $"{nameof(steamIds)} is null.");
-
-            var ids = steamIds.ToList();
-            if (ids.Count > MaxPlayerSummariesPerRequest)
+            if (steamIds.Count() > MaxPlayerSummariesPerRequest)
                 throw new ArgumentException($"Unable to request more than {MaxPlayerSummariesPerRequest} player summaries.", nameof(steamIds));
 
-            var download = StreamPipeline.Create(this, progress, cancellationToken);
-
-            PlayerSummariesEnvelope playerSummaries = null;
-            var processData = new ActionBlock<Stream>(data =>
-            {
-                using (var sr = new StreamReader(data))
+            var requestUri = "ISteamUser/GetPlayerSummaries/v0002"
+                .SetQueryParams(new
                 {
-                    playerSummaries = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(sr.ReadToEnd());
-                }
-            });
+                    key = SteamWebApiKey,
+                    steamids = string.Join(",", steamIds),
+                });
+            var response = await GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
-            download.LinkTo(processData, new DataflowLinkOptions { PropagateCompletion = true });
-
-            var url = GetPlayerSummariesUri.BindByName(SteamApiUri, new Dictionary<string, string>
-            {
-                { "key", SteamWebApiKey },
-                { "steamIds", string.Join(",", ids) },
-            });
-            await download.SendAsync(url, cancellationToken).ConfigureAwait(false);
-
-            download.Complete();
-            await processData.Completion.ConfigureAwait(false);
-
-            Debug.Assert(playerSummaries != null);
-
-            return playerSummaries;
+            return await response.Content.ReadAsAsync<PlayerSummariesEnvelope>(cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region GetUGCFileDetails
-
-        static readonly UriTemplate GetUgcFileDetailsUri = new UriTemplate("ISteamRemoteStorage/GetUGCFileDetails/v1/?key={key}&appid={appId}&ugcid={ugcId}");
 
         // TODO: Handle a potential error response from the Steam Web API. See: https://wiki.teamfortress.com/wiki/WebAPI/GetUGCFileDetails#Result_data.
         /// <summary>
@@ -144,7 +114,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <param name="cancellationToken">
         /// A cancellation token that can be used by other objects or threads to receive notice of cancellation.
         /// </param>
-        /// <exception cref="System.InvalidOperationException">
+        /// <exception cref="InvalidOperationException">
         /// <see cref="GetUgcFileDetailsAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
         public async Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
@@ -156,33 +126,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
             if (SteamWebApiKey == null)
                 throw new InvalidOperationException($"{nameof(GetUgcFileDetailsAsync)} requires {nameof(SteamWebApiKey)} to be set to a valid Steam Web API Key.");
 
-            var download = StreamPipeline.Create(this, progress, cancellationToken);
-
-            UgcFileDetailsEnvelope ugcFileDetails = null;
-            var processData = new ActionBlock<Stream>(data =>
-            {
-                using (var sr = new StreamReader(data))
+            var requestUri = "ISteamRemoteStorage/GetUGCFileDetails/v1"
+                .SetQueryParams(new
                 {
-                    ugcFileDetails = JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(sr.ReadToEnd());
-                }
-            });
+                    key = SteamWebApiKey,
+                    appid = appId,
+                    ugcid = ugcId,
+                });
+            var response = await GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
-            download.LinkTo(processData, new DataflowLinkOptions { PropagateCompletion = true });
-
-            var url = GetUgcFileDetailsUri.BindByName(SteamApiUri, new Dictionary<string, string>
-            {
-                { "key", SteamWebApiKey },
-                { "appId", appId.ToString() },
-                { "ugcId", ugcId.ToString() },
-            });
-            await download.SendAsync(url, cancellationToken).ConfigureAwait(false);
-
-            download.Complete();
-            await processData.Completion.ConfigureAwait(false);
-
-            Debug.Assert(ugcFileDetails != null);
-
-            return ugcFileDetails;
+            return await response.Content.ReadAsAsync<UgcFileDetailsEnvelope>(cancellationToken).ConfigureAwait(false);
         }
 
         #endregion

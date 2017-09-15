@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
-using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
-using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.TestsShared;
 
@@ -21,14 +19,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
+                string steamWebApiKey = null;
                 var handler = new MockHttpMessageHandler();
-
-                var steamWebApiClient = new SteamWebApiClient(handler);
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
+                var steamIds = new long[0];
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
                 {
-                    return steamWebApiClient.GetPlayerSummariesAsync(new long[0]);
+                    return steamWebApiClient.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
@@ -36,13 +35,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task SteamIdsIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var steamWebApiClient = new SteamWebApiClient(new MockHttpMessageHandler());
-                steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
+                var steamWebApiKey = "mySteamWebApiKey";
+                var handler = new MockHttpMessageHandler();
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
+                long[] steamIds = null;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
-                    return steamWebApiClient.GetPlayerSummariesAsync(null);
+                    return steamWebApiClient.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
@@ -50,15 +51,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task TooManySteamIds_ThrowsArgumentException()
             {
                 // Arrange
+                var steamWebApiKey = "mySteamWebApiKey";
                 var handler = new MockHttpMessageHandler();
-
-                var steamWebApiClient = new SteamWebApiClient(handler);
-                steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
+                var steamIds = new long[SteamWebApiClient.MaxPlayerSummariesPerRequest + 1];
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentException>(() =>
                 {
-                    return steamWebApiClient.GetPlayerSummariesAsync(new long[SteamWebApiClient.MaxPlayerSummariesPerRequest + 1]);
+                    return steamWebApiClient.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
@@ -66,16 +67,18 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task ReturnsPlayerSummaries()
             {
                 // Arrange
+                var steamWebApiKey = "mySteamWebApiKey";
+                var steamIds = new long[] { 76561197960435530 };
                 var handler = new MockHttpMessageHandler();
                 handler
-                    .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=mySteamWebApiKey&steamids=76561197960435530")
+                    .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002")
+                    .WithQueryString("key", steamWebApiKey)
+                    .WithQueryString("steamids", string.Join(",", steamIds))
                     .Respond("application/json", Resources.PlayerSummaries);
-
-                var steamWebApiClient = new SteamWebApiClient(handler);
-                steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
 
                 // Act
-                var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(new long[] { 76561197960435530 });
+                var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(steamIds);
 
                 // Assert
                 var player = playerSummaries.Response.Players.First();
@@ -92,14 +95,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
+                string steamWebApiKey = null;
                 var handler = new MockHttpMessageHandler();
-
-                var steamWebApiClient = new SteamWebApiClient(handler);
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
+                var appId = 247080U;
+                var ugcId = 22837952671856412;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
                 {
-                    return steamWebApiClient.GetUgcFileDetailsAsync(247080, 22837952671856412);
+                    return steamWebApiClient.GetUgcFileDetailsAsync(appId, ugcId);
                 });
             }
 
@@ -107,16 +112,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task ReturnsUgcFileDetails()
             {
                 // Arrange
+                var steamWebApiKey = "mySteamWebApiKey";
+                var appId = 247080U;
+                var ugcId = 22837952671856412;
                 var handler = new MockHttpMessageHandler();
                 handler
-                    .When(HttpMethod.Get, "https://api.steampowered.com/ISteamRemoteStorage/GetUGCFileDetails/v1/?key=mySteamWebApiKey&appid=247080&ugcid=22837952671856412")
-                    .RespondJson(Resources.UgcFileDetails);
-
-                var steamWebApiClient = new SteamWebApiClient(handler);
-                steamWebApiClient.SteamWebApiKey = "mySteamWebApiKey";
+                    .When(HttpMethod.Get, "https://api.steampowered.com/ISteamRemoteStorage/GetUGCFileDetails/v1")
+                    .WithQueryString("key", steamWebApiKey)
+                    .WithQueryString("appid", appId.ToString())
+                    .WithQueryString("ugcid", ugcId.ToString())
+                    .Respond("application/json", Resources.UgcFileDetails);
+                var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
 
                 // Act
-                var ugcFileDetails = await steamWebApiClient.GetUgcFileDetailsAsync(247080, 22837952671856412);
+                var ugcFileDetails = await steamWebApiClient.GetUgcFileDetailsAsync(appId, ugcId);
 
                 // Assert
                 var data = ugcFileDetails.Data;
