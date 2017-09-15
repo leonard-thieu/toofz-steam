@@ -26,13 +26,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <param name="cancellationToken">
         /// A cancellation token that can be used by other objects or threads to receive notice of cancellation.
         /// </param>
-        /// <exception cref="System.InvalidOperationException">
+        /// <exception cref="InvalidOperationException">
         /// <see cref="GetPlayerSummariesAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="steamIds"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Unable to request more than 100 player summaries.
         /// </exception>
         Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
@@ -54,7 +54,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <param name="cancellationToken">
         /// A cancellation token that can be used by other objects or threads to receive notice of cancellation.
         /// </param>
-        /// <exception cref="System.InvalidOperationException">
+        /// <exception cref="InvalidOperationException">
         /// <see cref="GetUgcFileDetailsAsync"/> requires <see cref="SteamWebApiKey"/> to be set to a valid Steam Web API Key.
         /// </exception>
         Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
