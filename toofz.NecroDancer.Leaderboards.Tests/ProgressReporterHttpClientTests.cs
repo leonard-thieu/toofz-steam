@@ -114,7 +114,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                         return Task.FromResult(response);
                     });
                 var httpClient = new EmptyProgressReporterHttpClient(handler);
-                var requestUri = "http://example.org/";
+                var requestUri = new Uri("http://example.org/");
                 var mockProgress = new Mock<IProgress<long>>();
                 var progress = mockProgress.Object;
                 var cancellationToken = CancellationToken.None;
@@ -132,7 +132,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 // Arrange
                 var handler = new MockHttpMessageHandler();
                 var httpClient = new EmptyProgressReporterHttpClient(handler);
-                var requestUri = "http://example.org/";
+                var requestUri = new Uri("http://example.org/");
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
 
