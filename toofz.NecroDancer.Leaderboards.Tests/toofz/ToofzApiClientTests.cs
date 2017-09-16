@@ -23,7 +23,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/players")
                     .Respond("application/json", Resources.PlayersEnvelope);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
 
                 // Act
                 var response = await toofzApiClient.GetPlayersAsync();
@@ -51,7 +51,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/players?limit=20&sort=updated_at")
                     .Respond("application/json", Resources.PlayersEnvelope);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
 
                 // Act
                 var response = await toofzApiClient.GetPlayersAsync(new GetPlayersParams
@@ -79,7 +79,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var toofzApiClient = new ToofzApiClient(handler);
+                var toofzApiClient = new ToofzApiClient(handler, false);
                 IEnumerable<Player> players = null;
 
                 // Act -> Assert
@@ -98,7 +98,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/players")
                     .Respond("application/json", Resources.BulkStoreDTO);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
                 var players = new List<Player> { new Player { Exists = true, LastUpdate = new DateTime(2016, 1, 1) } };
 
                 // Act
@@ -121,7 +121,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/replays")
                     .Respond("application/json", Resources.ReplaysEnvelope);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
 
                 // Act
                 var response = await toofzApiClient.GetReplaysAsync();
@@ -146,7 +146,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/replays?limit=20")
                     .Respond("application/json", Resources.ReplaysEnvelope);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
 
                 // Act
                 var response = await toofzApiClient.GetReplaysAsync(new GetReplaysParams
@@ -170,7 +170,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
                 IEnumerable<Replay> replays = null;
 
                 // Act -> Assert
@@ -189,7 +189,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("http://example.org/replays")
                     .Respond("application/json", Resources.BulkStoreDTO);
 
-                var toofzApiClient = new ToofzApiClient(handler) { BaseAddress = new Uri("http://example.org/") };
+                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
                 var replays = new List<Replay> { new Replay() };
 
                 // Act

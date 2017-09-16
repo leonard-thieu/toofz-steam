@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
@@ -17,11 +16,11 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// Initializes a new instance of the <see cref="ToofzApiClient"/> class with a specific handler.
         /// </summary>
         /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
-        public ToofzApiClient(HttpMessageHandler handler) : base(handler, disposeHandler: false)
-        {
-            MaxResponseContentBufferSize = 2 * 1024 * 1024;
-            DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-        }
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by Dispose(); false if you intend 
+        /// to reuse the inner handler.
+        /// </param>
+        public ToofzApiClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler) { }
 
         #region Players
 
