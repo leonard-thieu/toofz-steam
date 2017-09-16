@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,11 +7,7 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public abstract class ProgressReporterHttpClient : HttpClient
     {
-        protected ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler)
-        {
-            MaxResponseContentBufferSize = 2 * 1024 * 1024;
-            DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-        }
+        protected ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
 
         public async Task<HttpResponseMessage> GetAsync(string requestUri, IProgress<long> progress, CancellationToken cancellationToken)
         {
