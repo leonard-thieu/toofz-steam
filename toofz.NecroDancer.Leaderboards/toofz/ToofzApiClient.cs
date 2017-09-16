@@ -29,16 +29,19 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             GetPlayersParams @params = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var url = "players"
-                .SetQueryParams(new
+            var requestUri = "players";
+            if (@params != null)
+            {
+                requestUri = requestUri.SetQueryParams(new
                 {
-                    q = @params?.Query,
-                    offset = @params?.Offset,
-                    limit = @params?.Limit,
+                    q = @params.Query,
+                    offset = @params.Offset,
+                    limit = @params.Limit,
                     sort = @params.Sort,
                 });
+            }
 
-            var response = await GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<PlayersEnvelope>(cancellationToken).ConfigureAwait(false);
         }
@@ -63,16 +66,19 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             GetReplaysParams @params = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var url = "replays"
-                .SetQueryParams(new
+            var requestUri = "replays";
+            if (@params != null)
+            {
+                requestUri = requestUri.SetQueryParams(new
                 {
-                    version = @params?.Version,
-                    error = @params?.ErrorCode,
-                    offset = @params?.Offset,
-                    limit = @params?.Limit,
+                    version = @params.Version,
+                    error = @params.ErrorCode,
+                    offset = @params.Offset,
+                    limit = @params.Limit,
                 });
+            }
 
-            var response = await GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<ReplaysEnvelope>(cancellationToken).ConfigureAwait(false);
         }
