@@ -104,7 +104,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var bearerToken = new OAuth2AccessToken();
                 var userName = "myUserName";
                 var password = "myPassword";
-                var handler = new TestingHttpMessageHandler(new OAuth2Handler(userName, password)
+                var handler = new HttpMessageHandlerAdapter(new OAuth2Handler(userName, password)
                 {
                     InnerHandler = mockHandler,
                     BearerToken = bearerToken,
@@ -113,7 +113,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var mockRequest = new Mock<HttpRequestMessage>();
 
                 // Act
-                await handler.TestSendAsync(mockRequest.Object, CancellationToken.None);
+                await handler.PublicSendAsync(mockRequest.Object, CancellationToken.None);
                 var authorization = mockRequest.Object.Headers.Authorization;
 
                 // Assert
@@ -129,32 +129,32 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized };
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
                 mockHandler
-                    .Expect(Constants.FakeUri)
+                    .Expect("/")
                     .Respond(req => response);
 
                 mockHandler
-                    .Expect(new Uri(Constants.FakeUri, "/token"))
+                    .Expect("/token")
                     .Respond("application/json", Resources.OAuth2AccessToken);
 
                 mockHandler
-                    .Expect(Constants.FakeUri)
+                    .Expect("/")
                     .WithHeaders("Authorization", "Bearer myAccessToken")
                     .Respond(HttpStatusCode.OK);
 
                 var userName = "myUserName";
                 var password = "myPassword";
-                var handler = new TestingHttpMessageHandler(new OAuth2Handler(userName, password)
+                var handler = new HttpMessageHandlerAdapter(new OAuth2Handler(userName, password)
                 {
                     InnerHandler = mockHandler,
                 });
 
-                var request = new HttpRequestMessage()
+                var request = new HttpRequestMessage
                 {
-                    RequestUri = Constants.FakeUri
+                    RequestUri = new Uri("http://example.org/"),
                 };
 
                 // Act
-                await handler.TestSendAsync(request, CancellationToken.None);
+                await handler.PublicSendAsync(request, CancellationToken.None);
                 var authorization = request.Headers.Authorization;
 
                 // Assert

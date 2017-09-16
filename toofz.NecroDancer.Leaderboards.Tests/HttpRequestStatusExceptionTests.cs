@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
@@ -63,12 +64,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 // Arrange
                 var statusCode = HttpStatusCode.BadGateway;
                 var ex = new HttpRequestStatusException(statusCode);
+                var uri = new Uri("http://example.org/");
 
                 // Act
-                ex.RequestUri = Constants.FakeUri;
+                ex.RequestUri = uri;
 
                 // Assert
-                Assert.AreEqual(Constants.FakeUri, ex.RequestUri);
+                Assert.AreEqual(uri, ex.RequestUri);
             }
         }
 

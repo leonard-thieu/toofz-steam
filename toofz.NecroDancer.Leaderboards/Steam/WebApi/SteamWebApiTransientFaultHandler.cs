@@ -1,52 +1,38 @@
-﻿using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using System;
-using System.Net;
+﻿using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
     public sealed class SteamWebApiTransientFaultHandler : DelegatingHandler
     {
+        static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiTransientFaultHandler));
+
         static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        static readonly RetryPolicy<SteamWebApiTransientErrorDetectionStrategy> RetryPolicy = SteamWebApiTransientErrorDetectionStrategy.Create(RetryStrategy);
-
-        public SteamWebApiTransientFaultHandler(TelemetryClient telemetryClient)
-        {
-            this.telemetryClient = telemetryClient;
-        }
-
-        readonly TelemetryClient telemetryClient;
+        static readonly RetryPolicy<SteamWebApiTransientErrorDetectionStrategy> RetryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            var retryCount = 0;
+
             return RetryPolicy.ExecuteAsync(async () =>
             {
-                var startTime = DateTimeOffset.UtcNow;
+                if (retryCount > 0)
+                {
+                    using (var oldRequest = request)
+                    {
+                        request = await oldRequest.CloneAsync().ConfigureAwait(false);
+                    }
+                }
+                retryCount++;
 
-                // Simple clone should handle use cases
-                var clonedRequest = new HttpRequestMessage(HttpMethod.Get, request.RequestUri);
                 var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-                if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
+                if (!response.IsSuccessStatusCode)
                 {
-                    if (telemetryClient != null)
-                    {
-                        var telemetry = new DependencyTelemetry
-                        {
-                            Name = request.RequestUri.Host,
-                            Data = request.RequestUri.PathAndQuery,
-                            Timestamp = startTime,
-                            Duration = DateTimeOffset.UtcNow - startTime,
-                            Success = false,
-                            Type = "HTTP",
-                        };
-                        telemetryClient.TrackDependency(telemetry);
-                    }
-
                     throw new HttpRequestStatusException(response.StatusCode);
                 }
 

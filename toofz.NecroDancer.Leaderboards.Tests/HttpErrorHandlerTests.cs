@@ -21,14 +21,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, new StringContent("myContent"));
-                var handler = new TestingHttpMessageHandler(new HttpErrorHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new HttpErrorHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<HttpRequestStatusException>(() =>
                 {
-                    return handler.TestSendAsync(request);
+                    return handler.PublicSendAsync(request);
                 });
             }
 
@@ -40,12 +40,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.OK);
-                var handler = new TestingHttpMessageHandler(new HttpErrorHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new HttpErrorHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
                 // Act
-                var response = await handler.TestSendAsync(request);
+                var response = await handler.PublicSendAsync(request);
 
                 // Assert
                 Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));

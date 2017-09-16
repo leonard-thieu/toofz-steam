@@ -39,10 +39,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                     .When("*")
                     .Respond(HttpStatusCode.OK);
                 var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new TestingHttpMessageHandler(loggingHandler);
+                var handler = new HttpMessageHandlerAdapter(loggingHandler);
 
                 // Act
-                await handler.TestSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
+                await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
 
                 // Assert
                 mockLog.Verify(l => l.Debug("Start download http://fake.uri/"), Times.Once);
@@ -59,10 +59,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                     .When("*")
                     .Respond(HttpStatusCode.OK);
                 var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new TestingHttpMessageHandler(loggingHandler);
+                var handler = new HttpMessageHandlerAdapter(loggingHandler);
 
                 // Act
-                await handler.TestSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
+                await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
 
                 // Assert
                 mockLog.Verify(l => l.Debug("End download http://fake.uri/"), Times.Once);
@@ -79,10 +79,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                     .When("*")
                     .Respond(new StringContent("myContent"));
                 var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new TestingHttpMessageHandler(loggingHandler);
+                var handler = new HttpMessageHandlerAdapter(loggingHandler);
 
                 // Act
-                var response = await handler.TestSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
+                var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
                 var content = await response.Content.ReadAsStringAsync();
 
                 // Assert
