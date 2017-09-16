@@ -104,36 +104,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentLengthHandlerTests.cs" />
-    <Compile Include="ProgressReporterHttpClientTests.cs" />
-    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListenerTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
-    <Compile Include="Steam\UgcHttpClientTests.cs" />
-    <Compile Include="toofz\HttpErrorExceptionTests.cs" />
-    <Compile Include="toofz\OAuth2HandlerTests.cs" />
-    <Compile Include="toofz\ToofzApiClientTests.cs" />
-    <Compile Include="toofz\ToofzHttpErrorHandlerTests.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="DailyEntryTests.cs" />
-    <Compile Include="DailyLeaderboardTests.cs" />
-    <Compile Include="EntryTests.cs" />
-    <Compile Include="HttpErrorHandlerTests.cs" />
-    <Compile Include="HttpRequestStatusExceptionTests.cs" />
-    <Compile Include="LeaderboardTests.cs" />
-    <Compile Include="LeaderboardsResourcesTests.cs" />
-    <Compile Include="LeaderboardsStoreClientTests.cs" />
-    <Compile Include="LoggingHandlerTests.cs" />
-    <Compile Include="PlayerTests.cs" />
-    <Compile Include="ReplayTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -151,12 +121,47 @@
     <None Include="Resources\OAuth2AccessToken.json" />
     <None Include="Resources\PlayersEnvelope.json" />
     <None Include="Resources\ReplaysEnvelope.json" />
+    <None Include="Resources\StarWarsEncoding.json" />
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListenerTests.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
+    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
+    <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
+    <Compile Include="Steam\UgcHttpClientTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="toofz\HttpErrorExceptionTests.cs" />
+    <Compile Include="toofz\OAuth2HandlerTests.cs" />
+    <Compile Include="toofz\ToofzApiClientTests.cs" />
+    <Compile Include="toofz\ToofzHttpErrorHandlerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="ContentLengthHandlerTests.cs" />
+    <Compile Include="DailyEntryTests.cs" />
+    <Compile Include="DailyLeaderboardTests.cs" />
+    <Compile Include="EntryTests.cs" />
+    <Compile Include="HttpErrorHandlerTests.cs" />
+    <Compile Include="HttpRequestStatusExceptionTests.cs" />
+    <Compile Include="LeaderboardTests.cs" />
+    <Compile Include="LeaderboardsResourcesTests.cs" />
+    <Compile Include="LeaderboardsStoreClientTests.cs" />
+    <Compile Include="LoggingHandlerTests.cs" />
+    <Compile Include="PlayerTests.cs" />
+    <Compile Include="ProgressReporterHttpClientTests.cs" />
+    <Compile Include="ReplayTests.cs" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

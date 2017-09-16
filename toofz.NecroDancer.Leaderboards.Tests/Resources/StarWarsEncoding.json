@@ -1,0 +1,27 @@
+{
+	"response": {
+		"players": [
+			{
+				"steamid": "76561198000971575",
+				"communityvisibilitystate": 3,
+				"profilestate": 1,
+				"personaname": "TheFaceless",
+				"lastlogoff": 1505533192,
+				"commentpermission": 1,
+				"profileurl": "http://steamcommunity.com/profiles/76561198000971575/",
+				"avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ee/ee5a1c8fdc1939ff4d83ed2d36ad279766a367a5.jpg",
+				"avatarmedium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ee/ee5a1c8fdc1939ff4d83ed2d36ad279766a367a5_medium.jpg",
+				"avatarfull": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ee/ee5a1c8fdc1939ff4d83ed2d36ad279766a367a5_full.jpg",
+				"personastate": 1,
+				"realname": "Tapsa",
+				"primaryclanid": "103582791456540191",
+				"timecreated": 1220541178,
+				"personastateflags": 0,
+				"gameextrainfo": "STAR WARS™ Knights of the Old Republic™ II: The Sith Lords�",
+				"gameid": "208580",
+				"loccountrycode": "FI"
+			}
+		]
+		
+	}
+}

@@ -88,7 +88,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;total&quot;:453681,&quot;players&quot;:[{&quot;id&quot;:&quot;76561198020278823&quot;,&quot;display_name&quot;:&quot;Mr.moneybottoms&quot;,&quot;updated_at&quot;:&quot;2017-09-13T12:48:01.35Z&quot;,&quot;avatar&quot;:&quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;},{&quot;id&quot;:&quot;76561198020279203&quot;,&quot;display_name&quot;:&quot;srslycirce&quot;,&quot;updated_at&quot;:&quot;2017-09-13T12:48:01.35Z&quot;,&quot;avatar&quot;:&quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b9/b9917cb765564dcb3c7b2eb9592b085efd4f147b.jpg&quot;},{&quot;id&quot;:&quot;76561198020365632&quot;,&quot;display_n [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {
+        ///  &quot;total&quot;: 453681,
+        ///  &quot;players&quot;: [
+        ///    {
+        ///      &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///      &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///      &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///      &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;76561198020279203&quot;,
+        ///      &quot;display_name&quot;: &quot;srslycirce&quot;,
+        ///      &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///      &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/i [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PlayersEnvelope {
             get {
@@ -98,17 +111,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///	&quot;response&quot;: {
-        ///		&quot;players&quot;: [
-        ///			{
-        ///				&quot;steamid&quot;: &quot;76561197960435530&quot;,
-        ///				&quot;communityvisibilitystate&quot;: 3,
-        ///				&quot;profilestate&quot;: 1,
-        ///				&quot;personaname&quot;: &quot;Robin&quot;,
-        ///				&quot;lastlogoff&quot;: 1501731437,
-        ///				&quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
-        ///				&quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
-        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cb [rest of string was truncated]&quot;;.
+        ///  &quot;response&quot;: {
+        ///    &quot;players&quot;: [
+        ///      {
+        ///        &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///        &quot;communityvisibilitystate&quot;: 3,
+        ///        &quot;profilestate&quot;: 1,
+        ///        &quot;personaname&quot;: &quot;Robin&quot;,
+        ///        &quot;lastlogoff&quot;: 1501731437,
+        ///        &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///        &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///        &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/im [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PlayerSummaries {
             get {
@@ -117,11 +130,58 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;total&quot;:43767,&quot;replays&quot;:[{&quot;id&quot;:&quot;844845073340377377&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340436306&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340472702&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340489317&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340511612&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot;:null,&quot;killed_by&quot;:null},{&quot;id&quot;:&quot;844845073340512126&quot;,&quot;error&quot;:null,&quot;seed&quot;:null,&quot;version&quot; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {
+        ///  &quot;total&quot;: 43767,
+        ///  &quot;replays&quot;: [
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340436306&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340472702&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340489317&quot;,
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReplaysEnvelope {
             get {
                 return ResourceManager.GetString("ReplaysEnvelope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;response&quot;: {
+        ///		&quot;players&quot;: [
+        ///			{
+        ///				&quot;steamid&quot;: &quot;76561198000971575&quot;,
+        ///				&quot;communityvisibilitystate&quot;: 3,
+        ///				&quot;profilestate&quot;: 1,
+        ///				&quot;personaname&quot;: &quot;TheFaceless&quot;,
+        ///				&quot;lastlogoff&quot;: 1505533192,
+        ///				&quot;commentpermission&quot;: 1,
+        ///				&quot;profileurl&quot;: &quot;http://steamcommunity.com/profiles/76561198000971575/&quot;,
+        ///				&quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ee/ee5a1c8fdc1939ff4d83ed2d36ad279766a367a5.jpg&quot;,
+        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/image [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StarWarsEncoding {
+            get {
+                return ResourceManager.GetString("StarWarsEncoding", resourceCulture);
             }
         }
         
@@ -136,11 +196,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///	&quot;data&quot;: {
-        ///		&quot;filename&quot;: &quot;2/9/2014_score191_zone1_level2&quot;,
-        ///		&quot;url&quot;: &quot;http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/&quot;,
-        ///		&quot;size&quot;: 1558
-        ///	}
+        ///  &quot;data&quot;: {
+        ///    &quot;filename&quot;: &quot;2/9/2014_score191_zone1_level2&quot;,
+        ///    &quot;url&quot;: &quot;http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/&quot;,
+        ///    &quot;size&quot;: 1558
+        ///  }
         ///}.
         /// </summary>
         internal static string UgcFileDetails {

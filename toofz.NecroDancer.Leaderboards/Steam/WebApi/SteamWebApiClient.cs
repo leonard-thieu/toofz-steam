@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using log4net;
+using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
@@ -90,8 +91,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     steamids = string.Join(",", steamIds),
                 });
             var response = await GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<PlayerSummariesEnvelope>(cancellationToken).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(content);
         }
 
         #endregion
