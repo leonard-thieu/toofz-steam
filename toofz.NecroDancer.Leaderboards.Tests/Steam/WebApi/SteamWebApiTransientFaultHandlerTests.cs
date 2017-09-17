@@ -3,24 +3,25 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
+using toofz.NecroDancer.Leaderboards.Steam.WebApi;
 using toofz.TestsShared;
 
-namespace toofz.NecroDancer.Leaderboards.Tests
+namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 {
-    class ContentLengthHandlerTests
+    class SteamWebApiTransientFaultHandlerTests
     {
         [TestClass]
         public class SendAsyncMethod
         {
             [TestMethod]
-            public async Task SetsContentLengthToLengthOfContent()
+            public async Task ReturnsResponse()
             {
                 // Arrange
                 var mockHandler = new MockHttpMessageHandler();
                 mockHandler
                     .When("*")
                     .Respond(new StringContent("0123456789"));
-                var handler = new HttpMessageHandlerAdapter(new ContentLengthHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new SteamWebApiTransientFaultHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
@@ -28,7 +29,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.AreEqual(10, response.Content.Headers.ContentLength.Value);
+                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
             }
         }
     }

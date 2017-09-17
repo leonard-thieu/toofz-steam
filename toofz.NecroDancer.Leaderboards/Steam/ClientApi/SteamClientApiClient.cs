@@ -12,7 +12,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
         static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        static readonly RetryPolicy<SteamClientApiTransientErrorDetectionStrategy> RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.Create(RetryStrategy);
+        static readonly RetryPolicy<SteamClientApiTransientErrorDetectionStrategy> RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
@@ -58,8 +58,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.password = password;
 
             manager = manager ?? new CallbackManagerAdapter();
-            if (manager.SteamClient == null)
-                throw new ArgumentNullException(nameof(manager.SteamClient));
             steamClient = manager.SteamClient;
             steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
 
@@ -174,7 +172,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             {
                 case EResult.OK: return leaderboard;
                 default:
-                    throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.") { Result = leaderboard.Result };
+                    throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.", leaderboard.Result);
             }
         }
 
@@ -214,7 +212,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             {
                 case EResult.OK: return leaderboardEntries;
                 default:
-                    throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.") { Result = leaderboardEntries.Result };
+                    throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.", leaderboardEntries.Result);
             }
         }
 
@@ -222,25 +220,20 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         bool disposed = false;
 
-        void Dispose(bool disposing)
+        /// <summary>
+        /// Disconnects from Steam.
+        /// </summary>
+        public void Dispose()
         {
             if (!disposed)
             {
-                if (disposing)
+                if (steamClient.IsConnected)
                 {
                     steamClient.Disconnect();
                 }
 
                 disposed = true;
             }
-        }
-
-        /// <summary>
-        /// Disconnects from Steam.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         #endregion

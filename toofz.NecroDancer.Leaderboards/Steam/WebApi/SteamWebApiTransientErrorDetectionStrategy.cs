@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
@@ -10,19 +9,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
     {
         #region Static Members
 
-        static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiTransientErrorDetectionStrategy));
-
-        public static RetryPolicy<SteamWebApiTransientErrorDetectionStrategy> Create(RetryStrategy retryStrategy)
+        public static RetryPolicy<SteamWebApiTransientErrorDetectionStrategy> CreateRetryPolicy(RetryStrategy retryStrategy, ILog log)
         {
             var retryPolicy = new RetryPolicy<SteamWebApiTransientErrorDetectionStrategy>(retryStrategy);
-            retryPolicy.Retrying += OnRetrying;
+            retryPolicy.Retrying += (s, e) =>
+            {
+                log.Debug(e.LastException.Message + $" Experienced a transient error during an HTTP request. Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
+            };
 
             return retryPolicy;
-        }
-
-        static void OnRetrying(object sender, RetryingEventArgs e)
-        {
-            Log.Debug(e.LastException.Message + $" Experienced a transient error during an HTTP request. Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
         }
 
         #endregion
@@ -36,7 +31,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
             {
                 switch (transient.StatusCode)
                 {
-                    case HttpStatusCode.Forbidden:
                     case HttpStatusCode.RequestTimeout:
                     case HttpStatusCode.InternalServerError:
                     case HttpStatusCode.BadGateway:
@@ -48,9 +42,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                         return false;
                 }
             }
-
-            if (ex is IOException)
-                return true;
 
             return false;
         }

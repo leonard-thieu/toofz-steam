@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Net;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
+using toofz.NecroDancer.Leaderboards.Steam.WebApi;
 
-namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
+namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 {
-    class SteamClientApiTransientErrorDetectionStrategyTests
+    class SteamWebApiTransientErrorDetectionStrategyTests
     {
         [TestClass]
         public class CreateRetryPolicyMethod
@@ -21,10 +21,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var log = Mock.Of<ILog>();
 
                 // Act
-                var retryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
+                var retryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
 
                 // Assert
-                Assert.IsInstanceOfType(retryPolicy, typeof(RetryPolicy<SteamClientApiTransientErrorDetectionStrategy>));
+                Assert.IsInstanceOfType(retryPolicy, typeof(RetryPolicy<SteamWebApiTransientErrorDetectionStrategy>));
             }
 
             [TestMethod]
@@ -34,7 +34,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var retryStrategy = new FixedInterval(1, TimeSpan.Zero);
                 var mockLog = new Mock<ILog>();
                 var log = mockLog.Object;
-                var retryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
+                var retryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
                 var count = 0;
 
                 // Act
@@ -43,7 +43,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     if (count == 0)
                     {
                         count++;
-                        throw new SteamClientApiException("", new TaskCanceledException());
+                        throw new HttpRequestStatusException(HttpStatusCode.RequestTimeout);
                     }
                 });
 
@@ -55,12 +55,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         [TestClass]
         public class IsTransientMethod
         {
-            [TestMethod]
-            public void ExIsSteamClientApiExceptionWithTaskCanceledExceptionAsInnerException_ReturnsTrue()
+            [DataTestMethod]
+            [DataRow(HttpStatusCode.RequestTimeout)]
+            [DataRow(HttpStatusCode.InternalServerError)]
+            [DataRow(HttpStatusCode.BadGateway)]
+            [DataRow(HttpStatusCode.ServiceUnavailable)]
+            [DataRow(HttpStatusCode.GatewayTimeout)]
+            public void ExIsHttpRequestStatusExceptionAndHasTransientStatusCode_ReturnsTrue(HttpStatusCode statusCode)
             {
                 // Arrange
-                var strategy = new SteamClientApiTransientErrorDetectionStrategy();
-                var ex = new SteamClientApiException("myMessage", new TaskCanceledException());
+                var strategy = new SteamWebApiTransientErrorDetectionStrategy();
+                var ex = new HttpRequestStatusException(statusCode);
 
                 // Act
                 var isTransient = strategy.IsTransient(ex);
@@ -70,11 +75,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ExIsSteamClientApiExceptionWithoutTaskCanceledExceptionAsInnerException_ReturnsFalse()
+            public void ExIsHttpRequestStatusExceptionAndDoesNotHaveTransientStatusCode_ReturnsFalse()
             {
                 // Arrange
-                var strategy = new SteamClientApiTransientErrorDetectionStrategy();
-                var ex = new SteamClientApiException("myMessage");
+                var statusCode = HttpStatusCode.NotFound;
+                var strategy = new SteamWebApiTransientErrorDetectionStrategy();
+                var ex = new HttpRequestStatusException(statusCode);
 
                 // Act
                 var isTransient = strategy.IsTransient(ex);
@@ -84,10 +90,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ExIsNotTaskCanceledException_ReturnsFalse()
+            public void ExIsNotHttpRequestStatusException_ReturnsFalse()
             {
                 // Arrange
-                var strategy = new SteamClientApiTransientErrorDetectionStrategy();
+                var strategy = new SteamWebApiTransientErrorDetectionStrategy();
                 var ex = new Exception();
 
                 // Act

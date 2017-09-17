@@ -24,14 +24,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new HttpError("myMessage")));
-                var handler = new TestingHttpMessageHandler(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<HttpErrorException>(() =>
                 {
-                    return handler.TestSendAsync(request);
+                    return handler.PublicSendAsync(request);
                 });
             }
 
@@ -43,12 +43,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new { myProp = "myProp" }));
-                var handler = new TestingHttpMessageHandler(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
                 // Act
-                var response = await handler.TestSendAsync(request);
+                var response = await handler.PublicSendAsync(request);
 
                 // Assert
                 Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
@@ -62,12 +62,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.OK);
-                var handler = new TestingHttpMessageHandler(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
+                var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
                 var mockRequest = new Mock<HttpRequestMessage>();
                 var request = mockRequest.Object;
 
                 // Act
-                var response = await handler.TestSendAsync(request);
+                var response = await handler.PublicSendAsync(request);
 
                 // Assert
                 Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));

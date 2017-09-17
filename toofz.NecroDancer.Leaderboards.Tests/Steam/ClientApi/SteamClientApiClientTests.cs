@@ -447,12 +447,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class DisposeMethod
         {
             [TestMethod]
-            public void DisconnectsFromSteam()
+            public void IsConnected_DisconnectsFromSteam()
             {
                 // Arrange
                 string userName = "userName";
                 string password = "password";
                 Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(s => s.IsConnected).Returns(true);
                 Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
                 mockManager
                     .Setup(m => m.SteamClient)
@@ -465,6 +466,51 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
+            }
+
+            [TestMethod]
+            public void IsNotConnected_DoesNotDisconnectFromSteam()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(s => s.IsConnected).Returns(false);
+                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+                mockManager
+                    .Setup(m => m.SteamClient)
+                    .Returns(mockSteamClient.Object);
+                ICallbackManager manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                client.Dispose();
+
+                // Assert
+                mockSteamClient.Verify(s => s.Disconnect(), Times.Never);
+            }
+
+            [TestMethod]
+            public void DisposeMoreThanOnce_DoesNothing()
+            {
+                // Arrange
+                string userName = "userName";
+                string password = "password";
+                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(s => s.IsConnected).Returns(false);
+                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+                mockManager
+                    .Setup(m => m.SteamClient)
+                    .Returns(mockSteamClient.Object);
+                ICallbackManager manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                client.Dispose();
+                client.Dispose();
+
+                // Assert
+                mockSteamClient.Verify(s => s.Disconnect(), Times.Never);
             }
         }
     }

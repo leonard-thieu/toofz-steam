@@ -114,7 +114,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         tcs.TrySetResult(response);
                         break;
                     default:
-                        tcs.TrySetException(new SteamClientApiException($"Unable to connect to Steam.") { Result = response.Result });
+                        tcs.TrySetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
                         break;
                 }
 
@@ -145,10 +145,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// connected at this point. Results are returned in a <see cref="SteamUser.LoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// No logon details were provided.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
         public Task<SteamUser.LoggedOnCallback> LogOnAsync(SteamUser.LogOnDetails details)
@@ -167,13 +167,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         break;
                     case EResult.AccountLogonDenied:
                         {
-                            var ex = new SteamClientApiException("Unable to logon to Steam: This account is SteamGuard protected.") { Result = response.Result };
+                            var ex = new SteamClientApiException("Unable to logon to Steam: This account is SteamGuard protected.", response.Result);
                             tcs.TrySetException(ex);
                             break;
                         }
                     default:
                         {
-                            var ex = new SteamClientApiException("Unable to logon to Steam.") { Result = response.Result };
+                            var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
                             tcs.TrySetException(ex);
                             break;
                         }
