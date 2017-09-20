@@ -33,7 +33,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 var httpError = await response.Content.ReadAsAsync<HttpError>(cancellationToken).ConfigureAwait(false);
                 if (httpError.Message != null)
                 {
-                    throw new HttpErrorException(httpError, response.StatusCode) { RequestUri = request.RequestUri };
+                    throw new HttpErrorException(httpError, response.StatusCode, response.RequestMessage.RequestUri);
                 }
             }
 

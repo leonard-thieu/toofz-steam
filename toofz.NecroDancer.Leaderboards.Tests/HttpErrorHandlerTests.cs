@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
 
@@ -22,8 +21,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, new StringContent("myContent"));
                 var handler = new HttpMessageHandlerAdapter(new HttpErrorHandler { InnerHandler = mockHandler });
-                var mockRequest = new Mock<HttpRequestMessage>();
-                var request = mockRequest.Object;
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<HttpRequestStatusException>(() =>
@@ -41,8 +39,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                     .When("*")
                     .Respond(HttpStatusCode.OK);
                 var handler = new HttpMessageHandlerAdapter(new HttpErrorHandler { InnerHandler = mockHandler });
-                var mockRequest = new Mock<HttpRequestMessage>();
-                var request = mockRequest.Object;
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act
                 var response = await handler.PublicSendAsync(request);

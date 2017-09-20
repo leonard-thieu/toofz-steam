@@ -7,34 +7,72 @@ namespace toofz.NecroDancer.Leaderboards.Tests
     class HttpRequestStatusExceptionTests
     {
         [TestClass]
-        public class Constructor_StatusCode
+        public class Constructor_HttpStatusCode_Uri
         {
             [TestMethod]
-            public void SetsStatusCode()
+            public void ReturnsInstance()
             {
                 // Arrange
                 var statusCode = HttpStatusCode.BadGateway;
+                var requestUri = new Uri("http://localhost/");
 
                 // Act
-                var ex = new HttpRequestStatusException(statusCode);
+                var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(statusCode, ex.StatusCode);
+                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
             }
         }
 
         [TestClass]
-        public class Constructor_Message_StatusCode
+        public class Constructor_String_HttpStatusCode_Uri
         {
+            [TestMethod]
+            public void ReturnsInstance()
+            {
+                // Arrange
+                var message = "myMessage";
+                var statusCode = HttpStatusCode.BadGateway;
+                var requestUri = new Uri("http://localhost/");
+
+                // Act
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri);
+
+                // Assert
+                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
+            }
+        }
+
+        [TestClass]
+        public class Constructor_String_HttpStatusCode_Uri_String
+        {
+            [TestMethod]
+            public void RequestUriIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                var message = "myMessage";
+                var statusCode = HttpStatusCode.BadGateway;
+                Uri requestUri = null;
+                var responseContent = "myResponseContent";
+
+                // Act -> Assert
+                Assert.ThrowsException<ArgumentNullException>(() =>
+                {
+                    new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
+                });
+            }
+
             [TestMethod]
             public void SetsMessage()
             {
                 // Arrange
                 var message = "myMessage";
                 var statusCode = HttpStatusCode.BadGateway;
+                var requestUri = new Uri("http://localhost/");
+                var responseContent = "myResponseContent";
 
                 // Act
-                var ex = new HttpRequestStatusException(message, statusCode);
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
                 Assert.AreEqual(message, ex.Message);
@@ -46,49 +84,62 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 // Arrange
                 var message = "myMessage";
                 var statusCode = HttpStatusCode.BadGateway;
+                var requestUri = new Uri("http://localhost/");
+                var responseContent = "myResponseContent";
 
                 // Act
-                var ex = new HttpRequestStatusException(message, statusCode);
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
                 Assert.AreEqual(statusCode, ex.StatusCode);
             }
-        }
 
-        [TestClass]
-        public class RequestUriProperty
-        {
             [TestMethod]
-            public void GetSetBehavior()
+            public void SetsRequestUri()
             {
                 // Arrange
+                var message = "myMessage";
                 var statusCode = HttpStatusCode.BadGateway;
-                var ex = new HttpRequestStatusException(statusCode);
-                var uri = new Uri("http://example.org/");
+                var requestUri = new Uri("http://localhost/");
+                var responseContent = "myResponseContent";
 
                 // Act
-                ex.RequestUri = uri;
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual(uri, ex.RequestUri);
+                Assert.AreEqual(requestUri, ex.RequestUri);
             }
-        }
 
-        [TestClass]
-        public class ResponseContent
-        {
             [TestMethod]
-            public void GetSetBehavior()
+            public void SetsResponseContent()
             {
                 // Arrange
+                var message = "myMessage";
                 var statusCode = HttpStatusCode.BadGateway;
-                var ex = new HttpRequestStatusException(statusCode);
+                var requestUri = new Uri("http://localhost/");
+                var responseContent = "myResponseContent";
 
                 // Act
-                ex.ResponseContent = "myContent";
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual("myContent", ex.ResponseContent);
+                Assert.AreEqual(responseContent, ex.ResponseContent);
+            }
+
+            [TestMethod]
+            public void ReturnsInstance()
+            {
+                // Arrange
+                var message = "myMessage";
+                var statusCode = HttpStatusCode.BadGateway;
+                var requestUri = new Uri("http://localhost/");
+                var responseContent = "myResponseContent";
+
+                // Act
+                var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
+
+                // Assert
+                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
             }
         }
     }

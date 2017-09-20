@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.toofz;
@@ -25,8 +24,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new HttpError("myMessage")));
                 var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
-                var mockRequest = new Mock<HttpRequestMessage>();
-                var request = mockRequest.Object;
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<HttpErrorException>(() =>
@@ -44,8 +42,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("*")
                     .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new { myProp = "myProp" }));
                 var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
-                var mockRequest = new Mock<HttpRequestMessage>();
-                var request = mockRequest.Object;
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act
                 var response = await handler.PublicSendAsync(request);
@@ -63,8 +60,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .When("*")
                     .Respond(HttpStatusCode.OK);
                 var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
-                var mockRequest = new Mock<HttpRequestMessage>();
-                var request = mockRequest.Object;
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act
                 var response = await handler.PublicSendAsync(request);
