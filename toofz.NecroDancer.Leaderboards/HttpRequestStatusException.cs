@@ -26,7 +26,7 @@ namespace toofz.NecroDancer.Leaderboards
         /// <exception cref="ArgumentNullException">
         /// <paramref name="requestUri"/> is null.
         /// </exception>
-        public HttpRequestStatusException(string message, HttpStatusCode statusCode, Uri requestUri) : this(null, statusCode, requestUri, null) { }
+        public HttpRequestStatusException(string message, HttpStatusCode statusCode, Uri requestUri) : this(message, statusCode, requestUri, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpRequestStatusException"/> class 

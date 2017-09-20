@@ -105,6 +105,21 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Assert
                 Assert.AreEqual("myExceptionType", exceptionType);
             }
+
+            [TestMethod]
+            public void ReturnsInstance()
+            {
+                // Arrange
+                var httpError = new HttpError { ExceptionType = "myExceptionType" };
+                var statusCode = HttpStatusCode.NotFound;
+                var requestUri = new Uri("http://localhost/");
+
+                // Act
+                var ex = new HttpErrorException(httpError, statusCode, requestUri);
+
+                // Assert
+                Assert.IsInstanceOfType(ex, typeof(HttpErrorException));
+            }
         }
     }
 }
