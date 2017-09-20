@@ -36,7 +36,7 @@ namespace toofz.NecroDancer.Leaderboards
         {
             log.Debug($"Start download {request.RequestUri}");
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            log.Debug($"End download {request.RequestUri}");
+            log.Debug($"End download {response.RequestMessage.RequestUri}");
 
             return response;
         }

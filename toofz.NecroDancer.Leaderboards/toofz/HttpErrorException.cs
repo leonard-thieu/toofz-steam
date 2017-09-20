@@ -6,9 +6,12 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class HttpErrorException : HttpRequestStatusException
     {
-        internal HttpErrorException(HttpError httpError, HttpStatusCode statusCode) :
-            base(httpError.Message, statusCode)
+        public HttpErrorException(HttpError httpError, HttpStatusCode statusCode, Uri requestUri) :
+            base(httpError?.Message, statusCode, requestUri)
         {
+            if (httpError == null)
+                throw new ArgumentNullException(nameof(httpError));
+
             stackTrace = httpError.StackTrace;
             ExceptionMessage = httpError.ExceptionMessage;
             ExceptionType = httpError.ExceptionType;

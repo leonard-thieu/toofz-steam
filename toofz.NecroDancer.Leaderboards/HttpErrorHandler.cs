@@ -15,13 +15,9 @@ namespace toofz.NecroDancer.Leaderboards
                 var message = $"Response status code does not indicate success: {(int)response.StatusCode} ({response.ReasonPhrase}).";
 
                 await response.Content.LoadIntoBufferAsync().ConfigureAwait(false);
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                throw new HttpRequestStatusException(message, response.StatusCode)
-                {
-                    RequestUri = request.RequestUri,
-                    ResponseContent = content,
-                };
+                throw new HttpRequestStatusException(message, response.StatusCode, response.RequestMessage.RequestUri, responseContent);
             }
 
             return response;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +16,9 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
         static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
 
-        public OAuth2Handler(string userName, string password)
+        public OAuth2Handler(string userName, string password) : this(userName, password, Log) { }
+
+        internal OAuth2Handler(string userName, string password, ILog log)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentException($"'{nameof(userName)}' is null or empty.", nameof(userName));
@@ -24,10 +27,12 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             this.userName = userName;
             this.password = password;
+            this.log = log;
         }
 
         readonly string userName;
         readonly string password;
+        readonly ILog log;
 
         internal OAuth2AccessToken BearerToken { get; set; }
 
@@ -38,16 +43,12 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                if (!response.Headers.WwwAuthenticate.Contains(BearerHeader))
-                {
-                    Log.Warn("Did not receive 'WWW-Authenticate: Bearer' header.");
-                }
-                else
-                {
-                    BearerToken = await AuthenticateAsync(request.RequestUri, cancellationToken).ConfigureAwait(false);
-                    AddBearerToken();
-                    response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-                }
+                Debug.Assert(response.Headers.WwwAuthenticate.Contains(BearerHeader), "Did not receive 'WWW-Authenticate: Bearer' header.");
+
+                BearerToken = await AuthenticateAsync(response.RequestMessage.RequestUri, cancellationToken).ConfigureAwait(false);
+                AddBearerToken();
+                // Not sure why the request doesn't need to be cloned even though it's been sent before.
+                response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
 
             return response;
@@ -64,7 +65,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         async Task<OAuth2AccessToken> AuthenticateAsync(Uri requestUri, CancellationToken cancellationToken)
         {
             var authUri = new Uri(requestUri, "/token");
-            Log.Info($"Authenticating to '{authUri}'...");
+            log.Info($"Authenticating to '{authUri}'...");
 
             var loginData = new Dictionary<string, string>
             {
@@ -77,7 +78,6 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             var response = await PostAsync(authUri, content, cancellationToken).ConfigureAwait(false);
 
             var accessToken = await response.Content.ReadAsAsync<OAuth2AccessToken>(cancellationToken).ConfigureAwait(false);
-
             if (!((accessToken.TokenType == "bearer") &&
                   (accessToken.UserName == userName)))
             {

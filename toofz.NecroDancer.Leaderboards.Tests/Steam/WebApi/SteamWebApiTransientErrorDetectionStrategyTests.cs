@@ -43,7 +43,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                     if (count == 0)
                     {
                         count++;
-                        throw new HttpRequestStatusException(HttpStatusCode.RequestTimeout);
+                        var statusCode = HttpStatusCode.BadGateway;
+                        var requestUri = new Uri("http://localhost/");
+                        throw new HttpRequestStatusException(statusCode, requestUri);
                     }
                 });
 
@@ -65,7 +67,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             {
                 // Arrange
                 var strategy = new SteamWebApiTransientErrorDetectionStrategy();
-                var ex = new HttpRequestStatusException(statusCode);
+                var requestUri = new Uri("http://localhost/");
+                var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Act
                 var isTransient = strategy.IsTransient(ex);
@@ -80,7 +83,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 // Arrange
                 var statusCode = HttpStatusCode.NotFound;
                 var strategy = new SteamWebApiTransientErrorDetectionStrategy();
-                var ex = new HttpRequestStatusException(statusCode);
+                var requestUri = new Uri("http://localhost/");
+                var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Act
                 var isTransient = strategy.IsTransient(ex);

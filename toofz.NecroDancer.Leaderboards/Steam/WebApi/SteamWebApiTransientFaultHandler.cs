@@ -33,7 +33,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new HttpRequestStatusException(response.StatusCode);
+                    throw new HttpRequestStatusException(response.StatusCode, response.RequestMessage.RequestUri);
                 }
 
                 return response;
