@@ -119,27 +119,156 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="BulkStoreDTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BulkStoreDTO.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\BulkStoreDTO.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="OAuth2AccessToken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OAuth2AccessToken.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="BulkStoreDTOWithoutRowsAffected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BulkStoreDTOWithoutRowsAffected.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="PlayerSummaries" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetPlayerSummaries.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="HttpError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HttpError.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ReplaysEnvelope" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ReplaysEnvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="HttpErrorWithMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HttpErrorWithMessage.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="UgcFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\2_9_2014_score191_zone1_level2;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="HttpErrorWithoutMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HttpErrorWithoutMessage.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="UgcFileDetails" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetUGCFileDetails.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="OAuth2BearerToken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerToken.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutAccessToken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutAccessToken.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutExpires" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutExpires.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutExpiresIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutExpiresIn.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutIssued" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutIssued.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutTokenType" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutTokenType.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OAuth2BearerTokenWithoutUserName" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OAuth2BearerTokenWithoutUserName.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersDTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersDTO.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersDTOWithoutAvatar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersDTOWithoutAvatar.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersDTOWithoutDisplayName" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersDTOWithoutDisplayName.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersDTOWithoutId" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersDTOWithoutId.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersDTOWithoutUpdatedAt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersDTOWithoutUpdatedAt.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="PlayersEnvelope" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\playersenvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\PlayersEnvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="PlayersEnvelopeWithoutPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersEnvelopeWithoutPlayers.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayersEnvelopeWithoutTotal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayersEnvelopeWithoutTotal.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="PlayerSummaries" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaries.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummariesEnvelope" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummariesEnvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummariesEnvelopeWithoutResponse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummariesEnvelopeWithoutResponse.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummariesWithoutPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummariesWithoutPlayers.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummary.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutAvatar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutAvatar.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutAvatarFull" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutAvatarFull.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutAvatarMedium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutAvatarMedium.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutCommunityVisibilityState" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutCommunityVisibilityState.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutLastLogOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutLastLogOff.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutPersonaName" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutPersonaName.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutPersonaState" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutPersonaState.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutProfileUrl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutProfileUrl.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PlayerSummaryWithoutSteamId" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlayerSummaryWithoutSteamId.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTO.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTOWithoutError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTOWithoutError.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTOWithoutId" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTOWithoutId.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTOWithoutKilledBy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTOWithoutKilledBy.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTOWithoutSeed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTOWithoutSeed.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplayDTOWithoutVersion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplayDTOWithoutVersion.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplaysEnvelope" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplaysEnvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplaysEnvelopeWithoutReplays" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplaysEnvelopeWithoutReplays.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ReplaysEnvelopeWithoutTotal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReplaysEnvelopeWithoutTotal.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="StarWarsEncoding" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\starwarsencoding.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\StarWarsEncoding.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFile.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="UgcFileDetails" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetails.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFileDetailsEnvelope" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetailsEnvelope.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFileDetailsEnvelopeWithoutData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetailsEnvelopeWithoutData.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFileDetailsWithoutFileName" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetailsWithoutFileName.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFileDetailsWithoutSize" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetailsWithoutSize.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UgcFileDetailsWithoutUrl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UgcFileDetailsWithoutUrl.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

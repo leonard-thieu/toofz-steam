@@ -11,7 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// <summary>
         /// The number of rows affected.
         /// </summary>
-        [DataMember(Name = "rows_affected")]
+        [DataMember(Name = "rows_affected", IsRequired = true)]
         public int RowsAffected { get; set; }
     }
 }

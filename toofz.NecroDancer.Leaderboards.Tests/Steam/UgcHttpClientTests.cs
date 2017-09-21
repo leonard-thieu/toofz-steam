@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
-using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam
 {
@@ -36,7 +35,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
                 var handler = new MockHttpMessageHandler();
                 handler
                     .When(HttpMethod.Get, "http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/")
-                    .Respond("application/octet-stream", Resources.UgcFile);
+                    .Respond(new ByteArrayContent(Resources.UgcFile));
                 var ugcHttpClient = new UgcHttpClient(handler);
                 var requestUri = "http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/";
 

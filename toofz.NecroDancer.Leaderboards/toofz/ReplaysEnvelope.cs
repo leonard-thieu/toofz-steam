@@ -6,9 +6,9 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     [DataContract]
     public sealed class ReplaysEnvelope
     {
-        [DataMember(Name = "total")]
+        [DataMember(Name = "total", IsRequired = true)]
         public int Total { get; set; }
-        [DataMember(Name = "replays")]
-        public IEnumerable<ReplayDTO> Replays { get; set; } = new List<ReplayDTO>();
+        [DataMember(Name = "replays", IsRequired = true)]
+        public IEnumerable<ReplayDTO> Replays { get; set; }
     }
 }

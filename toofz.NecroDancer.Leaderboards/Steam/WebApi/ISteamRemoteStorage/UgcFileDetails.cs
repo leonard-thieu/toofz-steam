@@ -11,17 +11,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage
         /// <summary>
         /// Path to the file along with its name
         /// </summary>
-        [DataMember(Name = "filename")]
+        [DataMember(Name = "filename", IsRequired = true)]
         public string FileName { get; set; }
         /// <summary>
         /// URL to the file
         /// </summary>
-        [DataMember(Name = "url")]
+        [DataMember(Name = "url", IsRequired = true)]
         public string Url { get; set; }
         /// <summary>
         /// Size of the file
         /// </summary>
-        [DataMember(Name = "size")]
+        [DataMember(Name = "size", IsRequired = true)]
         public int Size { get; set; }
     }
 }

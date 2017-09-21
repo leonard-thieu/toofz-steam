@@ -12,12 +12,12 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// <summary>
         /// Total number of players.
         /// </summary>
-        [DataMember(Name = "total")]
+        [DataMember(Name = "total", IsRequired = true)]
         public int Total { get; set; }
         /// <summary>
         /// A collection of players.
         /// </summary>
-        [DataMember(Name = "players")]
-        public IEnumerable<PlayerDTO> Players { get; set; } = new List<PlayerDTO>();
+        [DataMember(Name = "players", IsRequired = true)]
+        public IEnumerable<PlayerDTO> Players { get; set; }
     }
 }

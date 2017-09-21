@@ -42,7 +42,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<PlayersEnvelope>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<PlayersEnvelope>().ConfigureAwait(false);
         }
 
         public async Task<BulkStoreDTO> PostPlayersAsync(
@@ -54,7 +54,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await this.PostAsJsonAsync("players", players, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<BulkStoreDTO>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<BulkStoreDTO>().ConfigureAwait(false);
         }
 
         #endregion
@@ -79,7 +79,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<ReplaysEnvelope>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<ReplaysEnvelope>().ConfigureAwait(false);
         }
 
         public async Task<BulkStoreDTO> PostReplaysAsync(
@@ -91,7 +91,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await this.PostAsJsonAsync("replays", replays, cancellationToken).ConfigureAwait(false);
 
-            return await response.Content.ReadAsAsync<BulkStoreDTO>(cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<BulkStoreDTO>().ConfigureAwait(false);
         }
 
         #endregion

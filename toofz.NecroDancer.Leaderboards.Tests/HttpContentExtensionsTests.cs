@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,13 +13,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         public class CloneAsyncMethod
         {
             [TestMethod]
-            public async Task ContentIsNull_ReturnsNull()
+            public async Task HttpContentIsNull_ReturnsNull()
             {
                 // Arrange
-                HttpContent content = null;
+                HttpContent httpContent = null;
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(content);
+                var clone = await HttpContentExtensions.CloneAsync(httpContent);
 
                 // Assert
                 Assert.IsNull(clone);
@@ -48,6 +50,57 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 Assert.AreEqual("utf-8", clone.Headers.ContentType.CharSet);
+            }
+        }
+
+        [TestClass]
+        public class ReadAsAsyncMethod
+        {
+            [TestMethod]
+            public async Task HttpContentIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                HttpContent httpContent = null;
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                {
+                    return HttpContentExtensions.ReadAsAsync<object>(httpContent);
+                });
+            }
+
+            [TestMethod]
+            public async Task ResponseFailsDeserialization_ReturnsDefaultOfType()
+            {
+                // Arrange
+                var httpContent = new StringContent("");
+
+                // Act
+                var content = await httpContent.ReadAsAsync<TestDto>();
+
+                // Assert
+                Assert.IsNull(content);
+            }
+
+            [TestMethod]
+            public async Task ReturnsDeserializedObject()
+            {
+                // Arrange
+                var httpContent = new StringContent("{\"MyProperty\":\"MyValue\"}");
+
+                // Act
+                var content = await httpContent.ReadAsAsync<TestDto>();
+
+                // Assert
+                Assert.IsInstanceOfType(content, typeof(TestDto));
+                Assert.AreEqual("MyValue", content.MyProperty);
+            }
+
+            [DataContract]
+            class TestDto
+            {
+                [DataMember(IsRequired = true)]
+                public string MyProperty { get; set; }
             }
         }
     }

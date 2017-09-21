@@ -12,22 +12,22 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// <summary>
         /// The player's Steam ID.
         /// </summary>
-        [DataMember(Name = "id")]
+        [DataMember(Name = "id", IsRequired = true)]
         public long Id { get; set; }
         /// <summary>
         /// The player's display name.
         /// </summary>
-        [DataMember(Name = "display_name")]
+        [DataMember(Name = "display_name", IsRequired = true)]
         public string DisplayName { get; set; }
         /// <summary>
         /// The time (in UTC) that the player's data was retrieved at.
         /// </summary>
-        [DataMember(Name = "updated_at")]
+        [DataMember(Name = "updated_at", IsRequired = true)]
         public DateTime? UpdatedAt { get; set; }
         /// <summary>
         /// The URL of the player's avatar.
         /// </summary>
-        [DataMember(Name = "avatar")]
+        [DataMember(Name = "avatar", IsRequired = true)]
         public string Avatar { get; set; }
     }
 }

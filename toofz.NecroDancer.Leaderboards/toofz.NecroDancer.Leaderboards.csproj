@@ -60,16 +60,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="toofz, Version=6.3.0.168, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.6.3.0\lib\net45\toofz.dll</HintPath>
+    <Reference Include="toofz, Version=7.2.0.182, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.7.2.0\lib\net45\toofz.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -77,16 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -96,18 +80,18 @@
     <None Include="toofz.NecroDancer.Leaderboards.nuspec" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <None Include="data\daily-leaderboard-headers.json" />
-    <None Include="data\daily-leaderboard-headers.min.json">
-      <DependentUpon>daily-leaderboard-headers.json</DependentUpon>
-    </None>
     <None Include="data\leaderboard-categories.json" />
-    <None Include="data\leaderboard-categories.min.json">
-      <DependentUpon>leaderboard-categories.json</DependentUpon>
-    </None>
     <None Include="data\leaderboard-headers.json" />
-    <None Include="data\leaderboard-headers.min.json">
-      <DependentUpon>leaderboard-headers.json</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Steam\ClientApi\ICallbackManager.cs" />
@@ -157,13 +141,14 @@
     <Compile Include="toofz\BulkStoreDTO.cs" />
     <Compile Include="toofz\GetPlayersParams.cs" />
     <Compile Include="toofz\GetReplaysParams.cs" />
+    <Compile Include="toofz\HttpError.cs" />
     <Compile Include="toofz\HttpErrorException.cs" />
     <Compile Include="toofz\IPagination.cs" />
     <Compile Include="toofz\IToofzApiClient.cs" />
     <Compile Include="toofz\ToofzApiClient.cs">
       <DependentUpon>IToofzApiClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="toofz\OAuth2AccessToken.cs" />
+    <Compile Include="toofz\OAuth2BearerToken.cs" />
     <Compile Include="toofz\OAuth2Handler.cs" />
     <Compile Include="toofz\PlayerDTO.cs" />
     <Compile Include="toofz\PlayersEnvelope.cs" />
@@ -177,7 +162,9 @@
     <Compile Include="DailyLeaderboard.cs" />
     <Compile Include="DailyLeaderboardHeader.cs" />
     <Compile Include="DailyLeaderboardHeaders.cs" />
+    <Compile Include="DailyLeaderboardHeadersEnvelope.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="HttpContentExtensions.cs" />
     <Compile Include="HttpErrorHandler.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />
@@ -189,6 +176,7 @@
     <Compile Include="Leaderboard.cs" />
     <Compile Include="LeaderboardHeader.cs" />
     <Compile Include="LeaderboardHeaders.cs" />
+    <Compile Include="LeaderboardHeadersEnvelope.cs" />
     <Compile Include="LeaderboardsResources.cs" />
     <Compile Include="LoggingHandler.cs" />
     <Compile Include="Player.cs" />
