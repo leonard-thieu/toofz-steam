@@ -9,8 +9,21 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
     class PlayerSummariesTests
     {
         [TestClass]
-        public class Deserialization
+        public class Serialization
         {
+            [TestMethod]
+            public void WithoutPlayers_DoesNotDeserialize()
+            {
+                // Arrange
+                var json = Resources.PlayerSummariesWithoutPlayers;
+
+                // Act -> Assert
+                Assert.ThrowsException<JsonSerializationException>(() =>
+                {
+                    JsonConvert.DeserializeObject<PlayerSummaries>(json);
+                });
+            }
+
             [TestMethod]
             public void Deserializes()
             {
@@ -18,12 +31,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
                 var json = Resources.PlayerSummaries;
 
                 // Act
-                var playerSummaries = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
-                var response = playerSummaries.Response;
+                var playerSummaries = JsonConvert.DeserializeObject<PlayerSummaries>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(PlayerSummaries));
-                Assert.AreEqual(1, response.Players.Count());
+                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummaries));
+                var players = playerSummaries.Players.ToList();
+                Assert.AreEqual(1, players.Count);
+                CollectionAssert.AllItemsAreInstancesOfType(players, typeof(PlayerSummary));
             }
         }
     }

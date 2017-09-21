@@ -102,7 +102,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 mockHandler
                     .When("*")
                     .Respond(HttpStatusCode.OK);
-                var bearerToken = new OAuth2AccessToken();
+                var bearerToken = new OAuth2BearerToken();
                 var userName = "myUserName";
                 var password = "myPassword";
                 var handler = new HttpMessageHandlerAdapter(new OAuth2Handler(userName, password)
@@ -134,7 +134,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .Respond(req => response);
                 mockHandler
                     .Expect("/token")
-                    .Respond("application/json", Resources.OAuth2AccessToken);
+                    .Respond("application/json", Resources.OAuth2BearerToken);
                 mockHandler
                     .Expect("/")
                     .WithHeaders("Authorization", "Bearer myAccessToken")
@@ -166,7 +166,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                     .Respond(req => response);
                 mockHandler
                     .Expect("/token")
-                    .Respond("application/json", Resources.OAuth2AccessToken);
+                    .Respond("application/json", Resources.OAuth2BearerToken);
                 mockHandler
                     .Expect("/")
                     .WithHeaders("Authorization", "Bearer myAccessToken")

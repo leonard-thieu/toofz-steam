@@ -1,0 +1,7 @@
+{
+  "access_token": "myAccessToken",
+  "token_type": "bearer",
+  "userName": "myUserName",
+  ".issued": "Wed, 13 Sep 2017 18:29:56 GMT",
+  ".expires": "Wed, 13 Sep 2017 19:29:56 GMT"
+}

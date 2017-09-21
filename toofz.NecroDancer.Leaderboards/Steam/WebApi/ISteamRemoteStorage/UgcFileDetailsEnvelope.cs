@@ -8,7 +8,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage
         /// <summary>
         /// UGC file information.
         /// </summary>
-        [DataMember(Name = "data")]
+        [DataMember(Name = "data", IsRequired = true)]
         public UgcFileDetails Data { get; set; }
     }
 }

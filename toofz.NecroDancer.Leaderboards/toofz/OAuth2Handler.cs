@@ -34,7 +34,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         readonly string password;
         readonly ILog log;
 
-        internal OAuth2AccessToken BearerToken { get; set; }
+        internal OAuth2BearerToken BearerToken { get; set; }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -62,7 +62,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             }
         }
 
-        async Task<OAuth2AccessToken> AuthenticateAsync(Uri requestUri, CancellationToken cancellationToken)
+        async Task<OAuth2BearerToken> AuthenticateAsync(Uri requestUri, CancellationToken cancellationToken)
         {
             var authUri = new Uri(requestUri, "/token");
             log.Info($"Authenticating to '{authUri}'...");
@@ -77,14 +77,15 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
             var response = await PostAsync(authUri, content, cancellationToken).ConfigureAwait(false);
 
-            var accessToken = await response.Content.ReadAsAsync<OAuth2AccessToken>(cancellationToken).ConfigureAwait(false);
-            if (!((accessToken.TokenType == "bearer") &&
-                  (accessToken.UserName == userName)))
+            var bearerToken = await response.Content.ReadAsAsync<OAuth2BearerToken>().ConfigureAwait(false);
+            if (bearerToken == null ||
+                !((bearerToken.TokenType == "bearer") &&
+                  (bearerToken.UserName == userName)))
             {
                 throw new InvalidDataException("Did not receive a valid bearer token.");
             }
 
-            return accessToken;
+            return bearerToken;
         }
 
         Task<HttpResponseMessage> PostAsync(Uri requestUri, FormUrlEncodedContent content, CancellationToken cancellationToken)

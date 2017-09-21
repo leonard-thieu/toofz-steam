@@ -11,7 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         /// <summary>
         /// 64-bit SteamID of the user
         /// </summary>
-        [DataMember(Name = "steamid")]
+        [DataMember(Name = "steamid", IsRequired = true)]
         public long SteamId { get; set; }
         /// <summary>
         /// This represents whether the profile is visible or not, and if it is visible, why you are allowed to see it. 
@@ -22,7 +22,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         ///   The community visibility state this API returns is different than the privacy state. It's the effective visibility state from 
         ///   the account making the request to the account being viewed given the requesting account's relationship to the viewed account.
         /// </summary>
-        [DataMember(Name = "communityvisibilitystate")]
+        [DataMember(Name = "communityvisibilitystate", IsRequired = true)]
         public int CommunityVisibilityState { get; set; }
         /// <summary>
         /// If set, indicates the user has a community profile configured (will be set to '1')
@@ -32,32 +32,32 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         /// <summary>
         /// The player's persona name (display name)
         /// </summary>
-        [DataMember(Name = "personaname")]
+        [DataMember(Name = "personaname", IsRequired = true)]
         public string PersonaName { get; set; }
         /// <summary>
         /// The last time the user was online, in unix time.
         /// </summary>
-        [DataMember(Name = "lastlogoff")]
+        [DataMember(Name = "lastlogoff", IsRequired = true)]
         public int LastLogOff { get; set; }
         /// <summary>
         /// The full URL of the player's Steam Community profile.
         /// </summary>
-        [DataMember(Name = "profileurl")]
+        [DataMember(Name = "profileurl", IsRequired = true)]
         public string ProfileUrl { get; set; }
         /// <summary>
         /// The full URL of the player's 32x32px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [DataMember(Name = "avatar")]
+        [DataMember(Name = "avatar", IsRequired = true)]
         public string Avatar { get; set; }
         /// <summary>
         /// The full URL of the player's 64x64px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [DataMember(Name = "avatarmedium")]
+        [DataMember(Name = "avatarmedium", IsRequired = true)]
         public string AvatarMedium { get; set; }
         /// <summary>
         /// The full URL of the player's 184x184px avatar. If the user hasn't configured an avatar, this will be the default ? avatar.
         /// </summary>
-        [DataMember(Name = "avatarfull")]
+        [DataMember(Name = "avatarfull", IsRequired = true)]
         public string AvatarFull { get; set; }
         /// <summary>
         /// The user's current status.
@@ -71,7 +71,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser
         /// If the player's profile is private, this will always be "0", except if the user has set their status to Looking to Trade or Looking to Play, 
         /// because a bug makes those status appear even if the profile is private.
         /// </summary>
-        [DataMember(Name = "personastate")]
+        [DataMember(Name = "personastate", IsRequired = true)]
         public int PersonaState { get; set; }
         /// <summary>
         /// The player's "Real Name", if they have set it.

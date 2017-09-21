@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
@@ -30,8 +29,8 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 var message = $"Response status code does not indicate success: {(int)response.StatusCode} ({response.ReasonPhrase}).";
 
                 await response.Content.LoadIntoBufferAsync().ConfigureAwait(false);
-                var httpError = await response.Content.ReadAsAsync<HttpError>(cancellationToken).ConfigureAwait(false);
-                if (httpError.Message != null)
+                var httpError = await response.Content.ReadAsAsync<HttpError>().ConfigureAwait(false);
+                if (httpError != null)
                 {
                     throw new HttpErrorException(httpError, response.StatusCode, response.RequestMessage.RequestUri);
                 }

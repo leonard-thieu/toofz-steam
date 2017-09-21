@@ -8,20 +8,33 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamRemoteStorage
     class UgcFileDetailsEnvelopeTests
     {
         [TestClass]
-        public class Deserialization
+        public class Serialization
         {
+            [TestMethod]
+            public void WithoutData_DoesNotDeserialize()
+            {
+                // Arrange
+                var json = Resources.UgcFileDetailsEnvelopeWithoutData;
+
+                // Act -> Assert
+                Assert.ThrowsException<JsonSerializationException>(() =>
+                {
+                    JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(json);
+                });
+            }
+
             [TestMethod]
             public void Deserializes()
             {
                 // Arrange
-                var json = Resources.UgcFileDetails;
+                var json = Resources.UgcFileDetailsEnvelope;
 
                 // Act
-                var ugcFileDetails = JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(json);
+                var ugcFileDetailsEnvelope = JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(ugcFileDetails, typeof(UgcFileDetailsEnvelope));
-                Assert.IsNotNull(ugcFileDetails.Data);
+                Assert.IsInstanceOfType(ugcFileDetailsEnvelope, typeof(UgcFileDetailsEnvelope));
+                Assert.IsInstanceOfType(ugcFileDetailsEnvelope.Data, typeof(UgcFileDetails));
             }
         }
     }

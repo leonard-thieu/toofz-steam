@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
@@ -22,7 +21,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var mockHandler = new MockHttpMessageHandler();
                 mockHandler
                     .When("*")
-                    .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new HttpError("myMessage")));
+                    .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(new HttpError { Message = "myMessage" }));
                 var handler = new HttpMessageHandlerAdapter(new ToofzHttpErrorHandler { InnerHandler = mockHandler });
                 var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 

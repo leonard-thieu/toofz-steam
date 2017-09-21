@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using toofz.NecroDancer.Leaderboards.toofz;
 
@@ -46,7 +45,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public void SetsMessage()
             {
                 // Arrange
-                var httpError = new HttpError("myMessage");
+                var httpError = new HttpError { Message = "myMessage" };
                 var statusCode = HttpStatusCode.NotFound;
                 var requestUri = new Uri("http://localhost/");
                 var ex = new HttpErrorException(httpError, statusCode, requestUri);

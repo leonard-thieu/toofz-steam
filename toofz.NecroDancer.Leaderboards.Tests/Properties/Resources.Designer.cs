@@ -73,6 +73,52 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///
+        ///}.
+        /// </summary>
+        internal static string BulkStoreDTOWithoutRowsAffected {
+            get {
+                return ResourceManager.GetString("BulkStoreDTOWithoutRowsAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;message&quot;: &quot;An error has occurred.&quot;,
+        ///  &quot;exceptionMessage&quot;: &quot;An error occurred while preparing the command definition. See the inner exception for details.&quot;,
+        ///  &quot;exceptionType&quot;: &quot;System.Data.Entity.Core.EntityCommandCompilationException&quot;,
+        ///  &quot;stackTrace&quot;: &quot;   at System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition..ctor(DbProviderFactory storeProviderFactory, DbCommandTree commandTree, DbInterceptionContext interceptionContext, IDbDependencyResolver resolver, BridgeDataReaderFactory br [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HttpError {
+            get {
+                return ResourceManager.GetString("HttpError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;message&quot;: &quot;An error has occurred.&quot;
+        ///}.
+        /// </summary>
+        internal static string HttpErrorWithMessage {
+            get {
+                return ResourceManager.GetString("HttpErrorWithMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  
+        ///}.
+        /// </summary>
+        internal static string HttpErrorWithoutMessage {
+            get {
+                return ResourceManager.GetString("HttpErrorWithoutMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
         ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
         ///  &quot;token_type&quot;: &quot;bearer&quot;,
         ///  &quot;expires_in&quot;: 3599,
@@ -81,9 +127,165 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
         ///}.
         /// </summary>
-        internal static string OAuth2AccessToken {
+        internal static string OAuth2BearerToken {
             get {
-                return ResourceManager.GetString("OAuth2AccessToken", resourceCulture);
+                return ResourceManager.GetString("OAuth2BearerToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutAccessToken {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutAccessToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutExpires {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutExpires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutExpiresIn {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutExpiresIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutIssued {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutIssued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;userName&quot;: &quot;myUserName&quot;,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutTokenType {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutTokenType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
+        ///  &quot;token_type&quot;: &quot;bearer&quot;,
+        ///  &quot;expires_in&quot;: 3599,
+        ///  &quot;.issued&quot;: &quot;Wed, 13 Sep 2017 18:29:56 GMT&quot;,
+        ///  &quot;.expires&quot;: &quot;Wed, 13 Sep 2017 19:29:56 GMT&quot;
+        ///}.
+        /// </summary>
+        internal static string OAuth2BearerTokenWithoutUserName {
+            get {
+                return ResourceManager.GetString("OAuth2BearerTokenWithoutUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///  &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///  &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///}.
+        /// </summary>
+        internal static string PlayersDTO {
+            get {
+                return ResourceManager.GetString("PlayersDTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///  &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///  &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;
+        ///}.
+        /// </summary>
+        internal static string PlayersDTOWithoutAvatar {
+            get {
+                return ResourceManager.GetString("PlayersDTOWithoutAvatar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///  &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///}.
+        /// </summary>
+        internal static string PlayersDTOWithoutDisplayName {
+            get {
+                return ResourceManager.GetString("PlayersDTOWithoutDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///  &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///}.
+        /// </summary>
+        internal static string PlayersDTOWithoutId {
+            get {
+                return ResourceManager.GetString("PlayersDTOWithoutId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///  &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///}.
+        /// </summary>
+        internal static string PlayersDTOWithoutUpdatedAt {
+            get {
+                return ResourceManager.GetString("PlayersDTOWithoutUpdatedAt", resourceCulture);
             }
         }
         
@@ -111,6 +313,57 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///  &quot;total&quot;: 453681
+        ///}.
+        /// </summary>
+        internal static string PlayersEnvelopeWithoutPlayers {
+            get {
+                return ResourceManager.GetString("PlayersEnvelopeWithoutPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;players&quot;: [
+        ///    {
+        ///      &quot;id&quot;: &quot;76561198020278823&quot;,
+        ///      &quot;display_name&quot;: &quot;Mr.moneybottoms&quot;,
+        ///      &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///      &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;76561198020279203&quot;,
+        ///      &quot;display_name&quot;: &quot;srslycirce&quot;,
+        ///      &quot;updated_at&quot;: &quot;2017-09-13T12:48:01.35Z&quot;,
+        ///      &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b9/b99 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayersEnvelopeWithoutTotal {
+            get {
+                return ResourceManager.GetString("PlayersEnvelopeWithoutTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;players&quot;: [
+        ///    {
+        ///      &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///      &quot;communityvisibilitystate&quot;: 3,
+        ///      &quot;profilestate&quot;: 1,
+        ///      &quot;personaname&quot;: &quot;Robin&quot;,
+        ///      &quot;lastlogoff&quot;: 1501731437,
+        ///      &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///      &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///      &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaries {
+            get {
+                return ResourceManager.GetString("PlayerSummaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
         ///  &quot;response&quot;: {
         ///    &quot;players&quot;: [
         ///      {
@@ -123,9 +376,285 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         ///        &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
         ///        &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/im [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string PlayerSummaries {
+        internal static string PlayerSummariesEnvelope {
             get {
-                return ResourceManager.GetString("PlayerSummaries", resourceCulture);
+                return ResourceManager.GetString("PlayerSummariesEnvelope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///
+        ///}.
+        /// </summary>
+        internal static string PlayerSummariesEnvelopeWithoutResponse {
+            get {
+                return ResourceManager.GetString("PlayerSummariesEnvelopeWithoutResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///
+        ///}.
+        /// </summary>
+        internal static string PlayerSummariesWithoutPlayers {
+            get {
+                return ResourceManager.GetString("PlayerSummariesWithoutPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;profilestate&quot;: 1,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;http [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummary {
+            get {
+                return ResourceManager.GetString("PlayerSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_full.jpg&quot;,
+        ///  &quot;personastate&quot;: 0
+        ///}.
+        /// </summary>
+        internal static string PlayerSummaryWithoutAvatar {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutAvatar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;personastate&quot;: 0
+        ///}.
+        /// </summary>
+        internal static string PlayerSummaryWithoutAvatarFull {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutAvatarFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_full.jpg&quot;,
+        ///  &quot;personastate&quot;: 0
+        ///}.
+        /// </summary>
+        internal static string PlayerSummaryWithoutAvatarMedium {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutAvatarMedium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutCommunityVisibilityState {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutCommunityVisibilityState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutLastLogOff {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutLastLogOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutPersonaName {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutPersonaName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaih [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutPersonaState {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutPersonaState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutProfileUrl {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutProfileUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;communityvisibilitystate&quot;: 3,
+        ///  &quot;personaname&quot;: &quot;Robin&quot;,
+        ///  &quot;lastlogoff&quot;: 1501731437,
+        ///  &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///  &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///  &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium.jpg&quot;,
+        ///  &quot;avatarfull&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummaryWithoutSteamId {
+            get {
+                return ResourceManager.GetString("PlayerSummaryWithoutSteamId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///  &quot;error&quot;: null,
+        ///  &quot;seed&quot;: null,
+        ///  &quot;version&quot;: null,
+        ///  &quot;killed_by&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTO {
+            get {
+                return ResourceManager.GetString("ReplayDTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///  &quot;seed&quot;: null,
+        ///  &quot;version&quot;: null,
+        ///  &quot;killed_by&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTOWithoutError {
+            get {
+                return ResourceManager.GetString("ReplayDTOWithoutError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;error&quot;: null,
+        ///  &quot;seed&quot;: null,
+        ///  &quot;version&quot;: null,
+        ///  &quot;killed_by&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTOWithoutId {
+            get {
+                return ResourceManager.GetString("ReplayDTOWithoutId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///  &quot;error&quot;: null,
+        ///  &quot;seed&quot;: null,
+        ///  &quot;version&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTOWithoutKilledBy {
+            get {
+                return ResourceManager.GetString("ReplayDTOWithoutKilledBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///  &quot;error&quot;: null,
+        ///  &quot;version&quot;: null,
+        ///  &quot;killed_by&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTOWithoutSeed {
+            get {
+                return ResourceManager.GetString("ReplayDTOWithoutSeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///  &quot;error&quot;: null,
+        ///  &quot;seed&quot;: null,
+        ///  &quot;killed_by&quot;: null
+        ///}.
+        /// </summary>
+        internal static string ReplayDTOWithoutVersion {
+            get {
+                return ResourceManager.GetString("ReplayDTOWithoutVersion", resourceCulture);
             }
         }
         
@@ -166,6 +695,52 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///  &quot;total&quot;: 43767
+        ///}.
+        /// </summary>
+        internal static string ReplaysEnvelopeWithoutReplays {
+            get {
+                return ResourceManager.GetString("ReplaysEnvelopeWithoutReplays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;replays&quot;: [
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340377377&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340436306&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340472702&quot;,
+        ///      &quot;error&quot;: null,
+        ///      &quot;seed&quot;: null,
+        ///      &quot;version&quot;: null,
+        ///      &quot;killed_by&quot;: null
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: &quot;844845073340489317&quot;,
+        ///      &quot;error&quot;: null,
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ReplaysEnvelopeWithoutTotal {
+            get {
+                return ResourceManager.GetString("ReplaysEnvelopeWithoutTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
         ///	&quot;response&quot;: {
         ///		&quot;players&quot;: [
         ///			{
@@ -186,11 +761,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BROWN DIREBAT%*#%*24\n1\n0\n0\n1\n1\n0\n1\n107608\n2\n1006686362\n1\n512\n337\n170\n0|170|2:2,4:2,6:2,8:2,10:2,12:3,14:3,16:3,18:3,20:3,22:3,24:3,26:2,28:3,30:0,32:3,34:2,36:3,38:3,40:2,42:0,44:2,46:0,48:0,50:0,52:0,54:3,56:3,58:2,60:3,62:2,64:1,66:3,68:3,70:3,72:2,74:2,76:2,78:2,80:0,82:3,84:3,86:0,88:0,90:3,92:3,94:1,96:1,98:1,100:1,102:1,104:1,106:1,108:1,110:1,112:1,114:1,116:1,118:1,120:1,122:2,124:1,126:1,128:2,130:0,132:2,134:0,136:2,138:2,140:2,142:2,144:2,146:2,148:2,150:1,152:2,154:1,156:1,158:1,1 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string UgcFile {
+        internal static byte[] UgcFile {
             get {
-                return ResourceManager.GetString("UgcFile", resourceCulture);
+                object obj = ResourceManager.GetObject("UgcFile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;filename&quot;: &quot;2/9/2014_score191_zone1_level2&quot;,
+        ///  &quot;url&quot;: &quot;http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/&quot;,
+        ///  &quot;size&quot;: 1558
+        ///}.
+        /// </summary>
+        internal static string UgcFileDetails {
+            get {
+                return ResourceManager.GetString("UgcFileDetails", resourceCulture);
             }
         }
         
@@ -203,9 +792,56 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         ///  }
         ///}.
         /// </summary>
-        internal static string UgcFileDetails {
+        internal static string UgcFileDetailsEnvelope {
             get {
-                return ResourceManager.GetString("UgcFileDetails", resourceCulture);
+                return ResourceManager.GetString("UgcFileDetailsEnvelope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///
+        ///}.
+        /// </summary>
+        internal static string UgcFileDetailsEnvelopeWithoutData {
+            get {
+                return ResourceManager.GetString("UgcFileDetailsEnvelopeWithoutData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;url&quot;: &quot;http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/&quot;,
+        ///  &quot;size&quot;: 1558
+        ///}.
+        /// </summary>
+        internal static string UgcFileDetailsWithoutFileName {
+            get {
+                return ResourceManager.GetString("UgcFileDetailsWithoutFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;filename&quot;: &quot;2/9/2014_score191_zone1_level2&quot;,
+        ///  &quot;url&quot;: &quot;http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/&quot;
+        ///}.
+        /// </summary>
+        internal static string UgcFileDetailsWithoutSize {
+            get {
+                return ResourceManager.GetString("UgcFileDetailsWithoutSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;filename&quot;: &quot;2/9/2014_score191_zone1_level2&quot;,
+        ///  &quot;size&quot;: 1558
+        ///}.
+        /// </summary>
+        internal static string UgcFileDetailsWithoutUrl {
+            get {
+                return ResourceManager.GetString("UgcFileDetailsWithoutUrl", resourceCulture);
             }
         }
     }

@@ -8,20 +8,33 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
     class PlayerSummariesEnvelopeTests
     {
         [TestClass]
-        public class Deserialization
+        public class Serialization
         {
+            [TestMethod]
+            public void WithoutResponse_DoesNotDeserialize()
+            {
+                // Arrange
+                var json = Resources.PlayerSummariesEnvelopeWithoutResponse;
+
+                // Act -> Assert
+                Assert.ThrowsException<JsonSerializationException>(() =>
+                {
+                    JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
+                });
+            }
+
             [TestMethod]
             public void Deserializes()
             {
                 // Arrange
-                var json = Resources.PlayerSummaries;
+                var json = Resources.PlayerSummariesEnvelope;
 
                 // Act
-                var playerSummaries = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
+                var playerSummariesEnvelope = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummariesEnvelope));
-                Assert.IsNotNull(playerSummaries.Response);
+                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
+                Assert.IsInstanceOfType(playerSummariesEnvelope.Response, typeof(PlayerSummaries));
             }
         }
     }

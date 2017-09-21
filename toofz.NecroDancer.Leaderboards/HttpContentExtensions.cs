@@ -1,27 +1,46 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     static class HttpContentExtensions
     {
-        public static async Task<HttpContent> CloneAsync(this HttpContent content)
+        public static async Task<HttpContent> CloneAsync(this HttpContent httpContent)
         {
-            if (content == null) { return null; }
+            if (httpContent == null) { return null; }
 
             var ms = new MemoryStream();
-            await content.CopyToAsync(ms).ConfigureAwait(false);
+            await httpContent.CopyToAsync(ms).ConfigureAwait(false);
             ms.Position = 0;
 
             var clone = new StreamContent(ms);
 
-            foreach (var header in content.Headers)
+            foreach (var header in httpContent.Headers)
             {
                 clone.Headers.Add(header.Key, header.Value);
             }
 
             return clone;
+        }
+
+        public static async Task<T> ReadAsAsync<T>(this HttpContent httpContent)
+        {
+            if (httpContent == null)
+                throw new ArgumentNullException(nameof(httpContent));
+
+            try
+            {
+                var value = await httpContent.ReadAsStringAsync().ConfigureAwait(false);
+
+                return JsonConvert.DeserializeObject<T>(value);
+            }
+            catch (JsonSerializationException)
+            {
+                return default(T);
+            }
         }
     }
 }

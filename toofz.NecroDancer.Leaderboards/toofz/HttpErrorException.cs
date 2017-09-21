@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Web.Http;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {

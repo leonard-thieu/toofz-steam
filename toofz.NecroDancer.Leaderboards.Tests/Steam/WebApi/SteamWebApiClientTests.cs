@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
+using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
-using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 {
@@ -76,17 +75,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                     .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002")
                     .WithQueryString("key", steamWebApiKey)
                     .WithQueryString("steamids", string.Join(",", steamIds))
-                    .Respond("application/json", Resources.PlayerSummaries);
+                    .Respond("application/json", Resources.PlayerSummariesEnvelope);
                 var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
 
                 // Act
-                var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(steamIds);
+                var playerSummariesEnvelope = await steamWebApiClient.GetPlayerSummariesAsync(steamIds);
 
                 // Assert
-                var player = playerSummaries.Response.Players.First();
-                Assert.AreEqual(76561197960435530, player.SteamId);
-                Assert.AreEqual("Robin", player.PersonaName);
-                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg", player.Avatar);
+                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
             }
 
             [TestMethod]
@@ -104,10 +100,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
 
                 // Act
-                var playerSummaries = await steamWebApiClient.GetPlayerSummariesAsync(steamIds);
+                var playerSummariesEnvelope = await steamWebApiClient.GetPlayerSummariesAsync(steamIds);
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummaries, typeof(PlayerSummariesEnvelope));
+                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
             }
         }
 
@@ -144,15 +140,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                     .WithQueryString("key", steamWebApiKey)
                     .WithQueryString("appid", appId.ToString())
                     .WithQueryString("ugcid", ugcId.ToString())
-                    .Respond("application/json", Resources.UgcFileDetails);
+                    .Respond("application/json", Resources.UgcFileDetailsEnvelope);
                 var steamWebApiClient = new SteamWebApiClient(handler) { SteamWebApiKey = steamWebApiKey };
 
                 // Act
-                var ugcFileDetails = await steamWebApiClient.GetUgcFileDetailsAsync(appId, ugcId);
+                var ugcFileDetailsEnvelope = await steamWebApiClient.GetUgcFileDetailsAsync(appId, ugcId);
 
                 // Assert
-                var data = ugcFileDetails.Data;
-                Assert.AreEqual("http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/", data.Url);
+                Assert.IsInstanceOfType(ugcFileDetailsEnvelope, typeof(UgcFileDetailsEnvelope));
             }
         }
     }

@@ -19,7 +19,7 @@ namespace toofz.NecroDancer.Leaderboards.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,32 @@ namespace toofz.NecroDancer.Leaderboards.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;leaderboards&quot;:[{&quot;id&quot;:391760,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-07-30T00:00:00Z&quot;},{&quot;id&quot;:394529,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-07-31T00:00:00Z&quot;},{&quot;id&quot;:396523,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-08-01T00:00:00Z&quot;},{&quot;id&quot;:396524,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-08-02T00:00:00Z&quot;},{&quot;id&quot;:396525,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-08-03T00:00:00Z&quot;},{&quot;id&quot;:396526,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-08-04T00:00:00Z&quot;},{&quot;id&quot;:396881,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-08-05T00:00:00Z&quot;},{&quot;id&quot;:396882,&quot;product&quot;:&quot;classic&quot;,&quot;date&quot;:&quot;2014-0 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {
+        ///  &quot;leaderboards&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 391760,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;date&quot;: &quot;2014-07-30T00:00:00Z&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 394529,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;date&quot;: &quot;2014-07-31T00:00:00Z&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 396523,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;date&quot;: &quot;2014-08-01T00:00:00Z&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 396524,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;date&quot;: &quot;2014-08-02T00:00:00Z&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 396525,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;date&quot;: &quot;2014 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DailyLeaderboardHeaders {
             get {
@@ -70,7 +95,32 @@ namespace toofz.NecroDancer.Leaderboards.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;categories&quot;:{&quot;products&quot;:{&quot;classic&quot;:{&quot;id&quot;:0,&quot;display_name&quot;:&quot;Classic&quot;,&quot;order&quot;:0},&quot;amplified&quot;:{&quot;id&quot;:1,&quot;display_name&quot;:&quot;Amplified&quot;,&quot;order&quot;:1,&quot;value&quot;:true}},&quot;modes&quot;:{&quot;standard&quot;:{&quot;id&quot;:0,&quot;display_name&quot;:&quot;Standard&quot;,&quot;order&quot;:0,&quot;value&quot;:true},&quot;no-return&quot;:{&quot;id&quot;:1,&quot;display_name&quot;:&quot;No Return&quot;,&quot;order&quot;:1},&quot;hard&quot;:{&quot;id&quot;:2,&quot;display_name&quot;:&quot;Hard&quot;,&quot;order&quot;:2},&quot;phasing&quot;:{&quot;id&quot;:3,&quot;display_name&quot;:&quot;Phasing&quot;,&quot;order&quot;:3},&quot;randomizer&quot;:{&quot;id&quot;:4,&quot;display_name&quot;:&quot;Randomizer&quot;,&quot;order&quot;:4},&quot;mystery&quot;:{&quot;id&quot;:5,&quot;display_name&quot;:&quot;Mystery&quot;,&quot;order&quot;:5}},&quot;runs&quot; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {
+        ///  &quot;categories&quot;: {
+        ///    &quot;products&quot;: {
+        ///      &quot;classic&quot;: {
+        ///        &quot;id&quot;: 0,
+        ///        &quot;display_name&quot;: &quot;Classic&quot;,
+        ///        &quot;order&quot;: 0
+        ///      },
+        ///      &quot;amplified&quot;: {
+        ///        &quot;id&quot;: 1,
+        ///        &quot;display_name&quot;: &quot;Amplified&quot;,
+        ///        &quot;order&quot;: 1,
+        ///        &quot;value&quot;: true
+        ///      }
+        ///    },
+        ///    &quot;modes&quot;: {
+        ///      &quot;standard&quot;: {
+        ///        &quot;id&quot;: 0,
+        ///        &quot;display_name&quot;: &quot;Standard&quot;,
+        ///        &quot;order&quot;: 0,
+        ///        &quot;value&quot;: true
+        ///      },
+        ///      &quot;no-return&quot;: {
+        ///        &quot;id&quot;: 1,
+        ///        &quot;display_name&quot;: &quot;No Return&quot;,
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LeaderboardCategories {
             get {
@@ -79,7 +129,29 @@ namespace toofz.NecroDancer.Leaderboards.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;leaderboards&quot;:[{&quot;id&quot;:741312,&quot;display_name&quot;:&quot;All Characters Score&quot;,&quot;product&quot;:&quot;classic&quot;,&quot;mode&quot;:&quot;standard&quot;,&quot;run&quot;:&quot;score&quot;,&quot;character&quot;:&quot;all-characters&quot;},{&quot;id&quot;:741115,&quot;display_name&quot;:&quot;Aria Score&quot;,&quot;product&quot;:&quot;classic&quot;,&quot;mode&quot;:&quot;standard&quot;,&quot;run&quot;:&quot;score&quot;,&quot;character&quot;:&quot;aria&quot;},{&quot;id&quot;:739795,&quot;display_name&quot;:&quot;Bard Score&quot;,&quot;product&quot;:&quot;classic&quot;,&quot;mode&quot;:&quot;standard&quot;,&quot;run&quot;:&quot;score&quot;,&quot;character&quot;:&quot;bard&quot;},{&quot;id&quot;:741400,&quot;display_name&quot;:&quot;Bolt Score&quot;,&quot;product&quot;:&quot;classic&quot;,&quot;mode&quot;:&quot;standard&quot;,&quot;run&quot;:&quot;score&quot;,&quot;character&quot;:&quot;bolt&quot;},{&quot;id&quot;:739999,&quot;display_n [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {
+        ///  &quot;leaderboards&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 741312,
+        ///      &quot;display_name&quot;: &quot;All Characters Score&quot;,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;mode&quot;: &quot;standard&quot;,
+        ///      &quot;run&quot;: &quot;score&quot;,
+        ///      &quot;character&quot;: &quot;all-characters&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 741115,
+        ///      &quot;display_name&quot;: &quot;Aria Score&quot;,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;mode&quot;: &quot;standard&quot;,
+        ///      &quot;run&quot;: &quot;score&quot;,
+        ///      &quot;character&quot;: &quot;aria&quot;
+        ///    },
+        ///    {
+        ///      &quot;id&quot;: 739795,
+        ///      &quot;display_name&quot;: &quot;Bard Score&quot;,
+        ///      &quot;product&quot;: &quot;classic&quot;,
+        ///      &quot;mode&quot;: &quot;s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LeaderboardHeaders {
             get {
