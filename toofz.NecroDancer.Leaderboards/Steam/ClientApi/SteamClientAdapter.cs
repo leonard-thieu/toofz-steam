@@ -110,12 +110,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 switch (response.Result)
                 {
                     case EResult.OK:
-                        Log.Info("Connected to Steam.");
-                        tcs.TrySetResult(response);
-                        break;
+                        {
+                            Log.Info("Connected to Steam.");
+                            tcs.TrySetResult(response);
+                            break;
+                        }
                     default:
-                        tcs.TrySetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
-                        break;
+                        {
+                            tcs.TrySetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
+                            break;
+                        }
                 }
 
                 onConnected.Dispose();
@@ -162,9 +166,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 switch (response.Result)
                 {
                     case EResult.OK:
-                        Log.Info("Logged on to Steam.");
-                        tcs.TrySetResult(response);
-                        break;
+                        {
+                            Log.Info("Logged on to Steam.");
+                            tcs.TrySetResult(response);
+                            break;
+                        }
                     case EResult.AccountLogonDenied:
                         {
                             var ex = new SteamClientApiException("Unable to logon to Steam: This account is SteamGuard protected.", response.Result);
