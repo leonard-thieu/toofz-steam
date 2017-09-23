@@ -98,12 +98,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         internal async Task ConnectAndLogOnAsync(CancellationToken cancellationToken)
         {
-            await connectAndLogOnSemaphore.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
+            await connectAndLogOnSemaphore.WaitAsync(cancellationToken);
             try
             {
                 if (!steamClient.IsConnected)
                 {
-                    await steamClient.ConnectAsync().ConfigureAwait(false);
+                    await steamClient.ConnectAsync();
                 }
                 if (!steamClient.IsLoggedOn)
                 {
@@ -111,7 +111,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     {
                         Username = userName,
                         Password = password,
-                    }).ConfigureAwait(false);
+                    });
                 }
             }
             finally
