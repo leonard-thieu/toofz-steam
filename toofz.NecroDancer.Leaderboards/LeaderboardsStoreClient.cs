@@ -23,15 +23,17 @@ namespace toofz.NecroDancer.Leaderboards
         {
             d => d.LeaderboardId,
             d => d.LastUpdate,
-            d => d.CharacterId,
+            d => d.IsProduction,
+            d => d.ProductId,
+            d => d.ModeId,
             d => d.RunId,
-            d => d.Date,
+            d => d.CharacterId,
         };
 
         [ExcludeFromCodeCoverage]
         public Task<int> SaveChangesAsync(
             IEnumerable<Leaderboard> leaderboards,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<Leaderboard>(GetLeaderboardMappings());
 
@@ -41,7 +43,7 @@ namespace toofz.NecroDancer.Leaderboards
         internal Task<int> SaveChangesAsync(
             ITypedUpserter<Leaderboard> upserter,
             IEnumerable<Leaderboard> leaderboards,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return UpsertAsync(upserter, leaderboards, true, cancellationToken);
         }
@@ -64,7 +66,7 @@ namespace toofz.NecroDancer.Leaderboards
         [ExcludeFromCodeCoverage]
         public Task<int> SaveChangesAsync(
             IEnumerable<Entry> entries,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<Entry>(GetEntryMappings());
 
@@ -74,7 +76,7 @@ namespace toofz.NecroDancer.Leaderboards
         internal Task<int> SaveChangesAsync(
             ITypedUpserter<Entry> upserter,
             IEnumerable<Entry> entries,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return upserter.InsertAsync(connection, entries, cancellationToken);
         }
@@ -88,14 +90,14 @@ namespace toofz.NecroDancer.Leaderboards
             d => d.LeaderboardId,
             d => d.LastUpdate,
             d => d.Date,
+            d => d.IsProduction,
             d => d.ProductId,
-            d => d.IsProduction
         };
 
         [ExcludeFromCodeCoverage]
         public Task<int> SaveChangesAsync(
             IEnumerable<DailyLeaderboard> leaderboards,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<DailyLeaderboard>(GetDailyLeaderboardMappings());
 
@@ -105,7 +107,7 @@ namespace toofz.NecroDancer.Leaderboards
         internal Task<int> SaveChangesAsync(
             ITypedUpserter<DailyLeaderboard> upserter,
             IEnumerable<DailyLeaderboard> leaderboards,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return UpsertAsync(upserter, leaderboards, true, cancellationToken);
         }
@@ -128,7 +130,7 @@ namespace toofz.NecroDancer.Leaderboards
         [ExcludeFromCodeCoverage]
         public Task<int> SaveChangesAsync(
             IEnumerable<DailyEntry> entries,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<DailyEntry>(GetDailyEntryMappings());
 
@@ -138,7 +140,7 @@ namespace toofz.NecroDancer.Leaderboards
         internal Task<int> SaveChangesAsync(
             ITypedUpserter<DailyEntry> upserter,
             IEnumerable<DailyEntry> entries,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return UpsertAsync(upserter, entries, true, cancellationToken);
         }
@@ -150,9 +152,9 @@ namespace toofz.NecroDancer.Leaderboards
         public ColumnMappings<Player> GetPlayerMappings() => new ColumnMappings<Player>("Players")
         {
             d => d.SteamId,
+            d => d.LastUpdate,
             d => d.Exists,
             d => d.Name,
-            d => d.LastUpdate,
             d => d.Avatar,
         };
 
@@ -160,7 +162,7 @@ namespace toofz.NecroDancer.Leaderboards
         public Task<int> SaveChangesAsync(
             IEnumerable<Player> players,
             bool updateOnMatch,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<Player>(GetPlayerMappings());
 
@@ -171,7 +173,7 @@ namespace toofz.NecroDancer.Leaderboards
             ITypedUpserter<Player> upserter,
             IEnumerable<Player> players,
             bool updateOnMatch,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return UpsertAsync(upserter, players, updateOnMatch, cancellationToken);
         }
@@ -185,15 +187,16 @@ namespace toofz.NecroDancer.Leaderboards
             d => d.ReplayId,
             d => d.ErrorCode,
             d => d.Seed,
-            d => d.KilledBy,
             d => d.Version,
+            d => d.KilledBy,
+            d => d.Uri,
         };
 
         [ExcludeFromCodeCoverage]
         public Task<int> SaveChangesAsync(
             IEnumerable<Replay> replays,
             bool updateOnMatch,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var upserter = new TypedUpserter<Replay>(GetReplayMappings());
 
@@ -204,7 +207,7 @@ namespace toofz.NecroDancer.Leaderboards
             ITypedUpserter<Replay> upserter,
             IEnumerable<Replay> replays,
             bool updateOnMatch,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return UpsertAsync(upserter, replays, updateOnMatch, cancellationToken);
         }

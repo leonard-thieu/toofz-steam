@@ -75,39 +75,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
-        public class FileNameProperty
+        public class UriProperty
         {
             [TestMethod]
-            public void VersionIsNotNull_ReturnsFileNameWithVersion()
+            public void GetSetBehavior()
             {
-                // Arrange
-                var replay = new Replay
-                {
-                    ReplayId = 32874823748,
-                    Version = 12,
-                };
+                // Arrange -> Act
+                var replay = new Replay { Uri = "http://example.org/" };
 
-                // Act
-                var fileName = replay.FileName;
-
-                // Assert
-                Assert.AreEqual($"12_32874823748.dat", fileName);
-            }
-
-            [TestMethod]
-            public void VersionIsNull_ReturnsFileNameWithUnknown()
-            {
-                // Arrange
-                var replay = new Replay
-                {
-                    ReplayId = 32874823748,
-                };
-
-                // Act
-                var fileName = replay.FileName;
-
-                // Assert
-                Assert.AreEqual($"UNKNOWN_32874823748.dat", fileName);
+                // Act -> Assert
+                Assert.AreEqual("http://example.org/", replay.Uri);
             }
         }
     }

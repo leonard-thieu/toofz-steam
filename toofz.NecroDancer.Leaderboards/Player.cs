@@ -12,9 +12,18 @@ namespace toofz.NecroDancer.Leaderboards
         /// The player's Steam ID.
         /// </summary>
         public long SteamId { get; set; }
-
+        /// <summary>
+        /// Entries that the player has submitted.
+        /// </summary>
+        public List<Entry> Entries { get; } = new List<Entry>();
+        /// <summary>
+        /// The last time the player's information was updated.
+        /// </summary>
+        public DateTime? LastUpdate { get; set; }
+        /// <summary>
+        /// Indicates if Steam returned information for the player.
+        /// </summary>
         public bool? Exists { get; set; }
-
         /// <summary>
         /// The player's display name.
         /// </summary>
@@ -23,15 +32,5 @@ namespace toofz.NecroDancer.Leaderboards
         /// The full URL of the player's 32x32px avatar.
         /// </summary>
         public string Avatar { get; set; }
-
-        /// <summary>
-        /// The last time the player's information was updated.
-        /// </summary>
-        public DateTime? LastUpdate { get; set; }
-
-        /// <summary>
-        /// Entries that the player has submitted.
-        /// </summary>
-        public List<Entry> Entries { get; } = new List<Entry>();
     }
 }

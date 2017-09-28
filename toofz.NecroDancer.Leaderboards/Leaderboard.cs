@@ -13,32 +13,32 @@ namespace toofz.NecroDancer.Leaderboards
         /// </summary>
         public int LeaderboardId { get; set; }
         /// <summary>
-        /// The total number of entries for the leaderboard. This value is provided by Steam.
-        /// </summary>
-        public int EntriesCount { get; set; }
-
-        /// <summary>
         /// The leaderboard's collection of entries.
         /// </summary>
         public List<Entry> Entries { get; } = new List<Entry>();
-
         /// <summary>
         /// The last time that the leaderboard was updated.
         /// </summary>
-        public DateTime LastUpdate { get; set; }
-
+        public DateTime? LastUpdate { get; set; }
         /// <summary>
-        /// The ID of the character associated with the leaderboard.
+        /// Indicates if the leaderboard is a production leaderboard.
         /// </summary>
-        public int CharacterId { get; set; }
+        public bool IsProduction { get; set; }
+        /// <summary>
+        /// The ID of the product associated with the leaderboard.
+        /// </summary>
+        public int ProductId { get; set; }
+        /// <summary>
+        /// The ID of the mode associated with the leaderboard.
+        /// </summary>
+        public int ModeId { get; set; }
         /// <summary>
         /// The ID of the run associated with the leaderboard.
         /// </summary>
         public int RunId { get; set; }
         /// <summary>
-        /// The date associated with the leaderboard if it is a daily. This value is null for leaderboards 
-        /// that are not dailies.
+        /// The ID of the character associated with the leaderboard.
         /// </summary>
-        public DateTime? Date { get; set; }
+        public int CharacterId { get; set; }
     }
 }

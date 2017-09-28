@@ -21,20 +21,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
-        public class EntriesCountProperty
-        {
-            [TestMethod]
-            public void GetSetBehavior()
-            {
-                // Arrange -> Act
-                var leaderboard = new Leaderboard { EntriesCount = 23546 };
-
-                // Act -> Assert
-                Assert.AreEqual(23546, leaderboard.EntriesCount);
-            }
-        }
-
-        [TestClass]
         public class EntriesProperty
         {
             [TestMethod]
@@ -87,20 +73,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Act -> Assert
                 Assert.AreEqual(2, leaderboard.RunId);
-            }
-        }
-
-        [TestClass]
-        public class DateProperty
-        {
-            [TestMethod]
-            public void GetSetBehavior()
-            {
-                // Arrange -> Act
-                var leaderboard = new Leaderboard { Date = new DateTime(2017, 8, 28) };
-
-                // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 28), leaderboard.Date);
             }
         }
     }
