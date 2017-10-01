@@ -159,6 +159,7 @@
     <Compile Include="toofz\ToofzHttpErrorHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character.cs" />
     <Compile Include="ContentLengthHandler.cs" />
     <Compile Include="DailyEntry.cs" />
     <Compile Include="DailyLeaderboard.cs" />
@@ -181,9 +182,12 @@
     <Compile Include="LeaderboardHeadersEnvelope.cs" />
     <Compile Include="LeaderboardsResources.cs" />
     <Compile Include="LoggingHandler.cs" />
+    <Compile Include="Mode.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="ProgressReporterHttpClient.cs" />
     <Compile Include="Replay.cs" />
+    <Compile Include="Run.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -199,6 +199,7 @@
     <Compile Include="toofz\ToofzHttpErrorHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharacterTests.cs" />
     <Compile Include="HttpClientExtensionsTests.cs" />
     <Compile Include="HttpErrorTests.cs" />
     <Compile Include="ContentLengthHandlerTests.cs" />
@@ -213,9 +214,12 @@
     <Compile Include="LeaderboardsResourcesTests.cs" />
     <Compile Include="LeaderboardsStoreClientTests.cs" />
     <Compile Include="LoggingHandlerTests.cs" />
+    <Compile Include="ModeTests.cs" />
     <Compile Include="PlayerTests.cs" />
+    <Compile Include="ProductTests.cs" />
     <Compile Include="ProgressReporterHttpClientTests.cs" />
     <Compile Include="ReplayTests.cs" />
+    <Compile Include="RunTests.cs" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

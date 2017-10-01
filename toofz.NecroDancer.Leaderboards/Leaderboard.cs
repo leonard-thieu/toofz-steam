@@ -21,21 +21,41 @@ namespace toofz.NecroDancer.Leaderboards
         /// </summary>
         public DateTime? LastUpdate { get; set; }
         /// <summary>
+        /// The leaderboard's display name.
+        /// </summary>
+        public string DisplayName { get; set; }
+        /// <summary>
         /// Indicates if the leaderboard is a production leaderboard.
         /// </summary>
         public bool IsProduction { get; set; }
+        /// <summary>
+        /// The product associated with the leaderboard.
+        /// </summary>
+        public Product Product { get; set; }
         /// <summary>
         /// The ID of the product associated with the leaderboard.
         /// </summary>
         public int ProductId { get; set; }
         /// <summary>
+        /// The mode associated with the leaderboard.
+        /// </summary>
+        public Mode Mode { get; set; }
+        /// <summary>
         /// The ID of the mode associated with the leaderboard.
         /// </summary>
         public int ModeId { get; set; }
         /// <summary>
+        /// The run associated with the leaderboard.
+        /// </summary>
+        public Run Run { get; set; }
+        /// <summary>
         /// The ID of the run associated with the leaderboard.
         /// </summary>
         public int RunId { get; set; }
+        /// <summary>
+        /// The character associated with the leaderboard.
+        /// </summary>
+        public Character Character { get; set; }
         /// <summary>
         /// The ID of the character associated with the leaderboard.
         /// </summary>

@@ -49,16 +49,53 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
-        public class DateProperty
+        public class DisplayNameProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var displayName = "MyDisplayName";
+                var dailyLeaderboard = new DailyLeaderboard();
+
+                // Act
+                dailyLeaderboard.DisplayName = displayName;
+                var displayName2 = dailyLeaderboard.DisplayName;
+
+                // Assert
+                Assert.AreEqual(displayName, displayName2);
+            }
+        }
+
+        [TestClass]
+        public class IsProductionProperty
         {
             [TestMethod]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
-                var dailyLeaderboard = new DailyLeaderboard { Date = new DateTime(2017, 8, 28) };
+                var dailyLeaderboard = new DailyLeaderboard { IsProduction = true };
 
                 // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 28), dailyLeaderboard.Date);
+                Assert.IsTrue(dailyLeaderboard.IsProduction);
+            }
+        }
+
+        [TestClass]
+        public class ProductProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var product = new Product(1, "myProduct", "MyProduct");
+
+                // Act
+                var dailyLeaderboard = new DailyLeaderboard { Product = product };
+                var product2 = dailyLeaderboard.Product;
+
+                // Assert
+                Assert.AreSame(product, product2);
             }
         }
 
@@ -77,16 +114,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
-        public class IsProductionProperty
+        public class DateProperty
         {
             [TestMethod]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
-                var dailyLeaderboard = new DailyLeaderboard { IsProduction = true };
+                var dailyLeaderboard = new DailyLeaderboard { Date = new DateTime(2017, 8, 28) };
 
                 // Act -> Assert
-                Assert.IsTrue(dailyLeaderboard.IsProduction);
+                Assert.AreEqual(new DateTime(2017, 8, 28), dailyLeaderboard.Date);
             }
         }
     }
