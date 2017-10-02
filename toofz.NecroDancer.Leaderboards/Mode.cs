@@ -4,6 +4,8 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Mode
     {
+        Mode() { }
+
         public Mode(int modeId, string name, string displayName)
         {
             ModeId = modeId;

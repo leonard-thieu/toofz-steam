@@ -4,6 +4,8 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Character
     {
+        Character() { }
+
         public Character(int characterId, string name, string displayName)
         {
             CharacterId = characterId;

@@ -4,6 +4,8 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Run
     {
+        Run() { }
+
         public Run(int runId, string name, string displayName)
         {
             RunId = runId;

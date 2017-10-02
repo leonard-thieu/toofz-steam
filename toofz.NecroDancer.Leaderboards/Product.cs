@@ -4,6 +4,8 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Product
     {
+        Product() { }
+
         public Product(int productId, string name, string displayName)
         {
             ProductId = productId;
