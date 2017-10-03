@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Sockets;
 using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
@@ -11,9 +10,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Initializes a new instance of the <see cref="CallbackManagerAdapter"/> class.
         /// </summary>
-        public CallbackManagerAdapter(ProtocolType type = ProtocolType.Tcp)
+        public CallbackManagerAdapter()
         {
-            var steamClient = new SteamClient(type);
+            var steamClient = new SteamClient();
             CallbackManager = new CallbackManager(steamClient);
             SteamClient = new SteamClientAdapter(steamClient, this);
         }
