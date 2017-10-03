@@ -94,29 +94,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         #region Connection
 
-        static readonly SemaphoreSlim connectAndLogOnSemaphore = new SemaphoreSlim(1, 1);
-
-        internal async Task ConnectAndLogOnAsync(CancellationToken cancellationToken)
+        public async Task ConnectAndLogOnAsync()
         {
-            await connectAndLogOnSemaphore.WaitAsync(cancellationToken);
-            try
+            if (!steamClient.IsConnected)
             {
-                if (!steamClient.IsConnected)
-                {
-                    await steamClient.ConnectAsync();
-                }
-                if (!steamClient.IsLoggedOn)
-                {
-                    await steamClient.LogOnAsync(new SteamUser.LogOnDetails
-                    {
-                        Username = userName,
-                        Password = password,
-                    });
-                }
+                await steamClient.ConnectAsync().ConfigureAwait(false);
             }
-            finally
+            if (!steamClient.IsLoggedOn)
             {
-                connectAndLogOnSemaphore.Release();
+                await steamClient.LogOnAsync(new SteamUser.LogOnDetails
+                {
+                    Username = userName,
+                    Password = password,
+                }).ConfigureAwait(false);
             }
         }
 
@@ -125,9 +115,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         public void Disconnect()
         {
-            if (disposed)
-                throw new ObjectDisposedException(nameof(SteamClientApiClient));
-
             steamClient.Disconnect();
         }
 
@@ -145,13 +132,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         public async Task<IFindOrCreateLeaderboardCallback> FindLeaderboardAsync(
             uint appId,
             string name,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
-            if (disposed)
-                throw new ObjectDisposedException(nameof(SteamClientApiClient));
-
-            await ConnectAndLogOnAsync(cancellationToken).ConfigureAwait(false);
-
             var leaderboard =
                 await RetryPolicy.ExecuteAsync(async () =>
                 {
@@ -185,13 +167,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         public async Task<ILeaderboardEntriesCallback> GetLeaderboardEntriesAsync(
             uint appId,
             int lbid,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
-            if (disposed)
-                throw new ObjectDisposedException(nameof(SteamClientApiClient));
-
-            await ConnectAndLogOnAsync(cancellationToken).ConfigureAwait(false);
-
             var leaderboardEntries =
                 await RetryPolicy.ExecuteAsync(async () =>
                 {
@@ -218,7 +195,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         #region IDisposable Implementation
 
-        bool disposed = false;
+        bool disposed;
 
         /// <summary>
         /// Disconnects from Steam.
