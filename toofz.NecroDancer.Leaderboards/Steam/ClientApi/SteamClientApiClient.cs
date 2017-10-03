@@ -151,6 +151,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboard =
                 await RetryPolicy.ExecuteAsync(async () =>
                 {
+                    EnsureConnectedAndLoggedOn();
                     try
                     {
                         return await steamUserStats
@@ -186,6 +187,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboardEntries =
                 await RetryPolicy.ExecuteAsync(async () =>
                 {
+                    EnsureConnectedAndLoggedOn();
                     try
                     {
                         return await steamUserStats
@@ -205,6 +207,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 default:
                     throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.", leaderboardEntries.Result);
             }
+        }
+
+        void EnsureConnectedAndLoggedOn()
+        {
+            if (!steamClient.IsConnected)
+                throw new InvalidOperationException("Not connected to Steam.");
+            if (!steamClient.IsLoggedOn)
+                throw new InvalidOperationException("Not logged on to Steam.");
         }
 
         #region IDisposable Implementation

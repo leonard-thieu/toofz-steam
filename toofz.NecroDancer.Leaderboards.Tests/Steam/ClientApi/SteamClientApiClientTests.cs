@@ -420,42 +420,63 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             const uint AppId = 247080;
             const string LeaderboardName = "Leaderboard Name";
 
-            Mock<IFindOrCreateLeaderboardCallback> mockIFindOrCreateLeaderboardCallback;
-            Mock<ISteamUserStats> mockISteamUserStats;
-            Mock<ISteamClient> mockISteamClient;
-            Mock<ICallbackManager> mockICallbackManager;
+            public FindLeaderboardAsyncMethod()
+            {
+                mockFindOrCreateLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
+
+                mockSteamUserStats = new Mock<ISteamUserStats>();
+                mockSteamUserStats
+                    .Setup(s => s.FindLeaderboard(It.IsAny<uint>(), It.IsAny<string>()))
+                    .Returns(Task.FromResult(mockFindOrCreateLeaderboardCallback.Object));
+
+                mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
+
+                mockManager = new Mock<ICallbackManager>();
+                mockManager.SetupGet(m => m.SteamClient).Returns(mockSteamClient.Object);
+
+                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockManager.Object);
+            }
+
+            Mock<IFindOrCreateLeaderboardCallback> mockFindOrCreateLeaderboardCallback;
+            Mock<ISteamUserStats> mockSteamUserStats;
+            Mock<ISteamClient> mockSteamClient;
+            Mock<ICallbackManager> mockManager;
             SteamClientApiClient steamClientApiClient;
 
-            [TestInitialize]
-            public void TestInitialize()
+            [TestMethod]
+            public async Task NotConnected_ThrowsInvalidOperationException()
             {
-                mockIFindOrCreateLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
+                // Arrange
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
 
-                mockISteamUserStats = new Mock<ISteamUserStats>();
-                mockISteamUserStats
-                    .Setup(s => s.FindLeaderboard(It.IsAny<uint>(), It.IsAny<string>()))
-                    .Returns(Task.FromResult(mockIFindOrCreateLeaderboardCallback.Object));
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                {
+                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                });
+            }
 
-                mockISteamClient = new Mock<ISteamClient>();
-                mockISteamClient
-                    .Setup(c => c.GetSteamUserStats())
-                    .Returns(mockISteamUserStats.Object);
+            [TestMethod]
+            public async Task NotLoggedOn_ThrowsInvalidOperationException()
+            {
+                // Arrange
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
 
-                mockICallbackManager = new Mock<ICallbackManager>();
-                mockICallbackManager
-                    .SetupGet(manager => manager.SteamClient)
-                    .Returns(mockISteamClient.Object);
-
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockICallbackManager.Object);
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                {
+                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                });
             }
 
             [TestMethod]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
-                mockIFindOrCreateLeaderboardCallback
-                    .Setup(le => le.Result)
-                    .Returns(EResult.Fail);
+                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.Fail);
 
                 // Act -> Assert
                 var ex = await Assert.ThrowsExceptionAsync<SteamClientApiException>(() =>
@@ -469,9 +490,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
             {
                 // Arrange
-                mockIFindOrCreateLeaderboardCallback
-                    .Setup(le => le.Result)
-                    .Returns(EResult.OK);
+                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
                 var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
@@ -489,42 +508,63 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             const uint AppId = 247080;
             const int LeaderboardId = 739999;
 
-            Mock<ILeaderboardEntriesCallback> mockILeaderboardEntriesCallback;
-            Mock<ISteamUserStats> mockISteamUserStats;
-            Mock<ISteamClient> mockISteamClient;
-            Mock<ICallbackManager> mockICallbackManager;
+            public GetLeaderboardEntriesAsyncMethod()
+            {
+                mockLeaderboardEntriesCallback = new Mock<ILeaderboardEntriesCallback>();
+
+                mockSteamUserStats = new Mock<ISteamUserStats>();
+                mockSteamUserStats
+                    .Setup(s => s.GetLeaderboardEntries(It.IsAny<uint>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ELeaderboardDataRequest>()))
+                    .Returns(Task.FromResult(mockLeaderboardEntriesCallback.Object));
+
+                mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
+
+                mockmanager = new Mock<ICallbackManager>();
+                mockmanager.SetupGet(manager => manager.SteamClient).Returns(mockSteamClient.Object);
+
+                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockmanager.Object);
+            }
+
+            Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
+            Mock<ISteamUserStats> mockSteamUserStats;
+            Mock<ISteamClient> mockSteamClient;
+            Mock<ICallbackManager> mockmanager;
             SteamClientApiClient steamClientApiClient;
 
-            [TestInitialize]
-            public void TestInitialize()
+            [TestMethod]
+            public async Task NotConnected_ThrowsInvalidOperationException()
             {
-                mockILeaderboardEntriesCallback = new Mock<ILeaderboardEntriesCallback>();
+                // Arrange
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
 
-                mockISteamUserStats = new Mock<ISteamUserStats>();
-                mockISteamUserStats
-                    .Setup(s => s.GetLeaderboardEntries(It.IsAny<uint>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ELeaderboardDataRequest>()))
-                    .Returns(Task.FromResult(mockILeaderboardEntriesCallback.Object));
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                {
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                });
+            }
 
-                mockISteamClient = new Mock<ISteamClient>();
-                mockISteamClient
-                    .Setup(c => c.GetSteamUserStats())
-                    .Returns(mockISteamUserStats.Object);
+            [TestMethod]
+            public async Task NotLoggedOn_ThrowsInvalidOperationException()
+            {
+                // Arrange
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
 
-                mockICallbackManager = new Mock<ICallbackManager>();
-                mockICallbackManager
-                    .SetupGet(manager => manager.SteamClient)
-                    .Returns(mockISteamClient.Object);
-
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockICallbackManager.Object);
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                {
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                });
             }
 
             [TestMethod]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
-                mockILeaderboardEntriesCallback
-                    .Setup(le => le.Result)
-                    .Returns(EResult.Fail);
+                mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.Fail);
 
                 // Act -> Assert
                 var ex = await Assert.ThrowsExceptionAsync<SteamClientApiException>(() =>
@@ -538,9 +578,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
             {
                 // Arrange
-                mockILeaderboardEntriesCallback
-                    .Setup(le => le.Result)
-                    .Returns(EResult.OK);
+                mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
                 var leaderboardEntries = await steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
