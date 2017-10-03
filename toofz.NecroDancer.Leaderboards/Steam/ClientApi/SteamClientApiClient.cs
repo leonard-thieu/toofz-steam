@@ -92,6 +92,21 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
         }
 
+        /// <summary>
+        /// Gets or sets the period of time before jobs will be considered timed out and will be canceled. 
+        /// By default this is 10 seconds.
+        /// </summary>
+        public TimeSpan Timeout
+        {
+            get => timeout;
+            set
+            {
+                timeout = value;
+                steamUserStats.Timeout = timeout;
+            }
+        }
+        TimeSpan timeout = TimeSpan.FromSeconds(10);
+
         #region Connection
 
         public async Task ConnectAndLogOnAsync()

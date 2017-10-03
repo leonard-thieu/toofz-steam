@@ -240,6 +240,66 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         }
 
         [TestClass]
+        public class TimeoutProperty
+        {
+            [TestMethod]
+            public void ReturnsDefault()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var client = new SteamClientApiClient(userName, password);
+
+                // Act
+                var timeout = client.Timeout;
+
+                // Assert
+                Assert.AreEqual(TimeSpan.FromSeconds(10), timeout);
+            }
+
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var client = new SteamClientApiClient(userName, password);
+                var timeout = TimeSpan.FromSeconds(1);
+
+                // Act
+                client.Timeout = timeout;
+                var timeout2 = client.Timeout;
+
+                // Assert
+                Assert.AreEqual(timeout, timeout2);
+            }
+
+            [TestMethod]
+            public void SetsTimeoutOnSteamUserStats()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var mockManager = new Mock<ICallbackManager>();
+                var mockSteamClient = new Mock<ISteamClient>();
+                var userStats = Mock.Of<ISteamUserStats>();
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(userStats);
+                var steamClient = mockSteamClient.Object;
+                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
+                var manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+                var timeout = TimeSpan.FromSeconds(1);
+
+                // Act
+                client.Timeout = timeout;
+                var timeout2 = userStats.Timeout;
+
+                // Assert
+                Assert.AreEqual(timeout, timeout2);
+            }
+        }
+
+        [TestClass]
         public class ConnectAndLogOnAsyncMethod
         {
             [TestMethod]
