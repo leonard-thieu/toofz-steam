@@ -26,7 +26,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// <paramref name="password"/> is null or empty.
         /// </exception>
-        public SteamClientApiClient(string userName, string password) : this(userName, password, null) { }
+        public SteamClientApiClient(string userName, string password) : this(userName, password, new CallbackManagerAdapter()) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
@@ -57,7 +57,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.userName = userName;
             this.password = password;
 
-            manager = manager ?? new CallbackManagerAdapter();
             steamClient = manager.SteamClient;
             steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
 
