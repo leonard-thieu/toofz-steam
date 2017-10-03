@@ -161,16 +161,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var mockHandler = new MockHttpMessageHandler();
                 var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized };
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
-                mockHandler
-                    .Expect("/")
-                    .Respond(req => response);
-                mockHandler
-                    .Expect("/token")
-                    .Respond("application/json", Resources.OAuth2BearerToken);
-                mockHandler
-                    .Expect("/")
-                    .WithHeaders("Authorization", "Bearer myAccessToken")
-                    .Respond(HttpStatusCode.OK);
+                mockHandler.Expect("/").Respond(req => response);
+                mockHandler.Expect("/token").Respond("application/json", Resources.OAuth2BearerToken);
+                mockHandler.Expect("/").WithHeaders("Authorization", "Bearer myAccessToken").Respond(HttpStatusCode.OK);
                 var userName = "myUserNameThatWillNotMatch";
                 var password = "myPassword";
                 var oAuth2Handler = new OAuth2Handler(userName, password) { InnerHandler = mockHandler };

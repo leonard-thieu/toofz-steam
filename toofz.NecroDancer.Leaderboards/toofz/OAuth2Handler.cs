@@ -90,8 +90,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         Task<HttpResponseMessage> PostAsync(Uri requestUri, FormUrlEncodedContent content, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-            request.Content = content;
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri) { Content = content };
 
             return SendAsync(request, cancellationToken);
         }
