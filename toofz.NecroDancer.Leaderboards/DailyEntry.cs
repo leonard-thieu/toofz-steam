@@ -14,7 +14,6 @@
         /// The rank of the entry relative to other entries on the leaderboard.
         /// </summary>
         public int Rank { get; set; }
-
         /// <summary>
         /// The Steam ID of the player who submitted the entry.
         /// </summary>
@@ -23,13 +22,11 @@
         /// The player who submitted the entry.
         /// </summary>
         public Player Player { get; set; }
-
         /// <summary>
         /// The ID of the replay associated with the entry. This may be null if there was no replay submitted 
         /// with the entry (UGCID = -1).
         /// </summary>
         public long? ReplayId { get; set; }
-
         /// <summary>
         /// The score achieved by the entry.
         /// </summary>
