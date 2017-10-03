@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -239,24 +240,96 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         }
 
         [TestClass]
-        public class DisconnectMethod
+        public class ConnectAndLogOnAsyncMethod
         {
             [TestMethod]
-            public void IsDisposed_ThrowsObjectDisposedException()
+            public async Task NotConnectedToSteam_ConnectsToSteam()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
-                var client = new SteamClientApiClient(userName, password);
-                client.Dispose();
+                var userName = "myUserName";
+                var password = "myPassword";
+                var mockManager = new Mock<ICallbackManager>();
+                var mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
+                var steamClient = mockSteamClient.Object;
+                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
+                var manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
 
-                // Act -> Assert
-                Assert.ThrowsException<ObjectDisposedException>(() =>
-                {
-                    client.Disconnect();
-                });
+                // Act
+                await client.ConnectAndLogOnAsync();
+
+                // Assert
+                mockSteamClient.Verify(c => c.ConnectAsync(It.IsAny<IPEndPoint>()), Times.Once);
             }
 
+            [TestMethod]
+            public async Task ConnectedToSteam_DoesNotConnectToSteam()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var mockManager = new Mock<ICallbackManager>();
+                var mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
+                var steamClient = mockSteamClient.Object;
+                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
+                var manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                await client.ConnectAndLogOnAsync();
+
+                // Assert
+                mockSteamClient.Verify(c => c.ConnectAsync(It.IsAny<IPEndPoint>()), Times.Never);
+            }
+
+            [TestMethod]
+            public async Task NotLoggedOnToSteam_LogsOnToSteam()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var mockManager = new Mock<ICallbackManager>();
+                var mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
+                var steamClient = mockSteamClient.Object;
+                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
+                var manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                await client.ConnectAndLogOnAsync();
+
+                // Assert
+                mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<SteamUser.LogOnDetails>()), Times.Once);
+            }
+
+            [TestMethod]
+            public async Task LoggedOnToSteam_DoesNotLogOnToSteam()
+            {
+                // Arrange
+                var userName = "myUserName";
+                var password = "myPassword";
+                var mockManager = new Mock<ICallbackManager>();
+                var mockSteamClient = new Mock<ISteamClient>();
+                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
+                var steamClient = mockSteamClient.Object;
+                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
+                var manager = mockManager.Object;
+                var client = new SteamClientApiClient(userName, password, manager);
+
+                // Act
+                await client.ConnectAndLogOnAsync();
+
+                // Assert
+                mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<SteamUser.LogOnDetails>()), Times.Never);
+            }
+        }
+
+        [TestClass]
+        public class DisconnectMethod
+        {
             [TestMethod]
             public void DisconnectsFromSteam()
             {
@@ -314,19 +387,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     .Returns(mockISteamClient.Object);
 
                 steamClientApiClient = new SteamClientApiClient(UserName, Password, mockICallbackManager.Object);
-            }
-
-            [TestMethod]
-            public async Task IsDisposed_ThrowsObjectDisposedException()
-            {
-                // Arrange
-                steamClientApiClient.Dispose();
-
-                // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
-                {
-                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
-                });
             }
 
             [TestMethod]
@@ -396,19 +456,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     .Returns(mockISteamClient.Object);
 
                 steamClientApiClient = new SteamClientApiClient(UserName, Password, mockICallbackManager.Object);
-            }
-
-            [TestMethod]
-            public async Task IsDisposed_ThrowsObjectDisposedException()
-            {
-                // Arrange
-                steamClientApiClient.Dispose();
-
-                // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
-                {
-                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
-                });
             }
 
             [TestMethod]
