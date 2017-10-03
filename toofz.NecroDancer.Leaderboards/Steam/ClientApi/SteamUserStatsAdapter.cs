@@ -25,6 +25,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         readonly SteamUserStats steamUserStats;
 
         /// <summary>
+        /// Gets or sets the period of time before jobs will be considered timed out and will be canceled. 
+        /// By default this is 10 seconds.
+        /// </summary>
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
+
+        /// <summary>
         /// Asks the Steam back-end for a leaderboard by name for a given appid. Results
         /// are returned in a <see cref="IFindOrCreateLeaderboardCallback"/>.
         /// </summary>
@@ -32,10 +38,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <param name="name">Name of the leaderboard to request.</param>
         public async Task<IFindOrCreateLeaderboardCallback> FindLeaderboard(uint appId, string name)
         {
-            var leaderboard = await steamUserStats
-                .FindLeaderboard(appId, name)
-                .ToTask()
-                .ConfigureAwait(false);
+            var asyncJob = steamUserStats.FindLeaderboard(appId, name);
+            asyncJob.Timeout = Timeout;
+
+            var leaderboard = await asyncJob.ToTask().ConfigureAwait(false);
 
             return new FindOrCreateLeaderboardCallbackAdapter(leaderboard);
         }
@@ -51,10 +57,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <param name="dataRequest">Type of request.</param>
         public async Task<ILeaderboardEntriesCallback> GetLeaderboardEntries(uint appId, int id, int rangeStart, int rangeEnd, ELeaderboardDataRequest dataRequest)
         {
-            var leaderboardEntries = await steamUserStats
-                .GetLeaderboardEntries(appId, id, rangeStart, rangeEnd, dataRequest)
-                .ToTask()
-                .ConfigureAwait(false);
+            var asyncJob = steamUserStats.GetLeaderboardEntries(appId, id, rangeStart, rangeEnd, dataRequest);
+            asyncJob.Timeout = Timeout;
+
+            var leaderboardEntries = await asyncJob.ToTask().ConfigureAwait(false);
 
             return new LeaderboardEntriesCallbackAdapter(leaderboardEntries);
         }
