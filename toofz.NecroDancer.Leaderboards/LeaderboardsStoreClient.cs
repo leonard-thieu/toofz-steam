@@ -46,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards
             IEnumerable<Leaderboard> leaderboards,
             CancellationToken cancellationToken = default)
         {
-            return UpsertAsync(upserter, leaderboards, true, cancellationToken);
+            return upserter.UpsertAsync(connection, leaderboards, true, cancellationToken);
         }
 
         #endregion
@@ -111,7 +111,7 @@ namespace toofz.NecroDancer.Leaderboards
             IEnumerable<DailyLeaderboard> leaderboards,
             CancellationToken cancellationToken = default)
         {
-            return UpsertAsync(upserter, leaderboards, true, cancellationToken);
+            return upserter.UpsertAsync(connection, leaderboards, true, cancellationToken);
         }
 
         #endregion
@@ -144,7 +144,7 @@ namespace toofz.NecroDancer.Leaderboards
             IEnumerable<DailyEntry> entries,
             CancellationToken cancellationToken = default)
         {
-            return UpsertAsync(upserter, entries, true, cancellationToken);
+            return upserter.UpsertAsync(connection, entries, true, cancellationToken);
         }
 
         #endregion
@@ -177,7 +177,7 @@ namespace toofz.NecroDancer.Leaderboards
             bool updateOnMatch,
             CancellationToken cancellationToken = default)
         {
-            return UpsertAsync(upserter, players, updateOnMatch, cancellationToken);
+            return upserter.UpsertAsync(connection, players, updateOnMatch, cancellationToken);
         }
 
         #endregion
@@ -211,18 +211,9 @@ namespace toofz.NecroDancer.Leaderboards
             bool updateOnMatch,
             CancellationToken cancellationToken = default)
         {
-            return UpsertAsync(upserter, replays, updateOnMatch, cancellationToken);
+            return upserter.UpsertAsync(connection, replays, updateOnMatch, cancellationToken);
         }
 
         #endregion
-
-        Task<int> UpsertAsync<T>(
-           ITypedUpserter<T> upserter,
-            IEnumerable<T> items,
-            bool updateOnMatch,
-            CancellationToken cancellationToken)
-        {
-            return upserter.UpsertAsync(connection, items, updateOnMatch, cancellationToken);
-        }
     }
 }
