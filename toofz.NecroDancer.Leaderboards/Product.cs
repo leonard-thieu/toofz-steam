@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Product
     {
+        [ExcludeFromCodeCoverage]
         Product() { }
 
         public Product(int productId, string name, string displayName)

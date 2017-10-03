@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Mode
     {
+        [ExcludeFromCodeCoverage]
         Mode() { }
 
         public Mode(int modeId, string name, string displayName)

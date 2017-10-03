@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Run
     {
+        [ExcludeFromCodeCoverage]
         Run() { }
 
         public Run(int runId, string name, string displayName)
