@@ -17,6 +17,10 @@ namespace toofz.NecroDancer.Leaderboards
         /// </summary>
         public List<Entry> Entries { get; } = new List<Entry>();
         /// <summary>
+        /// Daily entries that the player has submitted.
+        /// </summary>
+        public List<DailyEntry> DailyEntries { get; } = new List<DailyEntry>();
+        /// <summary>
         /// The last time the player's information was updated.
         /// </summary>
         public DateTime? LastUpdate { get; set; }
