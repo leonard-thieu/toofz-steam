@@ -7,7 +7,7 @@ using Flurl;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
-    public sealed class SteamCommunityDataClient : IDisposable
+    public sealed class SteamCommunityDataClient : ISteamCommunityDataClient
     {
         static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
         static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));

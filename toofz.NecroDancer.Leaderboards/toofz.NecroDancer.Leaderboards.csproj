@@ -123,11 +123,14 @@
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\CommunityData\ISteamCommunityDataClient.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataClient.cs">
+      <DependentUpon>ISteamCommunityDataClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Steam\CommunityData\Leaderboard.cs" />
     <Compile Include="Steam\CommunityData\LeaderboardEntriesEnvelope.cs" />
     <Compile Include="Steam\CommunityData\LeaderboardEntry.cs" />
     <Compile Include="Steam\CommunityData\LeaderboardsEnvelope.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataClient.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
