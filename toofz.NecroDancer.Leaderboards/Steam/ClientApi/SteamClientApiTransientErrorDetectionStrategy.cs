@@ -34,8 +34,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </returns>
         public bool IsTransient(Exception ex)
         {
-            var transient = ex as SteamClientApiException;
-            if (transient != null)
+            if (ex is SteamClientApiException transient)
             {
                 return transient.InnerException is TaskCanceledException;
             }
