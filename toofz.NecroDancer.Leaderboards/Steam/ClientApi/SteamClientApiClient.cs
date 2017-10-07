@@ -59,14 +59,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             steamClient = manager.SteamClient;
             steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
-
-            steamUserStats = steamClient.GetSteamUserStats();
         }
 
         readonly string userName;
         readonly string password;
         readonly ISteamClient steamClient;
-        readonly ISteamUserStats steamUserStats;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -95,16 +92,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Gets or sets the period of time before jobs will be considered timed out and will be canceled. 
         /// By default this is 10 seconds.
         /// </summary>
-        public TimeSpan Timeout
-        {
-            get => timeout;
-            set
-            {
-                timeout = value;
-                steamUserStats.Timeout = timeout;
-            }
-        }
-        TimeSpan timeout = TimeSpan.FromSeconds(10);
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
 
         #region Connection
 
@@ -149,14 +137,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var leaderboard =
-                await RetryPolicy.ExecuteAsync(async () =>
+                await ExecuteRequestAsync(async () =>
                 {
-                    EnsureConnectedAndLoggedOn();
                     try
                     {
-                        return await steamUserStats
-                            .FindLeaderboard(appId, name)
-                            .ConfigureAwait(false);
+                        var steamUserStats = steamClient.GetSteamUserStats();
+                        steamUserStats.Timeout = Timeout;
+
+                        using (var downloadNotifier = new DownloadNotifier(Log, name))
+                        {
+                            return await steamUserStats
+                                .FindLeaderboard(appId, name)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (TaskCanceledException ex)
                     {
@@ -185,14 +178,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var leaderboardEntries =
-                await RetryPolicy.ExecuteAsync(async () =>
+                await ExecuteRequestAsync(async () =>
                 {
-                    EnsureConnectedAndLoggedOn();
                     try
                     {
-                        return await steamUserStats
-                            .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
-                            .ConfigureAwait(false);
+                        var steamUserStats = steamClient.GetSteamUserStats();
+                        steamUserStats.Timeout = Timeout;
+
+                        using (var downloadNotifier = new DownloadNotifier(Log, $"{lbid}"))
+                        {
+                            return await steamUserStats
+                                .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (TaskCanceledException ex)
                     {
@@ -207,6 +205,26 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 default:
                     throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.", leaderboardEntries.Result);
             }
+        }
+
+        static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
+
+        Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)
+        {
+            return RetryPolicy.ExecuteAsync(async () =>
+            {
+                await requestSemaphore.WaitAsync(cancellationToken);
+                try
+                {
+                    EnsureConnectedAndLoggedOn();
+
+                    return await taskFunc();
+                }
+                finally
+                {
+                    requestSemaphore.Release();
+                }
+            }, cancellationToken);
         }
 
         void EnsureConnectedAndLoggedOn()

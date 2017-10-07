@@ -20,7 +20,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         Task<IFindOrCreateLeaderboardCallback> FindLeaderboardAsync(
             uint appId,
             string name,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// Gets the leaderboard for the specified AppID and name.
         /// </summary>
@@ -33,6 +33,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         Task<ILeaderboardEntriesCallback> GetLeaderboardEntriesAsync(
             uint appId,
             int lbid,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default);
     }
 }

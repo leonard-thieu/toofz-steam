@@ -12,3 +12,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("toofz.NecroDancer.Leaderboards.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
