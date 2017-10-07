@@ -109,6 +109,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\CommunityDataResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommunityDataResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\CommunityDataResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommunityDataResources.resx</DependentUpon>
+    </Compile>
+    <None Include="Resources\Leaderboards.xml" />
+    <None Include="Resources\LeaderboardEntries.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -176,6 +189,7 @@
     <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiExceptionTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataClientTests.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />

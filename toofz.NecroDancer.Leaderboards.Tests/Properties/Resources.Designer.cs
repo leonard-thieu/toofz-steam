@@ -752,7 +752,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         ///				&quot;commentpermission&quot;: 1,
         ///				&quot;profileurl&quot;: &quot;http://steamcommunity.com/profiles/76561198000971575/&quot;,
         ///				&quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ee/ee5a1c8fdc1939ff4d83ed2d36ad279766a367a5.jpg&quot;,
-        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/image [rest of string was truncated]&quot;;.
+        ///				&quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string StarWarsEncoding {
             get {
