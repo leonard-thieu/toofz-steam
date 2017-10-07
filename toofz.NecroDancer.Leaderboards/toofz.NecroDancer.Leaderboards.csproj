@@ -174,6 +174,7 @@
     <Compile Include="DailyLeaderboardHeader.cs" />
     <Compile Include="DailyLeaderboardHeaders.cs" />
     <Compile Include="DailyLeaderboardHeadersEnvelope.cs" />
+    <Compile Include="DecompressionHandler.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="HttpContentExtensions.cs" />
