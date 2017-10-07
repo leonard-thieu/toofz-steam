@@ -87,11 +87,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="toofz, Version=7.2.0.182, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.7.2.0\lib\net45\toofz.dll</HintPath>
+    <Reference Include="toofz, Version=8.0.0.185, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.8.0.0\lib\net45\toofz.dll</HintPath>
     </Reference>
-    <Reference Include="toofz.TestsShared, Version=4.0.0.81, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.TestsShared.4.0.0\lib\net45\toofz.TestsShared.dll</HintPath>
+    <Reference Include="toofz.TestsShared, Version=4.1.0.83, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.TestsShared.4.1.0\lib\net45\toofz.TestsShared.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
