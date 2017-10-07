@@ -59,14 +59,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             steamClient = manager.SteamClient;
             steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
-
-            steamUserStats = steamClient.GetSteamUserStats();
         }
 
         readonly string userName;
         readonly string password;
         readonly ISteamClient steamClient;
-        readonly ISteamUserStats steamUserStats;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -95,16 +92,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Gets or sets the period of time before jobs will be considered timed out and will be canceled. 
         /// By default this is 10 seconds.
         /// </summary>
-        public TimeSpan Timeout
-        {
-            get => timeout;
-            set
-            {
-                timeout = value;
-                steamUserStats.Timeout = timeout;
-            }
-        }
-        TimeSpan timeout = TimeSpan.FromSeconds(10);
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
 
         #region Connection
 
@@ -154,6 +142,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     EnsureConnectedAndLoggedOn();
                     try
                     {
+                        var steamUserStats = steamClient.GetSteamUserStats();
+                        steamUserStats.Timeout = Timeout;
+
                         return await steamUserStats
                             .FindLeaderboard(appId, name)
                             .ConfigureAwait(false);
@@ -190,6 +181,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     EnsureConnectedAndLoggedOn();
                     try
                     {
+                        var steamUserStats = steamClient.GetSteamUserStats();
+                        steamUserStats.Timeout = Timeout;
+
                         return await steamUserStats
                             .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
                             .ConfigureAwait(false);

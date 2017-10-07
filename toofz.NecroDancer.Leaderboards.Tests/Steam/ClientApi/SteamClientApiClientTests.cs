@@ -273,30 +273,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Assert
                 Assert.AreEqual(timeout, timeout2);
             }
-
-            [TestMethod]
-            public void SetsTimeoutOnSteamUserStats()
-            {
-                // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
-                var mockManager = new Mock<ICallbackManager>();
-                var mockSteamClient = new Mock<ISteamClient>();
-                var userStats = Mock.Of<ISteamUserStats>();
-                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(userStats);
-                var steamClient = mockSteamClient.Object;
-                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
-                var manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
-                var timeout = TimeSpan.FromSeconds(1);
-
-                // Act
-                client.Timeout = timeout;
-                var timeout2 = userStats.Timeout;
-
-                // Assert
-                Assert.AreEqual(timeout, timeout2);
-            }
         }
 
         [TestClass]
@@ -498,6 +474,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Assert
                 Assert.IsInstanceOfType(leaderboardEntries, typeof(IFindOrCreateLeaderboardCallback));
             }
+
+            [TestMethod]
+            public async Task SetsTimeout()
+            {
+                // Arrange
+                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+
+                // Act
+                await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+
+                // Assert
+                mockSteamUserStats.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
+            }
         }
 
         [TestClass]
@@ -585,6 +574,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 Assert.IsInstanceOfType(leaderboardEntries, typeof(ILeaderboardEntriesCallback));
+            }
+
+            [TestMethod]
+            public async Task SetsTimeout()
+            {
+                // Arrange
+                mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.OK);
+
+                // Act
+                await steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+
+                // Assert
+                mockSteamUserStats.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
             }
         }
 
