@@ -5,20 +5,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
     class LeaderboardsResourcesTests
     {
         [TestClass]
-        public class ReadLeaderboardCategories
-        {
-            [TestMethod]
-            public void ReturnsCategories()
-            {
-                // Arrange -> Act
-                var categories = LeaderboardsResources.ReadLeaderboardCategories();
-
-                // Act -> Assert
-                Assert.IsInstanceOfType(categories, typeof(Categories));
-            }
-        }
-
-        [TestClass]
         public class ReadLeaderboardHeaders
         {
             [TestMethod]

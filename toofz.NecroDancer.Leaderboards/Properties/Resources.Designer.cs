@@ -96,40 +96,6 @@ namespace toofz.NecroDancer.Leaderboards.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///  &quot;categories&quot;: {
-        ///    &quot;products&quot;: {
-        ///      &quot;classic&quot;: {
-        ///        &quot;id&quot;: 0,
-        ///        &quot;display_name&quot;: &quot;Classic&quot;,
-        ///        &quot;order&quot;: 0
-        ///      },
-        ///      &quot;amplified&quot;: {
-        ///        &quot;id&quot;: 1,
-        ///        &quot;display_name&quot;: &quot;Amplified&quot;,
-        ///        &quot;order&quot;: 1,
-        ///        &quot;value&quot;: true
-        ///      }
-        ///    },
-        ///    &quot;modes&quot;: {
-        ///      &quot;standard&quot;: {
-        ///        &quot;id&quot;: 0,
-        ///        &quot;display_name&quot;: &quot;Standard&quot;,
-        ///        &quot;order&quot;: 0,
-        ///        &quot;value&quot;: true
-        ///      },
-        ///      &quot;no-return&quot;: {
-        ///        &quot;id&quot;: 1,
-        ///        &quot;display_name&quot;: &quot;No Return&quot;,
-        ///     [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string LeaderboardCategories {
-            get {
-                return ResourceManager.GetString("LeaderboardCategories", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {
         ///  &quot;leaderboards&quot;: [
         ///    {
         ///      &quot;id&quot;: 741312,

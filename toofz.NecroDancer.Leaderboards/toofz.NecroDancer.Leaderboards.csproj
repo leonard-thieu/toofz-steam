@@ -65,8 +65,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.XML" />
-    <Reference Include="toofz, Version=7.2.0.182, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.7.2.0\lib\net45\toofz.dll</HintPath>
+    <Reference Include="toofz, Version=8.0.0.185, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.8.0.0\lib\net45\toofz.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +93,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="data\daily-leaderboard-headers.json" />
-    <None Include="data\leaderboard-categories.json" />
     <None Include="data\leaderboard-headers.json" />
   </ItemGroup>
   <ItemGroup>
