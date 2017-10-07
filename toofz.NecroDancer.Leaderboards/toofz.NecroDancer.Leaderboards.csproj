@@ -64,6 +64,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.XML" />
     <Reference Include="toofz, Version=7.2.0.182, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\toofz.7.2.0\lib\net45\toofz.dll</HintPath>
     </Reference>
@@ -123,6 +124,11 @@
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\CommunityData\Leaderboard.cs" />
+    <Compile Include="Steam\CommunityData\LeaderboardEntriesEnvelope.cs" />
+    <Compile Include="Steam\CommunityData\LeaderboardEntry.cs" />
+    <Compile Include="Steam\CommunityData\LeaderboardsEnvelope.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataClient.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />

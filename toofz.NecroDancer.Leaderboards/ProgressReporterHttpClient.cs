@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    public abstract class ProgressReporterHttpClient : HttpClient
+    public class ProgressReporterHttpClient : HttpClient
     {
-        protected ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
+        internal ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
 
         public async Task<HttpResponseMessage> GetAsync(string requestUri, IProgress<long> progress, CancellationToken cancellationToken)
         {
