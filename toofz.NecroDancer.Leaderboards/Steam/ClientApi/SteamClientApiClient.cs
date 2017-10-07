@@ -145,9 +145,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         var steamUserStats = steamClient.GetSteamUserStats();
                         steamUserStats.Timeout = Timeout;
 
-                        return await steamUserStats
-                            .FindLeaderboard(appId, name)
-                            .ConfigureAwait(false);
+                        using (var downloadNotifier = new DownloadNotifier(Log, name))
+                        {
+                            return await steamUserStats
+                                .FindLeaderboard(appId, name)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (TaskCanceledException ex)
                     {
@@ -184,9 +187,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         var steamUserStats = steamClient.GetSteamUserStats();
                         steamUserStats.Timeout = Timeout;
 
-                        return await steamUserStats
-                            .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
-                            .ConfigureAwait(false);
+                        using (var downloadNotifier = new DownloadNotifier(Log, $"{lbid}"))
+                        {
+                            return await steamUserStats
+                                .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (TaskCanceledException ex)
                     {
