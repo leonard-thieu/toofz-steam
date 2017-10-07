@@ -4,7 +4,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    public interface ISteamUserStats
+    interface ISteamUserStats
     {
         /// <summary>
         /// Gets or sets the period of time before jobs will be considered timed out and will be canceled. 

@@ -4,7 +4,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    public interface ISteamClient
+    interface ISteamClient
     {
         /// <summary>
         /// Gets a value indicating whether this instance is connected to the remote CM server.

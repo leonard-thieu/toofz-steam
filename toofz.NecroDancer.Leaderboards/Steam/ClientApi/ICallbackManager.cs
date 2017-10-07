@@ -3,7 +3,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    public interface ICallbackManager
+    interface ICallbackManager
     {
         ISteamClient SteamClient { get; }
         /// <summary>
