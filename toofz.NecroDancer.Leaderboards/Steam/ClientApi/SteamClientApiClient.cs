@@ -139,22 +139,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboard =
                 await ExecuteRequestAsync(async () =>
                 {
-                    try
-                    {
-                        var steamUserStats = steamClient.GetSteamUserStats();
-                        steamUserStats.Timeout = Timeout;
+                    var steamUserStats = steamClient.GetSteamUserStats();
+                    steamUserStats.Timeout = Timeout;
 
-                        using (var downloadNotifier = new DownloadNotifier(Log, name))
-                        {
-                            return await steamUserStats
-                                .FindLeaderboard(appId, name)
-                                .ConfigureAwait(false);
-                        }
-                    }
-                    catch (TaskCanceledException ex)
-                    {
-                        throw new SteamClientApiException($"Unable to find the leaderboard '{name}' due to timeout.", ex);
-                    }
+                    Log.Debug($"Start download {name}");
+                    var result = await steamUserStats
+                        .FindLeaderboard(appId, name)
+                        .ConfigureAwait(false);
+                    Log.Debug($"End download {name}");
+
+                    return result;
                 }, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -180,22 +174,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboardEntries =
                 await ExecuteRequestAsync(async () =>
                 {
-                    try
-                    {
-                        var steamUserStats = steamClient.GetSteamUserStats();
-                        steamUserStats.Timeout = Timeout;
+                    var steamUserStats = steamClient.GetSteamUserStats();
+                    steamUserStats.Timeout = Timeout;
 
-                        using (var downloadNotifier = new DownloadNotifier(Log, $"{lbid}"))
-                        {
-                            return await steamUserStats
-                                .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
-                                .ConfigureAwait(false);
-                        }
-                    }
-                    catch (TaskCanceledException ex)
-                    {
-                        throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}' due to timeout.", ex);
-                    }
+                    Log.Debug($"Start download {lbid}");
+                    var result = await steamUserStats
+                        .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
+                        .ConfigureAwait(false);
+                    Log.Debug($"End download {lbid}");
+
+                    return result;
                 }, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -218,7 +206,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     EnsureConnectedAndLoggedOn();
 
-                    return await taskFunc();
+                    try
+                    {
+                        return await taskFunc();
+                    }
+                    catch (TaskCanceledException ex)
+                    {
+                        throw new SteamClientApiException("Request timed out.", ex);
+                    }
                 }
                 finally
                 {
