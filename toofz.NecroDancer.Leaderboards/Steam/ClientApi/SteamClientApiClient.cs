@@ -137,9 +137,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var leaderboard =
-                await RetryPolicy.ExecuteAsync(async () =>
+                await ExecuteRequestAsync(async () =>
                 {
-                    EnsureConnectedAndLoggedOn();
                     try
                     {
                         var steamUserStats = steamClient.GetSteamUserStats();
@@ -179,9 +178,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var leaderboardEntries =
-                await RetryPolicy.ExecuteAsync(async () =>
+                await ExecuteRequestAsync(async () =>
                 {
-                    EnsureConnectedAndLoggedOn();
                     try
                     {
                         var steamUserStats = steamClient.GetSteamUserStats();
@@ -207,6 +205,26 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 default:
                     throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.", leaderboardEntries.Result);
             }
+        }
+
+        static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
+
+        Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)
+        {
+            return RetryPolicy.ExecuteAsync(async () =>
+            {
+                await requestSemaphore.WaitAsync(cancellationToken);
+                try
+                {
+                    EnsureConnectedAndLoggedOn();
+
+                    return await taskFunc();
+                }
+                finally
+                {
+                    requestSemaphore.Release();
+                }
+            }, cancellationToken);
         }
 
         void EnsureConnectedAndLoggedOn()
