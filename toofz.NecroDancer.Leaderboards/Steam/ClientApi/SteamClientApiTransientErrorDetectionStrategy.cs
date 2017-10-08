@@ -14,7 +14,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var retryPolicy = new RetryPolicy<SteamClientApiTransientErrorDetectionStrategy>(retryStrategy);
             retryPolicy.Retrying += (s, e) =>
             {
-                log.Debug(e.LastException.Message + $" Experienced a transient error during a Steam Client API request. Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
+                log.Debug($"{e.LastException.Message} Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
             };
 
             return retryPolicy;
