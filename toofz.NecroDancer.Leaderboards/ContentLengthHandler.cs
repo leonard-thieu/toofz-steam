@@ -10,10 +10,13 @@ namespace toofz.NecroDancer.Leaderboards
         {
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             var httpContent = response.Content;
-            await httpContent.LoadIntoBufferAsync().ConfigureAwait(false);
+            if (httpContent != null)
+            {
+                await httpContent.LoadIntoBufferAsync().ConfigureAwait(false);
 
-            var content = await httpContent.ReadAsStreamAsync().ConfigureAwait(false);
-            httpContent.Headers.ContentLength = content.Length;
+                var content = await httpContent.ReadAsStreamAsync().ConfigureAwait(false);
+                httpContent.Headers.ContentLength = content.Length;
+            }
 
             return response;
         }
