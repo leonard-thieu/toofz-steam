@@ -31,6 +31,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         }
 
         /// <summary>
+        /// Blocks the current thread to run a single queued callback. If no callback is 
+        /// queued, the method will block until one is posted.
+        /// </summary>
+        public void RunWaitCallbacks()
+        {
+            CallbackManager.RunWaitCallbacks();
+        }
+
+        /// <summary>
         /// Registers the provided <see cref="Action{TCallback}"/> to receive callbacks of type <typeparamref name="TCallback"/>.
         /// </summary>
         /// <typeparam name="TCallback"></typeparam>

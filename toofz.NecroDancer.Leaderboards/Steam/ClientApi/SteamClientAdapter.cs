@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using SteamKit2;
@@ -34,9 +35,18 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             SteamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient), $"{nameof(steamClient)} is null.");
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} is null.");
+            messageLoop = new Thread(() =>
+            {
+                while (true)
+                {
+                    this.manager.RunWaitCallbacks();
+                }
+            });
+            messageLoop.Start();
         }
 
         readonly ICallbackManager manager;
+        readonly Thread messageLoop;
 
         /// <summary>
         /// The instance of <see cref="SteamClient"/> wrapped by the adapter.
@@ -61,20 +71,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             get => SteamClient.DebugNetworkListener as ProgressDebugNetworkListener;
             set => SteamClient.DebugNetworkListener = value;
-        }
-
-        /// <summary>
-        /// Returns a registered handler.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of the handler to cast to. Must derive from <see cref="ClientMsgHandler"/>.
-        /// </typeparam>
-        /// <returns>
-        /// A registered handler on success, or null if the handler could not be found.
-        /// </returns>
-        public T GetHandler<T>() where T : ClientMsgHandler
-        {
-            return SteamClient.GetHandler<T>();
         }
 
         /// <summary>
@@ -139,7 +135,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
 
             SteamClient.Connect(cmServer);
-            manager.RunWaitAllCallbacks(TimeSpan.FromSeconds(1));
 
             return tcs.Task;
         }
@@ -189,8 +184,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 onDisconnected.Dispose();
             });
 
-            GetHandler<SteamUser>().LogOn(details);
-            manager.RunWaitAllCallbacks(TimeSpan.FromSeconds(1));
+            SteamClient.GetHandler<SteamUser>().LogOn(details);
 
             return tcs.Task;
         }
@@ -201,7 +195,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         public void Disconnect()
         {
             SteamClient.Disconnect();
-            manager.RunWaitAllCallbacks(TimeSpan.FromSeconds(1));
         }
     }
 }
