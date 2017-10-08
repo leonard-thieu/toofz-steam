@@ -26,19 +26,17 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public async Task<PlayersEnvelope> GetPlayersAsync(
             GetPlayersParams @params = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var requestUri = "players";
-            if (@params != null)
+            @params = @params ?? new GetPlayersParams();
+            requestUri = requestUri.SetQueryParams(new
             {
-                requestUri = requestUri.SetQueryParams(new
-                {
-                    q = @params.Query,
-                    offset = @params.Offset,
-                    limit = @params.Limit,
-                    sort = @params.Sort,
-                });
-            }
+                q = @params.Query,
+                offset = @params.Offset,
+                limit = @params.Limit,
+                sort = @params.Sort,
+            });
 
             var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
@@ -47,7 +45,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public async Task<BulkStoreDTO> PostPlayersAsync(
             IEnumerable<Player> players,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (players == null)
                 throw new ArgumentNullException(nameof(players));
@@ -63,19 +61,17 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public async Task<ReplaysEnvelope> GetReplaysAsync(
             GetReplaysParams @params = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var requestUri = "replays";
-            if (@params != null)
+            @params = @params ?? new GetReplaysParams();
+            requestUri = requestUri.SetQueryParams(new
             {
-                requestUri = requestUri.SetQueryParams(new
-                {
-                    version = @params.Version,
-                    error = @params.ErrorCode,
-                    offset = @params.Offset,
-                    limit = @params.Limit,
-                });
-            }
+                version = @params.Version,
+                error = @params.ErrorCode,
+                offset = @params.Offset,
+                limit = @params.Limit,
+            });
 
             var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
@@ -84,7 +80,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public async Task<BulkStoreDTO> PostReplaysAsync(
             IEnumerable<Replay> replays,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (replays == null)
                 throw new ArgumentNullException(nameof(replays));
