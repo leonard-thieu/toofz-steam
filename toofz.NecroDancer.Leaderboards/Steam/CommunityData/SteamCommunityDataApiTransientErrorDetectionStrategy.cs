@@ -3,15 +3,15 @@ using System.Net;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
-namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
+namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
-    sealed class SteamWebApiTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
+    sealed class SteamCommunityDataApiTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
     {
         #region Static Members
 
-        public static RetryPolicy<SteamWebApiTransientErrorDetectionStrategy> CreateRetryPolicy(RetryStrategy retryStrategy, ILog log)
+        public static RetryPolicy<SteamCommunityDataApiTransientErrorDetectionStrategy> CreateRetryPolicy(RetryStrategy retryStrategy, ILog log)
         {
-            var retryPolicy = new RetryPolicy<SteamWebApiTransientErrorDetectionStrategy>(retryStrategy);
+            var retryPolicy = new RetryPolicy<SteamCommunityDataApiTransientErrorDetectionStrategy>(retryStrategy);
             retryPolicy.Retrying += (s, e) =>
             {
                 log.Debug($"{e.LastException.Message} Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
@@ -30,6 +30,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
             {
                 switch (transient.StatusCode)
                 {
+                    case HttpStatusCode.Forbidden:
                     case HttpStatusCode.RequestTimeout:
                     case HttpStatusCode.InternalServerError:
                     case HttpStatusCode.BadGateway:

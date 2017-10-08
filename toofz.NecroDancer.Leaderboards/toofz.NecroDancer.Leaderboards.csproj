@@ -132,6 +132,8 @@
     <Compile Include="Steam\CommunityData\LeaderboardEntriesEnvelope.cs" />
     <Compile Include="Steam\CommunityData\LeaderboardEntry.cs" />
     <Compile Include="Steam\CommunityData\LeaderboardsEnvelope.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientFaultHandler.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="ProgressReporterHttpClient.cs" />
     <Compile Include="Replay.cs" />
     <Compile Include="Run.cs" />
+    <Compile Include="TransientFaultHandlerBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

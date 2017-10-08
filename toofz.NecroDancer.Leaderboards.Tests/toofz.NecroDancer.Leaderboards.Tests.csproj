@@ -189,6 +189,8 @@
     <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiExceptionTests.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientErrorDetectionStrategyTests.cs" />
+    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientFaultHandlerTests.cs" />
     <Compile Include="Steam\CommunityData\SteamCommunityDataClientTests.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
@@ -235,6 +237,7 @@
     <Compile Include="ProgressReporterHttpClientTests.cs" />
     <Compile Include="ReplayTests.cs" />
     <Compile Include="RunTests.cs" />
+    <Compile Include="TransientFaultHandlerBaseTests.cs" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
