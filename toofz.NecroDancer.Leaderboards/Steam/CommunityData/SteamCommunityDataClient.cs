@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -18,6 +19,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         }
 
         readonly ProgressReporterHttpClient http;
+
+        /// <summary>
+        /// Gets the headers which should be sent with each request.
+        /// </summary>
+        /// <returns>
+        /// Returns <see cref="HttpRequestHeaders"/>. The headers which should be sent with each request.
+        /// </returns>
+        public HttpRequestHeaders DefaultRequestHeaders
+        {
+            get => http.DefaultRequestHeaders;
+        }
 
         #region GetLeaderboards
 
