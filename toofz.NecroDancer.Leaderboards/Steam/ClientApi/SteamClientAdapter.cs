@@ -171,12 +171,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                             tcs.TrySetResult(response);
                             break;
                         }
-                    case EResult.AccountLogonDenied:
-                        {
-                            var ex = new SteamClientApiException("Unable to logon to Steam: This account is SteamGuard protected.", response.Result);
-                            tcs.TrySetException(ex);
-                            break;
-                        }
                     default:
                         {
                             var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
