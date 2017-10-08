@@ -123,6 +123,7 @@
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
+    <Compile Include="Steam\CommunityData\GetLeaderboardEntriesParams.cs" />
     <Compile Include="Steam\CommunityData\ISteamCommunityDataClient.cs" />
     <Compile Include="Steam\CommunityData\SteamCommunityDataClient.cs">
       <DependentUpon>ISteamCommunityDataClient.cs</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,24 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 
                 // Assert
                 Assert.IsInstanceOfType(client, typeof(SteamCommunityDataClient));
+            }
+        }
+
+        [TestClass]
+        public class DefaultRequestHeadersProperty
+        {
+            [TestMethod]
+            public void ReturnsDefaultRequestHeaders()
+            {
+                // Arrange
+                var handler = Mock.Of<HttpMessageHandler>();
+                var client = new SteamCommunityDataClient(handler);
+
+                // Act
+                var defaultRequestHeaders = client.DefaultRequestHeaders;
+
+                // Assert
+                Assert.IsInstanceOfType(defaultRequestHeaders, typeof(HttpRequestHeaders));
             }
         }
 

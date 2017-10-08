@@ -74,19 +74,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         public Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             uint appId,
             int leaderboardId,
-            int? startRange = null,
-            int? endRange = null,
+            GetLeaderboardEntriesParams @params = null,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
-            return GetLeaderboardEntriesAsync(appId.ToString(), leaderboardId, startRange, endRange, progress, cancellationToken);
+            return GetLeaderboardEntriesAsync(appId.ToString(), leaderboardId, @params, progress, cancellationToken);
         }
 
         public async Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,
-            int? startRange = null,
-            int? endRange = null,
+            GetLeaderboardEntriesParams @params = null,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
@@ -95,12 +93,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             if (communityGameName == null)
                 throw new ArgumentNullException(nameof(communityGameName));
 
+            @params = @params ?? new GetLeaderboardEntriesParams();
             var requestUri = $"stats/{communityGameName}/leaderboards/{leaderboardId}/"
                 .SetQueryParams(new
                 {
                     xml = 1,
-                    start = startRange,
-                    end = endRange,
+                    start = @params.StartRange,
+                    end = @params.EndRange,
                 });
             var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
