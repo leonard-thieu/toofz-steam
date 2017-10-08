@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,19 +10,15 @@ namespace toofz.NecroDancer.Leaderboards
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            var content = response.Content;
-
-            if (content.Headers.ContentEncoding.Contains("gzip"))
+            var httpContent = response.Content;
+            if (httpContent != null && httpContent.Headers.ContentEncoding.Contains("gzip"))
             {
-                var inStream = await content.ReadAsStreamAsync().ConfigureAwait(false);
-                using (var gzip = new GZipStream(inStream, CompressionMode.Decompress))
+                var content = await httpContent.ReadAsStreamAsync().ConfigureAwait(false);
+                using (var gzip = new GZipStream(content, CompressionMode.Decompress, leaveOpen: true))
                 {
-                    var outStream = new MemoryStream();
-                    await gzip.CopyToAsync(outStream, 1024, cancellationToken).ConfigureAwait(false);
-                    outStream.Position = 0;
-                    response.Content = new StreamContent(outStream);
+                    response.Content = await httpContent.CloneAsync(gzip, cancellationToken).ConfigureAwait(false);
                 }
-                content.Dispose();
+                httpContent.Dispose();
             }
 
             return response;
