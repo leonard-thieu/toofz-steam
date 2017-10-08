@@ -1,6 +1,6 @@
 ﻿namespace toofz.NecroDancer.Leaderboards.toofz
 {
-    public sealed class GetPlayersParams : IPagination
+    public struct GetPlayersParams : IPagination
     {
         public string Query { get; set; }
         public int? Offset { get; set; }

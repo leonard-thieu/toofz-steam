@@ -25,11 +25,10 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         #region Players
 
         public async Task<PlayersEnvelope> GetPlayersAsync(
-            GetPlayersParams @params = null,
+            GetPlayersParams @params = default,
             CancellationToken cancellationToken = default)
         {
             var requestUri = "players";
-            @params = @params ?? new GetPlayersParams();
             requestUri = requestUri.SetQueryParams(new
             {
                 q = @params.Query,
@@ -60,11 +59,10 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         #region Replays
 
         public async Task<ReplaysEnvelope> GetReplaysAsync(
-            GetReplaysParams @params = null,
+            GetReplaysParams @params = default,
             CancellationToken cancellationToken = default)
         {
             var requestUri = "replays";
-            @params = @params ?? new GetReplaysParams();
             requestUri = requestUri.SetQueryParams(new
             {
                 version = @params.Version,

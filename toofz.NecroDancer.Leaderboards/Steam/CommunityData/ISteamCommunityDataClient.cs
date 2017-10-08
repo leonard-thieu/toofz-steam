@@ -17,13 +17,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             uint appId,
             int leaderboardId,
-            GetLeaderboardEntriesParams @params = null,
+            GetLeaderboardEntriesParams @params = default,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default);
         Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,
-            GetLeaderboardEntriesParams @params = null,
+            GetLeaderboardEntriesParams @params = default,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default);
     }

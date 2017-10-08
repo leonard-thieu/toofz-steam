@@ -8,16 +8,16 @@ namespace toofz.NecroDancer.Leaderboards.toofz
     public interface IToofzApiClient : IDisposable
     {
         Task<PlayersEnvelope> GetPlayersAsync(
-            GetPlayersParams @params = null,
-            CancellationToken cancellationToken = default(CancellationToken));
+            GetPlayersParams @params = default,
+            CancellationToken cancellationToken = default);
         Task<BulkStoreDTO> PostPlayersAsync(
             IEnumerable<Player> players,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default);
         Task<ReplaysEnvelope> GetReplaysAsync(
-            GetReplaysParams @params = null,
-            CancellationToken cancellationToken = default(CancellationToken));
+            GetReplaysParams @params = default,
+            CancellationToken cancellationToken = default);
         Task<BulkStoreDTO> PostReplaysAsync(
             IEnumerable<Replay> replays,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default);
     }
 }

@@ -74,7 +74,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         public Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             uint appId,
             int leaderboardId,
-            GetLeaderboardEntriesParams @params = null,
+            GetLeaderboardEntriesParams @params = default,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
@@ -84,7 +84,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         public async Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,
-            GetLeaderboardEntriesParams @params = null,
+            GetLeaderboardEntriesParams @params = default,
             IProgress<long> progress = null,
             CancellationToken cancellationToken = default)
         {
@@ -93,7 +93,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             if (communityGameName == null)
                 throw new ArgumentNullException(nameof(communityGameName));
 
-            @params = @params ?? new GetLeaderboardEntriesParams();
             var requestUri = $"stats/{communityGameName}/leaderboards/{leaderboardId}/"
                 .SetQueryParams(new
                 {
