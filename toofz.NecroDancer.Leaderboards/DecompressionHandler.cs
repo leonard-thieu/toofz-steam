@@ -20,6 +20,7 @@ namespace toofz.NecroDancer.Leaderboards
                 {
                     var outStream = new MemoryStream();
                     await gzip.CopyToAsync(outStream, 1024, cancellationToken).ConfigureAwait(false);
+                    outStream.Position = 0;
                     response.Content = new StreamContent(outStream);
                 }
                 content.Dispose();
