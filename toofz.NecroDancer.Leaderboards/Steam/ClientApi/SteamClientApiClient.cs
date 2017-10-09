@@ -38,25 +38,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </exception>
         public SteamClientApiClient(string userName, string password) : this(userName, password, CreateSteamClient()) { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
-        /// with the specified user name and password.
-        /// </summary>
-        /// <param name="userName">The user name to log on to Steam with.</param>
-        /// <param name="password">The password to log on to Steam with.</param>
-        /// <param name="manager">
-        /// The callback manager associated with this instance. If <paramref name="manager"/> is null, a default callback manager 
-        /// will be created.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="userName"/> is null or empty.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="password"/> is null or empty.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="manager"/>.<see cref="ICallbackManager.SteamClient"/> is null.
-        /// </exception>
         internal SteamClientApiClient(string userName, string password, ISteamClientAdapter steamClient)
         {
             if (string.IsNullOrEmpty(userName))

@@ -35,10 +35,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// connected at this point. Results are returned in a <see cref="SteamUser.LoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
-        /// <exception cref="ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         /// No logon details were provided.
         /// </exception>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="System.ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
         Task<LoggedOnCallback> LogOnAsync(LogOnDetails details);
