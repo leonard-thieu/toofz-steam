@@ -6,7 +6,7 @@ using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    interface ISteamClientAdapter : ISteamClient
+    interface ISteamClientAdapter
     {
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.
@@ -47,5 +47,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <returns>A registered handler on success, or null if the handler could not be found.</returns>
         ISteamUserStats GetSteamUserStats();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is connected to the remote CM server.
+        /// </summary>
+        bool IsConnected { get; }
+        /// <summary>
+        /// Disconnects this client.
+        /// </summary>
+        void Disconnect();
     }
 }
