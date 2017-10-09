@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using SteamKit2;
+using static SteamKit2.SteamUser;
+using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
@@ -12,7 +14,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
         static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        static readonly RetryPolicy<SteamClientApiTransientErrorDetectionStrategy> RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+        static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+
+        static ISteamClientAdapter CreateSteamClient()
+        {
+            var steamClient = new SteamClient { DebugNetworkListener = new ProgressDebugNetworkListener() };
+            var manager = new CallbackManager(steamClient);
+
+            return new SteamClientAdapter(steamClient, manager);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
@@ -26,28 +36,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// <paramref name="password"/> is null or empty.
         /// </exception>
-        public SteamClientApiClient(string userName, string password) : this(userName, password, new CallbackManagerAdapter()) { }
+        public SteamClientApiClient(string userName, string password) : this(userName, password, CreateSteamClient()) { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SteamClientApiClient"/> class 
-        /// with the specified user name and password.
-        /// </summary>
-        /// <param name="userName">The user name to log on to Steam with.</param>
-        /// <param name="password">The password to log on to Steam with.</param>
-        /// <param name="manager">
-        /// The callback manager associated with this instance. If <paramref name="manager"/> is null, a default callback manager 
-        /// will be created.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="userName"/> is null or empty.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="password"/> is null or empty.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="manager"/>.<see cref="ICallbackManager.SteamClient"/> is null.
-        /// </exception>
-        internal SteamClientApiClient(string userName, string password, ICallbackManager manager)
+        internal SteamClientApiClient(string userName, string password, ISteamClientAdapter steamClient)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentException($"{nameof(userName)} is null or empty.", nameof(userName));
@@ -56,14 +47,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             this.userName = userName;
             this.password = password;
-
-            steamClient = manager.SteamClient;
-            steamClient.ProgressDebugNetworkListener = new ProgressDebugNetworkListener();
+            this.steamClient = steamClient;
         }
 
         readonly string userName;
         readonly string password;
-        readonly ISteamClient steamClient;
+        readonly ISteamClientAdapter steamClient;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -75,14 +64,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 if (disposed)
                     throw new ObjectDisposedException(nameof(SteamClientApiClient));
 
-                return steamClient.ProgressDebugNetworkListener?.Progress;
+                return steamClient.ProgressDebugNetworkListener.Progress;
             }
             set
             {
                 if (disposed)
                     throw new ObjectDisposedException(nameof(SteamClientApiClient));
-                if (steamClient.ProgressDebugNetworkListener == null)
-                    throw new InvalidOperationException($"{nameof(steamClient)}.{nameof(steamClient.ProgressDebugNetworkListener)} is null.");
 
                 steamClient.ProgressDebugNetworkListener.Progress = value;
             }
@@ -104,7 +91,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
             if (!steamClient.IsLoggedOn)
             {
-                await steamClient.LogOnAsync(new SteamUser.LogOnDetails
+                await steamClient.LogOnAsync(new LogOnDetails
                 {
                     Username = userName,
                     Password = password,
@@ -115,10 +102,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Disconnects from Steam.
         /// </summary>
-        public void Disconnect()
-        {
-            steamClient.Disconnect();
-        }
+        public void Disconnect() => steamClient.Disconnect();
 
         #endregion
 
@@ -139,13 +123,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboard =
                 await ExecuteRequestAsync(async () =>
                 {
-                    var steamUserStats = steamClient.GetSteamUserStats();
-                    steamUserStats.Timeout = Timeout;
-
                     Log.Debug($"Start download {name}");
-                    var result = await steamUserStats
-                        .FindLeaderboard(appId, name)
-                        .ConfigureAwait(false);
+
+                    var asyncJob = steamClient.GetSteamUserStats().FindLeaderboard(appId, name);
+                    asyncJob.Timeout = Timeout;
+                    var result = await asyncJob.ToTask().ConfigureAwait(false);
+
                     Log.Debug($"End download {name}");
 
                     return result;
@@ -174,13 +157,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var leaderboardEntries =
                 await ExecuteRequestAsync(async () =>
                 {
-                    var steamUserStats = steamClient.GetSteamUserStats();
-                    steamUserStats.Timeout = Timeout;
-
                     Log.Debug($"Start download {lbid}");
-                    var result = await steamUserStats
-                        .GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global)
-                        .ConfigureAwait(false);
+
+                    var asyncJob = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global);
+                    asyncJob.Timeout = Timeout;
+                    var result = await asyncJob.ToTask().ConfigureAwait(false);
+
                     Log.Debug($"End download {lbid}");
 
                     return result;
@@ -195,6 +177,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
         }
 
+        // TODO: Make this configurable.
         static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
 
         Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)

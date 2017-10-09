@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SteamKit2;
+using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {

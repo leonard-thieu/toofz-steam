@@ -55,8 +55,8 @@
     <Reference Include="SqlBulkUpsert, Version=4.1.5.127, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\toofz.SqlBulkUpsert.4.1.5\lib\net45\SqlBulkUpsert.dll</HintPath>
     </Reference>
-    <Reference Include="SteamKit2, Version=1.8.3.0, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamKit2.1.8.3\lib\net45\SteamKit2.dll</HintPath>
+    <Reference Include="SteamKit2, Version=2.0.4.21, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamKit2.2.0.4\lib\net45\SteamKit2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -96,29 +96,13 @@
     <None Include="data\leaderboard-headers.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Steam\ClientApi\ICallbackManager.cs" />
-    <Compile Include="Steam\ClientApi\CallbackManagerAdapter.cs">
-      <DependentUpon>ICallbackManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\IFindOrCreateLeaderboardCallback.cs" />
-    <Compile Include="Steam\ClientApi\FindOrCreateLeaderboardCallbackAdapter.cs">
-      <DependentUpon>IFindOrCreateLeaderboardCallback.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ILeaderboardEntriesCallback.cs" />
-    <Compile Include="Steam\ClientApi\LeaderboardEntriesCallbackAdapter.cs">
-      <DependentUpon>ILeaderboardEntriesCallback.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ISteamClient.cs" />
+    <Compile Include="Steam\ClientApi\ISteamClientAdapter.cs" />
     <Compile Include="Steam\ClientApi\SteamClientAdapter.cs">
-      <DependentUpon>ISteamClient.cs</DependentUpon>
+      <DependentUpon>ISteamClientAdapter.cs</DependentUpon>
     </Compile>
     <Compile Include="Steam\ClientApi\ISteamClientApiClient.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiClient.cs">
       <DependentUpon>ISteamClientApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ISteamUserStats.cs" />
-    <Compile Include="Steam\ClientApi\SteamUserStatsAdapter.cs">
-      <DependentUpon>ISteamUserStats.cs</DependentUpon>
     </Compile>
     <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
     <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />

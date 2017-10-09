@@ -67,7 +67,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         #region GetLeaderboardEntries
 
         /// <summary>
-        /// The maximum number of leaderboard entries allowed per request by <see cref="GetLeaderboardEntriesAsync"/>.
+        /// The maximum number of leaderboard entries allowed per request.
         /// </summary>
         public const int MaxLeaderboardEntriesPerRequest = 5001;
 

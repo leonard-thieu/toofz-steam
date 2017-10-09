@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using SteamKit2;
+using static SteamKit2.SteamClient;
+using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    /// <summary>
-    /// Wraps an instance of <see cref="SteamClient"/> and presents a testable interface through <see cref="ISteamClient"/>.
-    /// </summary>
-    [ExcludeFromCodeCoverage]
-    sealed class SteamClientAdapter : ISteamClient
+    sealed class SteamClientAdapter : ISteamClientAdapter
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientAdapter));
 
@@ -20,7 +17,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Initializes a new instance of the <see cref="SteamClientAdapter"/> class.
         /// </summary>
         /// <param name="steamClient">
-        /// The instance of <see cref="SteamClient"/> to wrap.
+        /// The Steam client.
         /// </param>
         /// <param name="manager">
         /// The callback manager associated with <paramref name="steamClient"/>.
@@ -31,63 +28,44 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="manager"/> is null.
         /// </exception>
-        public SteamClientAdapter(SteamClient steamClient, ICallbackManager manager)
+        public SteamClientAdapter(ISteamClient steamClient, ICallbackManager manager)
         {
-            SteamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient), $"{nameof(steamClient)} is null.");
+            this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient), $"{nameof(steamClient)} is null.");
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} is null.");
-            messageLoop = new Thread(() =>
+            MessageLoop = new Thread(() =>
             {
                 while (true)
                 {
                     this.manager.RunWaitCallbacks();
                 }
             });
-            messageLoop.Start();
+            MessageLoop.Start();
         }
 
+        readonly ISteamClient steamClient;
         readonly ICallbackManager manager;
-        readonly Thread messageLoop;
 
-        /// <summary>
-        /// The instance of <see cref="SteamClient"/> wrapped by the adapter.
-        /// </summary>
-        public SteamClient SteamClient { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is connected to the remote CM server.
-        /// </summary>
-        public bool IsConnected => SteamClient.IsConnected;
+        internal Thread MessageLoop { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.
         /// </summary>
-        public bool IsLoggedOn => SteamClient.SessionID != null;
+        public bool IsLoggedOn => steamClient.SessionID != null;
 
         /// <summary>
-        /// Gets or sets the network listening interface. Use this for debugging only. For
-        /// your convenience, you can use <see cref="NetHookNetworkListener"/> class.
+        /// Gets or sets the network listening interface.
         /// </summary>
         public ProgressDebugNetworkListener ProgressDebugNetworkListener
         {
-            get => SteamClient.DebugNetworkListener as ProgressDebugNetworkListener;
-            set => SteamClient.DebugNetworkListener = value;
-        }
-
-        /// <summary>
-        /// Returns a wrapped registered handler for <see cref="SteamUserStats"/>.
-        /// </summary>
-        public ISteamUserStats GetSteamUserStats()
-        {
-            var steamUserStats = SteamClient.GetHandler<SteamUserStats>();
-
-            return new SteamUserStatsAdapter(steamUserStats);
+            get => steamClient.DebugNetworkListener as ProgressDebugNetworkListener;
+            set => steamClient.DebugNetworkListener = value;
         }
 
         /// <summary>
         /// Connects this client to a Steam3 server. This begins the process of connecting
         /// and encrypting the data channel between the client and the server. Results are
-        /// returned asynchronously in a <see cref="SteamClient.ConnectedCallback"/>. If the
-        /// server that SteamKit attempts to connect to is down, a <see cref="SteamClient.DisconnectedCallback"/>
+        /// returned asynchronously in a <see cref="ConnectedCallback"/>. If the
+        /// server that SteamKit attempts to connect to is down, a <see cref="DisconnectedCallback"/>
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
@@ -95,13 +73,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// The <see cref="IPEndPoint"/> of the CM server to connect to. If null, SteamKit will
         /// randomly select a CM server from its internal list.
         /// </param>
-        public Task<SteamClient.ConnectedCallback> ConnectAsync(IPEndPoint cmServer = null)
+        public Task<ConnectedCallback> ConnectAsync(IPEndPoint cmServer = null)
         {
-            var tcs = new TaskCompletionSource<SteamClient.ConnectedCallback>();
+            var tcs = new TaskCompletionSource<ConnectedCallback>();
 
             IDisposable onConnected = null;
             IDisposable onDisconnected = null;
-            onConnected = manager.Subscribe<SteamClient.ConnectedCallback>(response =>
+            onConnected = manager.Subscribe<ConnectedCallback>(response =>
             {
                 switch (response.Result)
                 {
@@ -121,27 +99,27 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 onConnected.Dispose();
                 onDisconnected.Dispose();
 
-                onDisconnected = manager.Subscribe<SteamClient.DisconnectedCallback>(_ =>
+                onDisconnected = manager.Subscribe<DisconnectedCallback>(_ =>
                 {
                     Log.Info("Disconnected from Steam.");
                     onDisconnected.Dispose();
                 });
             });
-            onDisconnected = manager.Subscribe<SteamClient.DisconnectedCallback>(response =>
+            onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
                 tcs.TrySetException(new SteamClientApiException("Unable to connect to Steam."));
                 onConnected.Dispose();
                 onDisconnected.Dispose();
             });
 
-            SteamClient.Connect(cmServer);
+            steamClient.Connect(cmServer);
 
             return tcs.Task;
         }
 
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
-        /// connected at this point. Results are returned in a <see cref="SteamUser.LoggedOnCallback"/>.
+        /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
         /// <exception cref="ArgumentNullException">
@@ -150,13 +128,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
-        public Task<SteamUser.LoggedOnCallback> LogOnAsync(SteamUser.LogOnDetails details)
+        public Task<LoggedOnCallback> LogOnAsync(LogOnDetails details)
         {
-            var tcs = new TaskCompletionSource<SteamUser.LoggedOnCallback>();
+            var tcs = new TaskCompletionSource<LoggedOnCallback>();
 
             IDisposable onLoggedOn = null;
             IDisposable onDisconnected = null;
-            onLoggedOn = manager.Subscribe<SteamUser.LoggedOnCallback>(response =>
+            onLoggedOn = manager.Subscribe<LoggedOnCallback>(response =>
             {
                 switch (response.Result)
                 {
@@ -177,24 +155,32 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
             });
-            onDisconnected = manager.Subscribe<SteamClient.DisconnectedCallback>(response =>
+            onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
                 tcs.TrySetException(new SteamClientApiException("Unable to connect to Steam."));
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
             });
 
-            SteamClient.GetHandler<SteamUser>().LogOn(details);
+            steamClient.GetHandler<SteamUser>().LogOn(details);
 
             return tcs.Task;
         }
 
         /// <summary>
+        /// Returns a registered handler for <see cref="SteamUserStats"/>.
+        /// </summary>
+        /// <returns>A registered handler on success, or null if the handler could not be found.</returns>
+        public ISteamUserStats GetSteamUserStats() => steamClient.GetHandler<SteamUserStats>();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is connected to the remote CM server.
+        /// </summary>
+        public bool IsConnected => steamClient.IsConnected;
+
+        /// <summary>
         /// Disconnects this client.
         /// </summary>
-        public void Disconnect()
-        {
-            SteamClient.Disconnect();
-        }
+        public void Disconnect() => steamClient.Disconnect();
     }
 }
