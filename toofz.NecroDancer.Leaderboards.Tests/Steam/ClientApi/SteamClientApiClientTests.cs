@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
+using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
@@ -70,7 +71,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ReturnsSteamClientApiClient()
+            public void ReturnsInstance()
             {
                 // Arrange
                 string userName = "userName";
@@ -104,66 +105,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ProgressDebugNetworkListenerIsNull_ReturnsNull()
+            public void ReturnsProgress()
             {
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
-
-                // Act
-                var progress = client.Progress;
-
-                // Assert
-                Assert.IsNull(progress);
-            }
-
-            [TestMethod]
-            public void ProgressDebugNetworkListenerIsNotNullAndProgressIsNull_ReturnsNull()
-            {
-                // Arrange
-                string userName = "userName";
-                string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient
-                    .Setup(c => c.ProgressDebugNetworkListener)
-                    .Returns(new ProgressDebugNetworkListener());
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
-
-                // Act
-                var progress = client.Progress;
-
-                // Assert
-                Assert.IsNull(progress);
-            }
-
-            [TestMethod]
-            public void ProgressDebugNetworkListenerIsNotNullAndProgressIsNotNull_ReturnsInstance()
-            {
-                // Arrange
-                string userName = "userName";
-                string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient
-                    .Setup(c => c.ProgressDebugNetworkListener)
-                    .Returns(new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() });
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
+                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() });
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 var progress = client.Progress;
@@ -193,43 +143,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [TestMethod]
-            public void ProgressDebugNetworkListenerIsNull_ThrowsInvalidOperationException()
-            {
-                // Arrange
-                string userName = "userName";
-                string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
-
-                // Act -> Assert
-                Assert.ThrowsException<InvalidOperationException>(() =>
-                {
-                    client.Progress = Mock.Of<IProgress<long>>();
-                });
-            }
-
-            [TestMethod]
             public void SetsProgress()
             {
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient
-                    .Setup(c => c.ProgressDebugNetworkListener)
-                    .Returns(new ProgressDebugNetworkListener());
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
-                IProgress<long> progress = Mock.Of<IProgress<long>>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
+                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener());
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
+                var progress = Mock.Of<IProgress<long>>();
 
                 // Act
                 client.Progress = progress;
@@ -284,13 +207,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var userName = "myUserName";
                 var password = "myPassword";
-                var mockManager = new Mock<ICallbackManager>();
-                var mockSteamClient = new Mock<ISteamClient>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
-                var manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -305,13 +225,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var userName = "myUserName";
                 var password = "myPassword";
-                var mockManager = new Mock<ICallbackManager>();
-                var mockSteamClient = new Mock<ISteamClient>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
-                var manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -326,13 +243,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var userName = "myUserName";
                 var password = "myPassword";
-                var mockManager = new Mock<ICallbackManager>();
-                var mockSteamClient = new Mock<ISteamClient>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
-                var manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -347,13 +261,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var userName = "myUserName";
                 var password = "myPassword";
-                var mockManager = new Mock<ICallbackManager>();
-                var mockSteamClient = new Mock<ISteamClient>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                mockManager.SetupGet(m => m.SteamClient).Returns(steamClient);
-                var manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -372,13 +283,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 client.Disconnect();
@@ -398,28 +305,31 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
             public FindLeaderboardAsyncMethod()
             {
-                mockFindOrCreateLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
+                mockLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
+                var leaderboardCallback = mockLeaderboardCallback.Object;
+                mockLeaderboardResponse = new Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>>();
+                mockLeaderboardResponse.Setup(r => r.ToTask()).Returns(Task.FromResult(leaderboardCallback));
+                var leaderboardResponse = mockLeaderboardResponse.Object;
 
                 mockSteamUserStats = new Mock<ISteamUserStats>();
                 mockSteamUserStats
                     .Setup(s => s.FindLeaderboard(It.IsAny<uint>(), It.IsAny<string>()))
-                    .Returns(Task.FromResult(mockFindOrCreateLeaderboardCallback.Object));
+                    .Returns(leaderboardResponse);
+                var steamUserStats = mockSteamUserStats.Object;
 
-                mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
+                mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
+                var steamClient = mockSteamClient.Object;
 
-                mockManager = new Mock<ICallbackManager>();
-                mockManager.SetupGet(m => m.SteamClient).Returns(mockSteamClient.Object);
-
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockManager.Object);
+                steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
             }
 
-            Mock<IFindOrCreateLeaderboardCallback> mockFindOrCreateLeaderboardCallback;
+            Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
+            Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>> mockLeaderboardResponse;
             Mock<ISteamUserStats> mockSteamUserStats;
-            Mock<ISteamClient> mockSteamClient;
-            Mock<ICallbackManager> mockManager;
+            Mock<ISteamClientAdapter> mockSteamClient;
             SteamClientApiClient steamClientApiClient;
 
             [TestMethod]
@@ -452,7 +362,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
-                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.Fail);
+                mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.Fail);
 
                 // Act -> Assert
                 var ex = await Assert.ThrowsExceptionAsync<SteamClientApiException>(() =>
@@ -466,7 +376,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
             {
                 // Arrange
-                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+                mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
                 var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
@@ -479,13 +389,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task SetsTimeout()
             {
                 // Arrange
-                mockFindOrCreateLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+                mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
                 await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
 
                 // Assert
-                mockSteamUserStats.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
+                mockLeaderboardResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
             }
         }
 
@@ -500,27 +410,30 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public GetLeaderboardEntriesAsyncMethod()
             {
                 mockLeaderboardEntriesCallback = new Mock<ILeaderboardEntriesCallback>();
+                var leaderboardEntriesCallback = mockLeaderboardEntriesCallback.Object;
+                mockLeaderboardEntriesResponse = new Mock<IAsyncJob<ILeaderboardEntriesCallback>>();
+                mockLeaderboardEntriesResponse.Setup(r => r.ToTask()).Returns(Task.FromResult(leaderboardEntriesCallback));
+                var leaderboardEntriesResponse = mockLeaderboardEntriesResponse.Object;
 
                 mockSteamUserStats = new Mock<ISteamUserStats>();
                 mockSteamUserStats
                     .Setup(s => s.GetLeaderboardEntries(It.IsAny<uint>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ELeaderboardDataRequest>()))
-                    .Returns(Task.FromResult(mockLeaderboardEntriesCallback.Object));
+                    .Returns(leaderboardEntriesResponse);
+                var steamUserStats = mockSteamUserStats.Object;
 
-                mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
+                mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
+                var steamClient = mockSteamClient.Object;
 
-                mockmanager = new Mock<ICallbackManager>();
-                mockmanager.SetupGet(manager => manager.SteamClient).Returns(mockSteamClient.Object);
-
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, mockmanager.Object);
+                steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
             }
 
             Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
+            Mock<IAsyncJob<ILeaderboardEntriesCallback>> mockLeaderboardEntriesResponse;
             Mock<ISteamUserStats> mockSteamUserStats;
-            Mock<ISteamClient> mockSteamClient;
-            Mock<ICallbackManager> mockmanager;
+            Mock<ISteamClientAdapter> mockSteamClient;
             SteamClientApiClient steamClientApiClient;
 
             [TestMethod]
@@ -586,7 +499,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 await steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
 
                 // Assert
-                mockSteamUserStats.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
+                mockLeaderboardEntriesResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
             }
         }
 
@@ -599,14 +512,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(s => s.IsConnected).Returns(true);
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 client.Dispose();
@@ -621,14 +530,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient.SetupGet(s => s.IsConnected).Returns(false);
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 client.Dispose();
@@ -643,14 +547,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 string userName = "userName";
                 string password = "password";
-                Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
-                mockSteamClient.SetupGet(s => s.IsConnected).Returns(false);
-                Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
-                mockManager
-                    .Setup(m => m.SteamClient)
-                    .Returns(mockSteamClient.Object);
-                ICallbackManager manager = mockManager.Object;
-                var client = new SteamClientApiClient(userName, password, manager);
+                var mockSteamClient = new Mock<ISteamClientAdapter>();
+                var steamClient = mockSteamClient.Object;
+                var client = new SteamClientApiClient(userName, password, steamClient);
 
                 // Act
                 client.Dispose();
