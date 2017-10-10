@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
@@ -99,9 +98,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             {
                 // Arrange
                 var mockHandler = new MockHttpMessageHandler();
-                mockHandler
-                    .When("*")
-                    .Respond(HttpStatusCode.OK);
+                mockHandler.When("*").Respond(HttpStatusCode.OK);
                 var bearerToken = new OAuth2BearerToken();
                 var userName = "myUserName";
                 var password = "myPassword";
@@ -129,16 +126,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var mockHandler = new MockHttpMessageHandler();
                 var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized };
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
-                mockHandler
-                    .Expect("/")
-                    .Respond(req => response);
-                mockHandler
-                    .Expect("/token")
-                    .Respond("application/json", Resources.OAuth2BearerToken);
-                mockHandler
-                    .Expect("/")
-                    .WithHeaders("Authorization", "Bearer myAccessToken")
-                    .Respond(HttpStatusCode.OK);
+                mockHandler.Expect("/").Respond(req => response);
+                mockHandler.Expect("/token").Respond("application/json", Resources.OAuth2BearerToken);
+                mockHandler.Expect("/").WithHeaders("Authorization", "Bearer myAccessToken").Respond(HttpStatusCode.OK);
                 var userName = "myUserName";
                 var password = "myPassword";
                 var oAuth2Handler = new OAuth2Handler(userName, password) { InnerHandler = mockHandler };
