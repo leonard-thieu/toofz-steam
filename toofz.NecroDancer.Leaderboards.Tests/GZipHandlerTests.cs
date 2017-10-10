@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,7 +12,7 @@ using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class DecompressionHandlerTests
+    class GZipHandlerTests
     {
         [TestClass]
         public class Constructor
@@ -19,24 +21,45 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public void ReturnsInstance()
             {
                 // Arrange -> Act
-                var handler = new DecompressionHandler();
+                var handler = new GZipHandler();
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(DecompressionHandler));
+                Assert.IsInstanceOfType(handler, typeof(GZipHandler));
             }
         }
 
         [TestClass]
         public class SendAsyncMethod
         {
+            public SendAsyncMethod()
+            {
+                mockHandler = new MockHttpMessageHandler();
+                var decompressionHandler = new GZipHandler { InnerHandler = mockHandler };
+                handler = new HttpMessageHandlerAdapter(decompressionHandler);
+            }
+
+            MockHttpMessageHandler mockHandler;
+            HttpMessageHandlerAdapter handler;
+
+            [TestMethod]
+            public async Task AddsAcceptEncodingGzipToRequest()
+            {
+                // Arrange
+                mockHandler.When("*").Respond(HttpStatusCode.OK);
+
+                // Act
+                var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));
+
+                // Assert
+                var request = response.RequestMessage;
+                CollectionAssert.Contains(request.Headers.AcceptEncoding.ToList(), new StringWithQualityHeaderValue("gzip"));
+            }
+
             [TestMethod]
             public async Task NoContent_ReturnsResponse()
             {
                 // Arrange
-                var mockHandler = new MockHttpMessageHandler();
                 mockHandler.When("*").Respond(HttpStatusCode.OK);
-                var decompressionHandler = new DecompressionHandler { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(decompressionHandler);
 
                 // Act
                 var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));
@@ -49,12 +72,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ContentIsNotCompressed_ReturnsUnmodifiedResponse()
             {
                 // Arrange
-                var mockHandler = new MockHttpMessageHandler();
                 var stream = new MemoryStream(Encoding.UTF8.GetBytes("0123456789"));
                 var content = new StreamContent(stream);
                 mockHandler.When("*").Respond(content);
-                var decompressionHandler = new DecompressionHandler { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(decompressionHandler);
 
                 // Act
                 var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));
@@ -67,7 +87,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ContentIsCompressed_ReturnsResponseWithDecompressedContent()
             {
                 // Arrange
-                var mockHandler = new MockHttpMessageHandler();
                 var compressed = new MemoryStream();
                 using (var gzip = new GZipStream(compressed, CompressionMode.Compress, leaveOpen: true))
                 {
@@ -77,8 +96,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var content = new StreamContent(compressed);
                 content.Headers.ContentEncoding.Add("gzip");
                 mockHandler.When("*").Respond(content);
-                var decompressionHandler = new DecompressionHandler { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(decompressionHandler);
 
                 // Act
                 var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));

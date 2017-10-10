@@ -154,14 +154,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
-    <Compile Include="ContentLengthHandler.cs" />
     <Compile Include="DailyEntry.cs" />
     <Compile Include="DailyLeaderboard.cs" />
     <Compile Include="DailyLeaderboardHeader.cs" />
     <Compile Include="DailyLeaderboardHeaders.cs" />
     <Compile Include="DailyLeaderboardHeadersEnvelope.cs" />
-    <Compile Include="DecompressionHandler.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="GZipHandler.cs" />
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="HttpContentExtensions.cs" />
     <Compile Include="HttpErrorHandler.cs" />

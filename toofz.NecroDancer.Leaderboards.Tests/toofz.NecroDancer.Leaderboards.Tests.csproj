@@ -193,10 +193,10 @@
     <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientErrorDetectionStrategyTests.cs" />
     <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientFaultHandlerTests.cs" />
     <Compile Include="Steam\CommunityData\SteamCommunityDataClientTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
     <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
+    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />
     <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
     <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategyTests.cs" />
@@ -217,15 +217,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharacterTests.cs" />
-    <Compile Include="DecompressionHandlerTests.cs" />
-    <Compile Include="HttpClientExtensionsTests.cs" />
-    <Compile Include="HttpErrorTests.cs" />
-    <Compile Include="ContentLengthHandlerTests.cs" />
     <Compile Include="DailyEntryTests.cs" />
     <Compile Include="DailyLeaderboardTests.cs" />
     <Compile Include="EntryTests.cs" />
+    <Compile Include="GZipHandlerTests.cs" />
+    <Compile Include="HttpClientExtensionsTests.cs" />
     <Compile Include="HttpContentExtensionsTests.cs" />
     <Compile Include="HttpErrorHandlerTests.cs" />
+    <Compile Include="HttpErrorTests.cs" />
     <Compile Include="HttpRequestMessageExtensionsTests.cs" />
     <Compile Include="HttpRequestStatusExceptionTests.cs" />
     <Compile Include="LeaderboardTests.cs" />
