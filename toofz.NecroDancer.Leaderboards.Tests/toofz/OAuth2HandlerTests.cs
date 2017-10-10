@@ -153,7 +153,29 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
                 mockHandler.Expect("/").Respond(req => response);
                 mockHandler.Expect("/token").Respond("application/json", Resources.OAuth2BearerToken);
-                mockHandler.Expect("/").WithHeaders("Authorization", "Bearer myAccessToken").Respond(HttpStatusCode.OK);
+                var userName = "myUserNameThatWillNotMatch";
+                var password = "myPassword";
+                var oAuth2Handler = new OAuth2Handler(userName, password) { InnerHandler = mockHandler };
+                var handler = new HttpMessageHandlerAdapter(oAuth2Handler);
+                var request = new HttpRequestMessage { RequestUri = new Uri("http://example.org/") };
+                var cancellationToken = CancellationToken.None;
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<InvalidDataException>(() =>
+                {
+                    return handler.PublicSendAsync(request, cancellationToken);
+                });
+            }
+
+            [TestMethod]
+            public async Task UnauthorizedAndReceivedNonBearerTokenResponse_ThrowsInvalidDataException()
+            {
+                // Arrange
+                var mockHandler = new MockHttpMessageHandler();
+                var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized };
+                response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Bearer"));
+                mockHandler.Expect("/").Respond(req => response);
+                mockHandler.Expect("/token").Respond("application/json", Resources.HttpError);
                 var userName = "myUserNameThatWillNotMatch";
                 var password = "myPassword";
                 var oAuth2Handler = new OAuth2Handler(userName, password) { InnerHandler = mockHandler };
