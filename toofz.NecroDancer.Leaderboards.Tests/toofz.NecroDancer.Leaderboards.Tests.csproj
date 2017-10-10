@@ -237,6 +237,7 @@
     <Compile Include="ProgressReporterHttpClientTests.cs" />
     <Compile Include="ReplayTests.cs" />
     <Compile Include="RunTests.cs" />
+    <Compile Include="SimpleHttpMessageHandler.cs" />
     <Compile Include="TransientFaultHandlerBaseTests.cs" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

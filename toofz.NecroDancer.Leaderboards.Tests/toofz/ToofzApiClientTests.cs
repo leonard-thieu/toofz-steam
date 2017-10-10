@@ -11,22 +11,55 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
     class ToofzApiClientTests
     {
-        [TestClass]
-        public class GetPlayersAsyncMethod
+        public ToofzApiClientTests()
         {
+            Client = new ToofzApiClient(Handler, false) { BaseAddress = new Uri("http://example.org/") };
+        }
+
+        public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
+        public ToofzApiClient Client { get; set; }
+
+        [TestClass]
+        public class Constructor
+        {
+            [TestMethod]
+            public void ReturnsInstance()
+            {
+                // Arrange
+                var handler = new MockHttpMessageHandler();
+
+                // Act
+                var client = new ToofzApiClient(handler, false);
+
+                // Assert
+                Assert.IsInstanceOfType(client, typeof(ToofzApiClient));
+            }
+        }
+
+        [TestClass]
+        public class GetPlayersAsyncMethod : ToofzApiClientTests
+        {
+            [TestMethod]
+            public async Task Disposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                Client.Dispose();
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.GetPlayersAsync();
+                });
+            }
+
             [TestMethod]
             public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/players")
-                    .Respond("application/json", Resources.PlayersEnvelope);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
+                Handler.When("http://example.org/players").Respond("application/json", Resources.PlayersEnvelope);
 
                 // Act
-                var response = await toofzApiClient.GetPlayersAsync();
+                var response = await Client.GetPlayersAsync();
 
                 // Assert
                 Assert.AreEqual(453681, response.Total);
@@ -40,25 +73,39 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class GetPlayersAsyncMethod_Params
+        public class GetPlayersAsyncMethod_Params : ToofzApiClientTests
         {
             [TestMethod]
-            public async Task ReturnsPlayersEnvelope()
+            public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/players?limit=20&sort=updated_at")
-                    .Respond("application/json", Resources.PlayersEnvelope);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
-
-                // Act
-                var response = await toofzApiClient.GetPlayersAsync(new GetPlayersParams
+                Client.Dispose();
+                var @params = new GetPlayersParams
                 {
                     Limit = 20,
                     Sort = "updated_at",
+                };
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.GetPlayersAsync(@params);
                 });
+            }
+
+            [TestMethod]
+            public async Task ReturnsPlayersEnvelope()
+            {
+                // Arrange
+                Handler.When("http://example.org/players?limit=20&sort=updated_at").Respond("application/json", Resources.PlayersEnvelope);
+                var @params = new GetPlayersParams
+                {
+                    Limit = 20,
+                    Sort = "updated_at",
+                };
+
+                // Act
+                var response = await Client.GetPlayersAsync(@params);
 
                 // Assert
                 Assert.AreEqual(453681, response.Total);
@@ -72,20 +119,39 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class PostPlayersAsyncMethod
+        public class PostPlayersAsyncMethod : ToofzApiClientTests
         {
+            [TestMethod]
+            public async Task Disposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                Client.Dispose();
+                var players = new List<Player>
+                {
+                    new Player
+                    {
+                        Exists = true,
+                        LastUpdate = new DateTime(2016, 1, 1),
+                    },
+                };
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.PostPlayersAsync(players);
+                });
+            }
+
             [TestMethod]
             public async Task PlayersIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                var toofzApiClient = new ToofzApiClient(handler, false);
                 IEnumerable<Player> players = null;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
-                    return toofzApiClient.PostPlayersAsync(players);
+                    return Client.PostPlayersAsync(players);
                 });
             }
 
@@ -93,16 +159,18 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/players")
-                    .Respond("application/json", Resources.BulkStoreDTO);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
-                var players = new List<Player> { new Player { Exists = true, LastUpdate = new DateTime(2016, 1, 1) } };
+                Handler.When("http://example.org/players").Respond("application/json", Resources.BulkStoreDTO);
+                var players = new List<Player>
+                {
+                    new Player
+                    {
+                        Exists = true,
+                        LastUpdate = new DateTime(2016, 1, 1),
+                    },
+                };
 
                 // Act
-                var bulkStore = await toofzApiClient.PostPlayersAsync(players);
+                var bulkStore = await Client.PostPlayersAsync(players);
 
                 // Assert
                 Assert.AreEqual(10, bulkStore.RowsAffected);
@@ -110,21 +178,29 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class GetReplaysAsyncMethod
+        public class GetReplaysAsyncMethod : ToofzApiClientTests
         {
+            [TestMethod]
+            public async Task Disposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                Client.Dispose();
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.GetReplaysAsync();
+                });
+            }
+
             [TestMethod]
             public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/replays")
-                    .Respond("application/json", Resources.ReplaysEnvelope);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
+                Handler.When("http://example.org/replays").Respond("application/json", Resources.ReplaysEnvelope);
 
                 // Act
-                var response = await toofzApiClient.GetReplaysAsync();
+                var response = await Client.GetReplaysAsync();
 
                 // Assert
                 Assert.AreEqual(43767, response.Total);
@@ -135,24 +211,37 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class GetReplaysAsyncMethod_Params
+        public class GetReplaysAsyncMethod_Params : ToofzApiClientTests
         {
             [TestMethod]
-            public async Task ReturnsReplaysEnvelope()
+            public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/replays?limit=20")
-                    .Respond("application/json", Resources.ReplaysEnvelope);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
-
-                // Act
-                var response = await toofzApiClient.GetReplaysAsync(new GetReplaysParams
+                Client.Dispose();
+                var @params = new GetReplaysParams
                 {
                     Limit = 20,
+                };
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.GetReplaysAsync(@params);
                 });
+            }
+
+            [TestMethod]
+            public async Task ReturnsReplaysEnvelope()
+            {
+                // Arrange
+                Handler.When("http://example.org/replays?limit=20").Respond("application/json", Resources.ReplaysEnvelope);
+                var @params = new GetReplaysParams
+                {
+                    Limit = 20,
+                };
+
+                // Act
+                var response = await Client.GetReplaysAsync(@params);
 
                 // Assert
                 Assert.AreEqual(43767, response.Total);
@@ -163,20 +252,35 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         }
 
         [TestClass]
-        public class PostReplaysAsyncMethod
+        public class PostReplaysAsyncMethod : ToofzApiClientTests
         {
+            [TestMethod]
+            public async Task Disposed_ThrowsObjectDisposedException()
+            {
+                // Arrange
+                Client.Dispose();
+                var replays = new List<Replay>
+                {
+                    new Replay(),
+                };
+
+                // Act -> Assert
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                {
+                    return Client.PostReplaysAsync(replays);
+                });
+            }
+
             [TestMethod]
             public async Task ReplaysIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
                 IEnumerable<Replay> replays = null;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
-                    return toofzApiClient.PostReplaysAsync(replays);
+                    return Client.PostReplaysAsync(replays);
                 });
             }
 
@@ -184,19 +288,50 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
-                    .When("http://example.org/replays")
-                    .Respond("application/json", Resources.BulkStoreDTO);
-
-                var toofzApiClient = new ToofzApiClient(handler, false) { BaseAddress = new Uri("http://example.org/") };
-                var replays = new List<Replay> { new Replay() };
+                Handler.When("http://example.org/replays").Respond("application/json", Resources.BulkStoreDTO);
+                var replays = new List<Replay>
+                {
+                    new Replay(),
+                };
 
                 // Act
-                var bulkStore = await toofzApiClient.PostReplaysAsync(replays);
+                var bulkStore = await Client.PostReplaysAsync(replays);
 
                 // Assert
                 Assert.AreEqual(10, bulkStore.RowsAffected);
+            }
+        }
+
+        [TestClass]
+        public class DisposeMethod
+        {
+            [TestMethod]
+            public void DisposesHttpClient()
+            {
+                // Arrange
+                var handler = new SimpleHttpMessageHandler();
+                var client = new ToofzApiClient(handler, true);
+
+                // Act
+                client.Dispose();
+
+                // Assert
+                Assert.AreEqual(1, handler.DisposeCount);
+            }
+
+            [TestMethod]
+            public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
+            {
+                // Arrange
+                var handler = new SimpleHttpMessageHandler();
+                var client = new ToofzApiClient(handler, true);
+
+                // Act
+                client.Dispose();
+                client.Dispose();
+
+                // Assert
+                Assert.AreEqual(1, handler.DisposeCount);
             }
         }
     }

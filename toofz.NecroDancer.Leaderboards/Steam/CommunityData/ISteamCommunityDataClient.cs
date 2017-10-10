@@ -8,23 +8,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
     {
         Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             uint appId,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default);
         Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             string communityGameName,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default);
         Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             uint appId,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default);
         Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default);
     }
 }

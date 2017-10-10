@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -15,6 +13,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 {
     class SteamCommunityDataClientTests
     {
+        public SteamCommunityDataClientTests()
+        {
+            Client = new SteamCommunityDataClient(Handler);
+        }
+
+        public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
+        public SteamCommunityDataClient Client { get; set; }
+
         [TestClass]
         public class Constructor
         {
@@ -22,7 +28,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ReturnsInstance()
             {
                 // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
+                var handler = new MockHttpMessageHandler();
 
                 // Act
                 var client = new SteamCommunityDataClient(handler);
@@ -33,39 +39,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         }
 
         [TestClass]
-        public class DefaultRequestHeadersProperty
-        {
-            [TestMethod]
-            public void ReturnsDefaultRequestHeaders()
-            {
-                // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
-                var client = new SteamCommunityDataClient(handler);
-
-                // Act
-                var defaultRequestHeaders = client.DefaultRequestHeaders;
-
-                // Assert
-                Assert.IsInstanceOfType(defaultRequestHeaders, typeof(HttpRequestHeaders));
-            }
-        }
-
-        [TestClass]
-        public class GetLeaderboardsAsyncMethod_UInt32
+        public class GetLeaderboardsAsyncMethod_UInt32 : SteamCommunityDataClientTests
         {
             [TestMethod]
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
+                Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/?xml=1")
                     .Respond(new StringContent(CommunityDataResources.Leaderboards, Encoding.UTF8, "text/xml"));
-                var client = new SteamCommunityDataClient(handler);
                 var appId = 247080U;
 
                 // Act
-                var leaderboardsEnvelope = await client.GetLeaderboardsAsync(appId);
+                var leaderboardsEnvelope = await Client.GetLeaderboardsAsync(appId);
 
                 // Assert
                 Assert.AreEqual(411, leaderboardsEnvelope.Leaderboards.Count);
@@ -81,21 +67,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         }
 
         [TestClass]
-        public class GetLeaderboardsAsyncMethod_String
+        public class GetLeaderboardsAsyncMethod_String : SteamCommunityDataClientTests
         {
             [TestMethod]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
-                var client = new SteamCommunityDataClient(handler);
-                client.Dispose();
+                Client.Dispose();
                 var communityGameName = 247080U.ToString();
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
                 {
-                    return client.GetLeaderboardsAsync(communityGameName);
+                    return Client.GetLeaderboardsAsync(communityGameName);
                 });
             }
 
@@ -103,14 +87,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
-                var client = new SteamCommunityDataClient(handler);
                 string communityGameName = null;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
-                    return client.GetLeaderboardsAsync(communityGameName);
+                    return Client.GetLeaderboardsAsync(communityGameName);
                 });
             }
 
@@ -118,15 +100,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
+                Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/?xml=1")
                     .Respond(new StringContent(CommunityDataResources.Leaderboards, Encoding.UTF8, "text/xml"));
-                var client = new SteamCommunityDataClient(handler);
                 var communityGameName = 247080U.ToString();
 
                 // Act
-                var leaderboardsEnvelope = await client.GetLeaderboardsAsync(communityGameName);
+                var leaderboardsEnvelope = await Client.GetLeaderboardsAsync(communityGameName);
 
                 // Assert
                 Assert.AreEqual(411, leaderboardsEnvelope.Leaderboards.Count);
@@ -142,22 +122,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         }
 
         [TestClass]
-        public class GetLeaderboardEntriesAsyncMethod_UInt32
+        public class GetLeaderboardEntriesAsyncMethod_UInt32 : SteamCommunityDataClientTests
         {
             [TestMethod]
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
+                Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1")
                     .Respond(new StringContent(CommunityDataResources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
-                var client = new SteamCommunityDataClient(handler);
                 var appId = 247080U;
                 var leaderboardId = 2047387;
 
                 // Act
-                var leaderboardEntriesEnvelope = await client.GetLeaderboardEntriesAsync(appId, leaderboardId);
+                var leaderboardEntriesEnvelope = await Client.GetLeaderboardEntriesAsync(appId, leaderboardId);
 
                 // Assert
                 var entries = leaderboardEntriesEnvelope.Entries;
@@ -172,22 +150,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         }
 
         [TestClass]
-        public class GetLeaderboardEntriesAsyncMethod_String
+        public class GetLeaderboardEntriesAsyncMethod_String : SteamCommunityDataClientTests
         {
             [TestMethod]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
-                var client = new SteamCommunityDataClient(handler);
-                client.Dispose();
+                Client.Dispose();
                 var communityGameName = 247080U.ToString();
                 var leaderboardId = 2047387;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
                 {
-                    return client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
+                    return Client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
                 });
             }
 
@@ -195,15 +171,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var handler = Mock.Of<HttpMessageHandler>();
-                var client = new SteamCommunityDataClient(handler);
                 string communityGameName = null;
                 var leaderboardId = 2047387;
 
                 // Act -> Assert
                 await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
                 {
-                    return client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
+                    return Client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
                 });
             }
 
@@ -211,16 +185,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                handler
+                Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1")
                     .Respond(new StringContent(CommunityDataResources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
-                var client = new SteamCommunityDataClient(handler);
                 var communityGameName = 247080U.ToString();
                 var leaderboardId = 2047387;
 
                 // Act
-                var leaderboardEntriesEnvelope = await client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
+                var leaderboardEntriesEnvelope = await Client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
 
                 // Assert
                 var entries = leaderboardEntriesEnvelope.Entries;
@@ -264,22 +236,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 
                 // Assert
                 Assert.AreEqual(1, handler.DisposeCount);
-            }
-
-            class SimpleHttpMessageHandler : HttpMessageHandler
-            {
-                protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-                {
-                    throw new NotImplementedException();
-                }
-
-                public int DisposeCount { get; private set; }
-
-                protected override void Dispose(bool disposing)
-                {
-                    DisposeCount++;
-                    base.Dispose(disposing);
-                }
             }
         }
     }

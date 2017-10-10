@@ -18,7 +18,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 string requestUri = null;
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
@@ -46,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                         return Task.FromResult(response);
                     });
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = "http://example.org/";
                 var mockProgress = new Mock<IProgress<long>>();
                 var progress = mockProgress.Object;
@@ -64,7 +64,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = "http://example.org/";
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
@@ -85,7 +85,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 Uri requestUri = null;
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
@@ -113,7 +113,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                         return Task.FromResult(response);
                     });
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = new Uri("http://example.org/");
                 var mockProgress = new Mock<IProgress<long>>();
                 var progress = mockProgress.Object;
@@ -131,7 +131,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
-                var httpClient = new EmptyProgressReporterHttpClient(handler);
+                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = new Uri("http://example.org/");
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
@@ -142,11 +142,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 // Assert
                 Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
             }
-        }
-
-        class EmptyProgressReporterHttpClient : ProgressReporterHttpClient
-        {
-            public EmptyProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
         }
     }
 }

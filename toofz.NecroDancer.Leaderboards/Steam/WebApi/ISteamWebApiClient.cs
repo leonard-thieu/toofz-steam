@@ -37,8 +37,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// </exception>
         Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
             IEnumerable<long> steamIds,
-            IProgress<long> progress = null,
-            CancellationToken cancellationToken = default(CancellationToken));
+            IProgress<long> progress = default,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// Returns file details for a UGC ID.
         /// </summary>
@@ -60,7 +60,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
             uint appId,
             long ugcId,
-            IProgress<long> progress = null,
-            CancellationToken cancellationToken = default(CancellationToken));
+            IProgress<long> progress = default,
+            CancellationToken cancellationToken = default);
     }
 }

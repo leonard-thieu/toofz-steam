@@ -8,7 +8,7 @@ using log4net;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
-    public sealed class ToofzApiClient : HttpClient, IToofzApiClient
+    public sealed class ToofzApiClient : IToofzApiClient
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(ToofzApiClient));
 
@@ -20,12 +20,32 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// true if the inner handler should be disposed of by Dispose(); false if you intend 
         /// to reuse the inner handler.
         /// </param>
-        public ToofzApiClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler) { }
+        public ToofzApiClient(HttpMessageHandler handler, bool disposeHandler)
+        {
+            http = new ProgressReporterHttpClient(handler, disposeHandler);
+        }
+
+        readonly ProgressReporterHttpClient http;
+
+        /// <summary>
+        /// Gets or sets the base address of Uniform Resource Identifier (URI) of the Internet 
+        /// resource used when sending requests.
+        /// </summary>
+        /// <returns>
+        /// Returns <see cref="Uri"/>.The base address of Uniform Resource Identifier (URI) of the 
+        /// Internet resource used when sending requests.
+        /// </returns>
+        public Uri BaseAddress
+        {
+            get => http.BaseAddress;
+            set => http.BaseAddress = value;
+        }
 
         #region Players
 
         public async Task<PlayersEnvelope> GetPlayersAsync(
             GetPlayersParams @params = default,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             var requestUri = "players";
@@ -37,7 +57,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 sort = @params.Sort,
             });
 
-            var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<PlayersEnvelope>().ConfigureAwait(false);
         }
@@ -49,7 +69,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             if (players == null)
                 throw new ArgumentNullException(nameof(players));
 
-            var response = await this.PostAsJsonAsync("players", players, cancellationToken).ConfigureAwait(false);
+            var response = await http.PostAsJsonAsync("players", players, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<BulkStoreDTO>().ConfigureAwait(false);
         }
@@ -60,6 +80,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public async Task<ReplaysEnvelope> GetReplaysAsync(
             GetReplaysParams @params = default,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             var requestUri = "replays";
@@ -71,7 +92,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 limit = @params.Limit,
             });
 
-            var response = await GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<ReplaysEnvelope>().ConfigureAwait(false);
         }
@@ -83,9 +104,25 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             if (replays == null)
                 throw new ArgumentNullException(nameof(replays));
 
-            var response = await this.PostAsJsonAsync("replays", replays, cancellationToken).ConfigureAwait(false);
+            var response = await http.PostAsJsonAsync("replays", replays, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<BulkStoreDTO>().ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region IDisposable Implementation
+
+        bool disposed;
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                http.Dispose();
+            }
+
+            disposed = true;
         }
 
         #endregion

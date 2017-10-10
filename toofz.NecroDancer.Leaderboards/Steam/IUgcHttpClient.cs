@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards.Steam
 {
-    public interface IUgcHttpClient
+    public interface IUgcHttpClient : IDisposable
     {
         Task<byte[]> GetUgcFileAsync(
             string url,
-            IProgress<long> progress = null,
-            CancellationToken cancellationToken = default(CancellationToken));
+            IProgress<long> progress = default,
+            CancellationToken cancellationToken = default);
     }
 }

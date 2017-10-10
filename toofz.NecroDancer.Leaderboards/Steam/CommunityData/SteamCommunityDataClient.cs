@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -20,22 +19,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         readonly ProgressReporterHttpClient http;
 
-        /// <summary>
-        /// Gets the headers which should be sent with each request.
-        /// </summary>
-        /// <returns>
-        /// Returns <see cref="HttpRequestHeaders"/>. The headers which should be sent with each request.
-        /// </returns>
-        public HttpRequestHeaders DefaultRequestHeaders
-        {
-            get => http.DefaultRequestHeaders;
-        }
-
         #region GetLeaderboards
 
         public Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             uint appId,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             return GetLeaderboardsAsync(appId.ToString(), progress, cancellationToken);
@@ -43,7 +31,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         public async Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             string communityGameName,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             if (disposed)
@@ -75,7 +63,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             uint appId,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             return GetLeaderboardEntriesAsync(appId.ToString(), leaderboardId, @params, progress, cancellationToken);
@@ -85,7 +73,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             string communityGameName,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
-            IProgress<long> progress = null,
+            IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
             if (disposed)

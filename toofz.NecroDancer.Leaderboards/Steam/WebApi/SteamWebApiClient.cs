@@ -11,15 +11,9 @@ using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
-    public sealed class SteamWebApiClient : ProgressReporterHttpClient, ISteamWebApiClient
+    public sealed class SteamWebApiClient : ISteamWebApiClient
     {
-        #region Static Members
-
         static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.
@@ -27,21 +21,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <param name="handler">
         /// The HTTP handler stack to use for sending requests.
         /// </param>
-        public SteamWebApiClient(HttpMessageHandler handler) : base(handler)
+        public SteamWebApiClient(HttpMessageHandler handler)
         {
-            BaseAddress = new Uri("https://api.steampowered.com/");
+            http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("https://api.steampowered.com/") };
         }
 
-        #endregion
-
-        #region Fields
+        readonly ProgressReporterHttpClient http;
 
         /// <summary>
         /// A Steam Web API key. This is required by some API endpoints.
         /// </summary>
         public string SteamWebApiKey { get; set; }
-
-        #endregion
 
         #region GetPlayerSummaries
 
@@ -73,8 +63,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// </exception>
         public async Task<PlayerSummariesEnvelope> GetPlayerSummariesAsync(
             IEnumerable<long> steamIds,
-            IProgress<long> progress = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+            IProgress<long> progress = default,
+            CancellationToken cancellationToken = default)
         {
             if (SteamWebApiKey == null)
                 throw new InvalidOperationException($"{nameof(GetPlayerSummariesAsync)} requires {nameof(SteamWebApiKey)} to be set to a valid Steam Web API Key.");
@@ -89,7 +79,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     key = SteamWebApiKey,
                     steamids = string.Join(",", steamIds),
                 });
-            var response = await GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<PlayerSummariesEnvelope>().ConfigureAwait(false);
         }
@@ -120,8 +110,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         public async Task<UgcFileDetailsEnvelope> GetUgcFileDetailsAsync(
             uint appId,
             long ugcId,
-            IProgress<long> progress = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+            IProgress<long> progress = default,
+            CancellationToken cancellationToken = default)
         {
             if (SteamWebApiKey == null)
                 throw new InvalidOperationException($"{nameof(GetUgcFileDetailsAsync)} requires {nameof(SteamWebApiKey)} to be set to a valid Steam Web API Key.");
@@ -133,9 +123,25 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     appid = appId,
                     ugcid = ugcId,
                 });
-            var response = await GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<UgcFileDetailsEnvelope>().ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region IDisposable Implementation
+
+        bool disposed;
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                http.Dispose();
+            }
+
+            disposed = true;
         }
 
         #endregion
