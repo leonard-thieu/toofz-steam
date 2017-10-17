@@ -49,9 +49,6 @@
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="SqlBulkUpsert, Version=4.1.5.127, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SqlBulkUpsert.4.1.5\lib\net45\SqlBulkUpsert.dll</HintPath>
-    </Reference>
     <Reference Include="SteamKit2, Version=2.0.6.26, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
       <HintPath>..\packages\toofz.SteamKit2.2.0.6\lib\net45\SteamKit2.dll</HintPath>
     </Reference>
@@ -157,10 +154,6 @@
     <Compile Include="HttpErrorHandler.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />
     <Compile Include="HttpRequestStatusException.cs" />
-    <Compile Include="ILeaderboardsStoreClient.cs" />
-    <Compile Include="LeaderboardsStoreClient.cs">
-      <DependentUpon>ILeaderboardsStoreClient.cs</DependentUpon>
-    </Compile>
     <Compile Include="Leaderboard.cs" />
     <Compile Include="LeaderboardHeader.cs" />
     <Compile Include="LeaderboardHeaders.cs" />

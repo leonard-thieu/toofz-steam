@@ -73,9 +73,6 @@
     <Reference Include="RichardSzalay.MockHttp, Version=3.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RichardSzalay.MockHttp.3.2.1\lib\net45\RichardSzalay.MockHttp.dll</HintPath>
     </Reference>
-    <Reference Include="SqlBulkUpsert, Version=4.1.5.127, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SqlBulkUpsert.4.1.5\lib\net45\SqlBulkUpsert.dll</HintPath>
-    </Reference>
     <Reference Include="SteamKit2, Version=2.0.6.26, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
       <HintPath>..\packages\toofz.SteamKit2.2.0.6\lib\net45\SteamKit2.dll</HintPath>
     </Reference>
@@ -223,7 +220,6 @@
     <Compile Include="HttpRequestStatusExceptionTests.cs" />
     <Compile Include="LeaderboardTests.cs" />
     <Compile Include="LeaderboardsResourcesTests.cs" />
-    <Compile Include="LeaderboardsStoreClientTests.cs" />
     <Compile Include="LoggingHandlerTests.cs" />
     <Compile Include="ModeTests.cs" />
     <Compile Include="PlayerTests.cs" />
