@@ -67,19 +67,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <None Include="data\daily-leaderboard-headers.json" />
-    <None Include="data\leaderboard-headers.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Steam\ClientApi\ISteamClientAdapter.cs" />
     <Compile Include="Steam\ClientApi\SteamClientAdapter.cs">
       <DependentUpon>ISteamClientAdapter.cs</DependentUpon>
@@ -141,9 +128,6 @@
     <Compile Include="Character.cs" />
     <Compile Include="DailyEntry.cs" />
     <Compile Include="DailyLeaderboard.cs" />
-    <Compile Include="DailyLeaderboardHeader.cs" />
-    <Compile Include="DailyLeaderboardHeaders.cs" />
-    <Compile Include="DailyLeaderboardHeadersEnvelope.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="GZipHandler.cs" />
     <Compile Include="HttpClientExtensions.cs" />
@@ -152,10 +136,6 @@
     <Compile Include="HttpRequestMessageExtensions.cs" />
     <Compile Include="HttpRequestStatusException.cs" />
     <Compile Include="Leaderboard.cs" />
-    <Compile Include="LeaderboardHeader.cs" />
-    <Compile Include="LeaderboardHeaders.cs" />
-    <Compile Include="LeaderboardHeadersEnvelope.cs" />
-    <Compile Include="LeaderboardsResources.cs" />
     <Compile Include="LoggingHandler.cs" />
     <Compile Include="Mode.cs" />
     <Compile Include="Player.cs" />

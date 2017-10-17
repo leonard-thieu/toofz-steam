@@ -219,7 +219,6 @@
     <Compile Include="HttpRequestMessageExtensionsTests.cs" />
     <Compile Include="HttpRequestStatusExceptionTests.cs" />
     <Compile Include="LeaderboardTests.cs" />
-    <Compile Include="LeaderboardsResourcesTests.cs" />
     <Compile Include="LoggingHandlerTests.cs" />
     <Compile Include="ModeTests.cs" />
     <Compile Include="PlayerTests.cs" />
