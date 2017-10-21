@@ -215,5 +215,33 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 Assert.AreEqual(9, leaderboard.CharacterId);
             }
         }
+
+        [TestClass]
+        public class IsCustomMusicProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange -> Act
+                var leaderboard = new Leaderboard { IsCustomMusic = true };
+
+                // Act -> Assert
+                Assert.IsTrue(leaderboard.IsCustomMusic);
+            }
+        }
+
+        [TestClass]
+        public class IsCoOpProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange -> Act
+                var leaderboard = new Leaderboard { IsCoOp = true };
+
+                // Act -> Assert
+                Assert.IsTrue(leaderboard.IsCoOp);
+            }
+        }
     }
 }
