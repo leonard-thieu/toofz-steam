@@ -21,6 +21,10 @@ namespace toofz.NecroDancer.Leaderboards
         /// </summary>
         public DateTime? LastUpdate { get; set; }
         /// <summary>
+        /// The leaderboard's name.
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// The leaderboard's display name.
         /// </summary>
         public string DisplayName { get; set; }

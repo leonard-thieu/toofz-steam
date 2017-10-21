@@ -49,6 +49,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
+        public class NameProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var name = "myName";
+                var dailyLeaderboard = new DailyLeaderboard();
+
+                // Act
+                dailyLeaderboard.Name = name;
+                var name2 = dailyLeaderboard.Name;
+
+                // Assert
+                Assert.AreEqual(name, name2);
+            }
+        }
+
+        [TestClass]
         public class DisplayNameProperty
         {
             [TestMethod]

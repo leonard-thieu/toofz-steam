@@ -49,6 +49,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
+        public class NameProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var name = "myName";
+                var leaderboard = new Leaderboard();
+
+                // Act
+                leaderboard.Name = name;
+                var name2 = leaderboard.Name;
+
+                // Assert
+                Assert.AreEqual(name, name2);
+            }
+        }
+
+        [TestClass]
         public class DisplayNameProperty
         {
             [TestMethod]
