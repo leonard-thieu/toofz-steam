@@ -65,12 +65,12 @@ namespace toofz.NecroDancer.Leaderboards
         /// </summary>
         public int CharacterId { get; set; }
         /// <summary>
-        /// Indicates if the leaderboard is a Custom Music leaderboard.
-        /// </summary>
-        public bool IsCustomMusic { get; set; }
-        /// <summary>
         /// Indicates if the leaderboard is a Co-op leaderboard.
         /// </summary>
         public bool IsCoOp { get; set; }
+        /// <summary>
+        /// Indicates if the leaderboard is a Custom Music leaderboard.
+        /// </summary>
+        public bool IsCustomMusic { get; set; }
     }
 }

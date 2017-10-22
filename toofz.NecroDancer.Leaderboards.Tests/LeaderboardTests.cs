@@ -236,20 +236,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         }
 
         [TestClass]
-        public class IsCustomMusicProperty
-        {
-            [TestMethod]
-            public void GetSetBehavior()
-            {
-                // Arrange -> Act
-                var leaderboard = new Leaderboard { IsCustomMusic = true };
-
-                // Act -> Assert
-                Assert.IsTrue(leaderboard.IsCustomMusic);
-            }
-        }
-
-        [TestClass]
         public class IsCoOpProperty
         {
             [TestMethod]
@@ -260,6 +246,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Act -> Assert
                 Assert.IsTrue(leaderboard.IsCoOp);
+            }
+        }
+
+        [TestClass]
+        public class IsCustomMusicProperty
+        {
+            [TestMethod]
+            public void GetSetBehavior()
+            {
+                // Arrange -> Act
+                var leaderboard = new Leaderboard { IsCustomMusic = true };
+
+                // Act -> Assert
+                Assert.IsTrue(leaderboard.IsCustomMusic);
             }
         }
     }
