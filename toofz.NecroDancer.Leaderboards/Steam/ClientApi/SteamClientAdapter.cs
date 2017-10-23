@@ -196,5 +196,27 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             isRunning = false;
         }
+
+        #region IDisposable Implementation
+
+        bool disposed;
+
+        public void Dispose()
+        {
+            if (disposed) { return; }
+
+            if (IsConnected)
+            {
+                Disconnect();
+            }
+            else
+            {
+                StopMessageLoop();
+            }
+
+            disposed = true;
+        }
+
+        #endregion
     }
 }

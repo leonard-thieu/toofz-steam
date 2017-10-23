@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using SteamKit2;
 using static SteamKit2.SteamClient;
@@ -6,7 +7,7 @@ using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    interface ISteamClientAdapter
+    interface ISteamClientAdapter : IDisposable
     {
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.
@@ -35,10 +36,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// No logon details were provided.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
         Task<LoggedOnCallback> LogOnAsync(LogOnDetails details);

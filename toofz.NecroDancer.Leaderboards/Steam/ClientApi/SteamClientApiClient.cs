@@ -222,15 +222,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         public void Dispose()
         {
-            if (!disposed)
-            {
-                if (steamClient.IsConnected)
-                {
-                    steamClient.Disconnect();
-                }
+            if (disposed) { return; }
 
-                disposed = true;
-            }
+            steamClient.Dispose();
+
+            disposed = true;
         }
 
         #endregion

@@ -507,25 +507,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class DisposeMethod
         {
             [TestMethod]
-            public void IsConnected_DisconnectsFromSteam()
-            {
-                // Arrange
-                string userName = "userName";
-                string password = "password";
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                mockSteamClient.SetupGet(s => s.IsConnected).Returns(true);
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
-
-                // Act
-                client.Dispose();
-
-                // Assert
-                mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
-            }
-
-            [TestMethod]
-            public void IsNotConnected_DoesNotDisconnectFromSteam()
+            public void DisposesSteamClient()
             {
                 // Arrange
                 string userName = "userName";
@@ -538,7 +520,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 client.Dispose();
 
                 // Assert
-                mockSteamClient.Verify(s => s.Disconnect(), Times.Never);
+                mockSteamClient.Verify(s => s.Dispose(), Times.Once);
             }
 
             [TestMethod]
