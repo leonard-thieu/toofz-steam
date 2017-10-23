@@ -32,7 +32,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         Task<ConnectedCallback> ConnectAsync(IPEndPoint cmServer = null);
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
-        /// connected at this point. Results are returned in a <see cref="SteamUser.LoggedOnCallback"/>.
+        /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
         /// <exception cref="System.ArgumentNullException">
