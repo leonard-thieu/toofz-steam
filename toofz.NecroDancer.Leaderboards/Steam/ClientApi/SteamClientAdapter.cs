@@ -34,17 +34,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
             MessageLoop = new Thread(() =>
             {
-                while (true)
+                while (isRunning)
                 {
-                    this.manager.RunWaitCallbacks();
+                    this.manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
                 }
             });
             MessageLoop.IsBackground = true;
-            MessageLoop.Start();
         }
 
         readonly ISteamClient steamClient;
         readonly ICallbackManager manager;
+        bool isRunning;
 
         internal Thread MessageLoop { get; }
 
@@ -102,6 +102,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                 onDisconnected = manager.Subscribe<DisconnectedCallback>(_ =>
                 {
+                    StopMessageLoop();
                     Log.Info("Disconnected from Steam.");
                     onDisconnected.Dispose();
                 });
@@ -113,6 +114,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 onDisconnected.Dispose();
             });
 
+            StartMessageLoop();
             steamClient.Connect(cmServer);
 
             return tcs.Task;
@@ -183,5 +185,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Disconnects this client.
         /// </summary>
         public void Disconnect() => steamClient.Disconnect();
+
+        private void StartMessageLoop()
+        {
+            isRunning = true;
+            MessageLoop.Start();
+        }
+
+        private void StopMessageLoop()
+        {
+            isRunning = false;
+        }
     }
 }
