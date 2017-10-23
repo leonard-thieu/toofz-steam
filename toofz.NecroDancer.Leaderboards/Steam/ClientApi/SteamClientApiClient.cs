@@ -184,14 +184,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             return RetryPolicy.ExecuteAsync(async () =>
             {
-                await requestSemaphore.WaitAsync(cancellationToken);
+                await requestSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
                 try
                 {
                     EnsureConnectedAndLoggedOn();
 
                     try
                     {
-                        return await taskFunc();
+                        return await taskFunc().ConfigureAwait(false);
                     }
                     catch (TaskCanceledException ex)
                     {

@@ -52,20 +52,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Assert
                 Assert.IsInstanceOfType(client, typeof(SteamClientAdapter));
             }
-
-            [TestMethod]
-            public void StartsMessageLoop()
-            {
-                // Arrange
-                var steamClient = Mock.Of<ISteamClient>();
-                var manager = Mock.Of<ICallbackManager>();
-
-                // Act
-                var client = new SteamClientAdapter(steamClient, manager);
-
-                // Assert
-                Assert.IsTrue(client.MessageLoop.IsAlive);
-            }
         }
 
         [TestClass]

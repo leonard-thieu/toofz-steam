@@ -30,22 +30,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </exception>
         public SteamClientAdapter(ISteamClient steamClient, ICallbackManager manager)
         {
-            this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient), $"{nameof(steamClient)} is null.");
-            this.manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} is null.");
+            this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient));
+            this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
             MessageLoop = new Thread(() =>
             {
-                while (true)
+                while (isRunning)
                 {
                     this.manager.RunWaitCallbacks();
                 }
             });
-            MessageLoop.Start();
+            MessageLoop.IsBackground = true;
         }
 
         readonly ISteamClient steamClient;
         readonly ICallbackManager manager;
 
         internal Thread MessageLoop { get; }
+        bool isRunning;
 
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.
@@ -86,12 +87,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     case EResult.OK:
                         {
                             Log.Info("Connected to Steam.");
-                            tcs.TrySetResult(response);
+                            tcs.SetResult(response);
                             break;
                         }
                     default:
                         {
-                            tcs.TrySetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
+                            tcs.SetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
                             break;
                         }
                 }
@@ -101,17 +102,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                 onDisconnected = manager.Subscribe<DisconnectedCallback>(_ =>
                 {
+                    StopMessageLoop();
                     Log.Info("Disconnected from Steam.");
                     onDisconnected.Dispose();
                 });
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                tcs.TrySetException(new SteamClientApiException("Unable to connect to Steam."));
+                tcs.SetException(new SteamClientApiException("Unable to connect to Steam."));
                 onConnected.Dispose();
                 onDisconnected.Dispose();
             });
 
+            StartMessageLoop();
             steamClient.Connect(cmServer);
 
             return tcs.Task;
@@ -141,13 +144,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     case EResult.OK:
                         {
                             Log.Info("Logged on to Steam.");
-                            tcs.TrySetResult(response);
+                            tcs.SetResult(response);
                             break;
                         }
                     default:
                         {
                             var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
-                            tcs.TrySetException(ex);
+                            tcs.SetException(ex);
                             break;
                         }
                 }
@@ -157,7 +160,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                tcs.TrySetException(new SteamClientApiException("Unable to connect to Steam."));
+                tcs.SetException(new SteamClientApiException("Unable to connect to Steam."));
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
             });
@@ -182,5 +185,16 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Disconnects this client.
         /// </summary>
         public void Disconnect() => steamClient.Disconnect();
+
+        private void StartMessageLoop()
+        {
+            isRunning = true;
+            MessageLoop.Start();
+        }
+
+        private void StopMessageLoop()
+        {
+            isRunning = false;
+        }
     }
 }
