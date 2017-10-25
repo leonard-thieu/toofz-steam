@@ -216,7 +216,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 await client.ConnectAndLogOnAsync();
 
                 // Assert
-                mockSteamClient.Verify(c => c.ConnectAsync(It.IsAny<IPEndPoint>()), Times.Once);
+                mockSteamClient.Verify(c => c.ConnectAsync(), Times.Once);
             }
 
             [TestMethod]
@@ -234,7 +234,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 await client.ConnectAndLogOnAsync();
 
                 // Assert
-                mockSteamClient.Verify(c => c.ConnectAsync(It.IsAny<IPEndPoint>()), Times.Never);
+                mockSteamClient.Verify(c => c.ConnectAsync(), Times.Never);
             }
 
             [TestMethod]
