@@ -40,6 +40,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 }
             });
             MessageLoop.IsBackground = true;
+            MessageLoop.Name = "Steam Client message loop";
         }
 
         readonly ISteamClient steamClient;
