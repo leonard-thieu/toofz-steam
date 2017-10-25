@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using SteamKit2;
 using static SteamKit2.SteamClient;
@@ -26,11 +25,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
-        /// <param name="cmServer">
-        /// The <see cref="IPEndPoint"/> of the CM server to connect to. If null, SteamKit will
-        /// randomly select a CM server from its internal list.
-        /// </param>
-        Task<ConnectedCallback> ConnectAsync(IPEndPoint cmServer = null);
+        Task<ConnectedCallback> ConnectAsync();
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
         /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.

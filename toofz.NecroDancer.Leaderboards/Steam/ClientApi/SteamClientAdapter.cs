@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -71,11 +70,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
-        /// <param name="cmServer">
-        /// The <see cref="IPEndPoint"/> of the CM server to connect to. If null, SteamKit will
-        /// randomly select a CM server from its internal list.
-        /// </param>
-        public Task<ConnectedCallback> ConnectAsync(IPEndPoint cmServer = null)
+        public Task<ConnectedCallback> ConnectAsync()
         {
             var tcs = new TaskCompletionSource<ConnectedCallback>();
 
@@ -83,20 +78,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             IDisposable onDisconnected = null;
             onConnected = manager.Subscribe<ConnectedCallback>(response =>
             {
-                switch (response.Result)
-                {
-                    case EResult.OK:
-                        {
-                            Log.Info("Connected to Steam.");
-                            tcs.SetResult(response);
-                            break;
-                        }
-                    default:
-                        {
-                            tcs.SetException(new SteamClientApiException($"Unable to connect to Steam.", response.Result));
-                            break;
-                        }
-                }
+                Log.Info("Connected to Steam.");
+                tcs.SetResult(response);
 
                 onConnected.Dispose();
                 onDisconnected.Dispose();
@@ -116,7 +99,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
 
             StartMessageLoop();
-            steamClient.Connect(cmServer);
+            steamClient.Connect();
 
             return tcs.Task;
         }
