@@ -74,8 +74,8 @@
     <Reference Include="RichardSzalay.MockHttp, Version=3.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RichardSzalay.MockHttp.3.2.1\lib\net45\RichardSzalay.MockHttp.dll</HintPath>
     </Reference>
-    <Reference Include="SteamKit2, Version=3.0.0.30, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SteamKit2.3.0.0\lib\net461\SteamKit2.dll</HintPath>
+    <Reference Include="SteamKit2, Version=3.0.1.32, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
+      <HintPath>..\packages\toofz.SteamKit2.3.0.1\lib\net461\SteamKit2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
