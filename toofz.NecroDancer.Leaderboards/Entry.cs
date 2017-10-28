@@ -31,6 +31,10 @@
         /// </summary>
         public long? ReplayId { get; set; }
         /// <summary>
+        /// The replay associated with the entry.
+        /// </summary>
+        public Replay Replay { get; set; }
+        /// <summary>
         /// The score achieved by the entry.
         /// </summary>
         public int Score { get; set; }
