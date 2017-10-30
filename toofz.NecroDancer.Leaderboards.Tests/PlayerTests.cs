@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class PlayerTests
+    internal class PlayerTests
     {
         [TestClass]
         public class SteamIdProperty

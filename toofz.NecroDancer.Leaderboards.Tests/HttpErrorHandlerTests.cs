@@ -7,7 +7,7 @@ using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class HttpErrorHandlerTests
+    internal class HttpErrorHandlerTests
     {
         [TestClass]
         public class SendAsyncMethod

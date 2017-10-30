@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class DailyLeaderboardTests
+    internal class DailyLeaderboardTests
     {
         [TestClass]
         public class LeaderboardIdProperty

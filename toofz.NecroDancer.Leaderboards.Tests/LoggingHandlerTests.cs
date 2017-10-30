@@ -9,7 +9,7 @@ using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class LoggingHandlerTests
+    internal class LoggingHandlerTests
     {
         [TestClass]
         public class Constructor

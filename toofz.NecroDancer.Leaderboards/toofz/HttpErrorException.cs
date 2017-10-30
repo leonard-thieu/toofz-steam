@@ -19,7 +19,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         public string ExceptionMessage { get; }
         public string ExceptionType { get; }
 
-        readonly string stackTrace;
         public override string StackTrace => stackTrace;
+        private readonly string stackTrace;
     }
 }

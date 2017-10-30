@@ -8,9 +8,9 @@ using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    sealed class SteamClientAdapter : ISteamClientAdapter
+    internal sealed class SteamClientAdapter : ISteamClientAdapter
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientAdapter));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientAdapter));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientAdapter"/> class.
@@ -42,9 +42,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             MessageLoop.Name = "Steam Client message loop";
         }
 
-        readonly ISteamClient steamClient;
-        readonly ICallbackManager manager;
-        bool isRunning;
+        private readonly ISteamClient steamClient;
+        private readonly ICallbackManager manager;
+        private bool isRunning;
 
         internal Thread MessageLoop { get; }
 
@@ -183,7 +183,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         public void Dispose()
         {

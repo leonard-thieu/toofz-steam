@@ -7,7 +7,7 @@ namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class LoggingHandler : DelegatingHandler
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(LoggingHandler));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LoggingHandler));
 
         /// <summary>
         /// Initializes an instance of the <see cref="LoggingHandler"/> class.
@@ -19,7 +19,7 @@ namespace toofz.NecroDancer.Leaderboards
             this.log = log;
         }
 
-        readonly ILog log;
+        private readonly ILog log;
 
         /// <summary>
         /// Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.

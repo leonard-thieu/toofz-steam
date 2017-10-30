@@ -2,7 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class ReplayTests
+    internal class ReplayTests
     {
         [TestClass]
         public class ReplayIdProperty

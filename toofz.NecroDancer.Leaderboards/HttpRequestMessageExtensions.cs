@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    static class HttpRequestMessageExtensions
+    internal static class HttpRequestMessageExtensions
     {
         public static async Task<HttpRequestMessage> CloneAsync(this HttpRequestMessage request)
         {

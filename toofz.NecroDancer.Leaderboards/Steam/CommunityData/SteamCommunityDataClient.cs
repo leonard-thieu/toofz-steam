@@ -9,15 +9,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
     public sealed class SteamCommunityDataClient : ISteamCommunityDataClient
     {
-        static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
-        static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
+        private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
+        private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
 
         public SteamCommunityDataClient(HttpMessageHandler handler)
         {
             http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("http://steamcommunity.com/") };
         }
 
-        readonly ProgressReporterHttpClient http;
+        private readonly ProgressReporterHttpClient http;
 
         #region GetLeaderboards
 
@@ -98,7 +98,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         public void Dispose()
         {

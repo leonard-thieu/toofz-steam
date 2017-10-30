@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    sealed class ProgressReporterHttpClient : HttpClient
+    internal sealed class ProgressReporterHttpClient : HttpClient
     {
         public ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
 

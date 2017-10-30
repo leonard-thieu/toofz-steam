@@ -8,7 +8,7 @@ using RichardSzalay.MockHttp;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class HttpClientExtensionsTests
+    internal class HttpClientExtensionsTests
     {
         [TestClass]
         public class PostAsJsonAsyncMethod

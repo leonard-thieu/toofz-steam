@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class HttpRequestStatusExceptionTests
+    internal class HttpRequestStatusExceptionTests
     {
         [TestClass]
         public class Constructor_HttpStatusCode_Uri

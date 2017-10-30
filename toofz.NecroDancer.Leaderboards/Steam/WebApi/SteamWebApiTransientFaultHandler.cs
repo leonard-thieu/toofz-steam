@@ -6,10 +6,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
     public sealed class SteamWebApiTransientFaultHandler : TransientFaultHandlerBase
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiTransientFaultHandler));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiTransientFaultHandler));
 
-        static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        static readonly RetryPolicy RetryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+        private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
+        private static readonly RetryPolicy RetryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
 
         public SteamWebApiTransientFaultHandler() : base(RetryPolicy) { }
     }

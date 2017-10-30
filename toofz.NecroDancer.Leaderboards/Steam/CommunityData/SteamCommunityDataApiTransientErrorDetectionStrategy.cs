@@ -5,7 +5,7 @@ using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
-    sealed class SteamCommunityDataApiTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
+    internal sealed class SteamCommunityDataApiTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
     {
         #region Static Members
 

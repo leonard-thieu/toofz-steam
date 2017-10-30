@@ -9,7 +9,7 @@ using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class TransientFaultHandlerBaseTests
+    internal class TransientFaultHandlerBaseTests
     {
         [TestClass]
         public class Constructor
@@ -65,7 +65,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             }
         }
 
-        class TransientFaultHandlerBaseAdapter : TransientFaultHandlerBase
+        private class TransientFaultHandlerBaseAdapter : TransientFaultHandlerBase
         {
             public TransientFaultHandlerBaseAdapter(RetryPolicy retryPolicy) : base(retryPolicy) { }
         }

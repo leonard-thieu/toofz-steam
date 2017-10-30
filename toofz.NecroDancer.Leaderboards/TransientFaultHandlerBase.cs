@@ -13,7 +13,7 @@ namespace toofz.NecroDancer.Leaderboards
             this.retryPolicy = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
         }
 
-        readonly RetryPolicy retryPolicy;
+        private readonly RetryPolicy retryPolicy;
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

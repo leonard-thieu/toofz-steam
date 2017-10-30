@@ -11,12 +11,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
     public sealed class SteamClientApiClient : ISteamClientApiClient
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
-        static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+        private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
+        private static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
 
-        static ISteamClientAdapter CreateSteamClient()
+        private static ISteamClientAdapter CreateSteamClient()
         {
             var steamClient = new SteamClient { DebugNetworkListener = new ProgressDebugNetworkListener() };
             var manager = new CallbackManager(steamClient);
@@ -50,9 +50,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.steamClient = steamClient;
         }
 
-        readonly string userName;
-        readonly string password;
-        readonly ISteamClientAdapter steamClient;
+        private readonly string userName;
+        private readonly string password;
+        private readonly ISteamClientAdapter steamClient;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -178,9 +178,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         }
 
         // TODO: Make this configurable.
-        static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
+        private static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
 
-        Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)
+        private Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)
         {
             return RetryPolicy.ExecuteAsync(async () =>
             {
@@ -205,7 +205,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }, cancellationToken);
         }
 
-        void EnsureConnectedAndLoggedOn()
+        private void EnsureConnectedAndLoggedOn()
         {
             if (!steamClient.IsConnected)
                 throw new InvalidOperationException("Not connected to Steam.");
@@ -215,7 +215,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         /// <summary>
         /// Disconnects from Steam.

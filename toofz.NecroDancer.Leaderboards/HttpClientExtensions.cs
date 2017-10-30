@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    static class HttpClientExtensions
+    internal static class HttpClientExtensions
     {
         public static Task<HttpResponseMessage> PostAsJsonAsync<T>(
             this HttpClient httpClient,

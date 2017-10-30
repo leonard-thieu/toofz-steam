@@ -10,7 +10,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class ToofzApiClient : IToofzApiClient
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(ToofzApiClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ToofzApiClient));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToofzApiClient"/> class with a specific handler.
@@ -25,7 +25,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             http = new ProgressReporterHttpClient(handler, disposeHandler);
         }
 
-        readonly ProgressReporterHttpClient http;
+        private readonly ProgressReporterHttpClient http;
 
         /// <summary>
         /// Gets or sets the base address of Uniform Resource Identifier (URI) of the Internet 
@@ -113,7 +113,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         public void Dispose()
         {

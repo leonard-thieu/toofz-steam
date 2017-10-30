@@ -12,7 +12,7 @@ using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class GZipHandlerTests
+    internal class GZipHandlerTests
     {
         [TestClass]
         public class Constructor

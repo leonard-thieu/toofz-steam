@@ -13,8 +13,8 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class OAuth2Handler : DelegatingHandler
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
-        static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
+        private static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
+        private static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
 
         public OAuth2Handler(string userName, string password) : this(userName, password, Log) { }
 
@@ -30,9 +30,9 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             this.log = log;
         }
 
-        readonly string userName;
-        readonly string password;
-        readonly ILog log;
+        private readonly string userName;
+        private readonly string password;
+        private readonly ILog log;
 
         internal OAuth2BearerToken BearerToken { get; set; }
 
@@ -62,7 +62,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             }
         }
 
-        async Task<OAuth2BearerToken> AuthenticateAsync(Uri requestUri, CancellationToken cancellationToken)
+        private async Task<OAuth2BearerToken> AuthenticateAsync(Uri requestUri, CancellationToken cancellationToken)
         {
             var authUri = new Uri(requestUri, "/token");
             log.Info($"Authenticating to '{authUri}'...");
@@ -88,7 +88,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
             return bearerToken;
         }
 
-        Task<HttpResponseMessage> PostAsync(Uri requestUri, FormUrlEncodedContent content, CancellationToken cancellationToken)
+        private Task<HttpResponseMessage> PostAsync(Uri requestUri, FormUrlEncodedContent content, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri) { Content = content };
 

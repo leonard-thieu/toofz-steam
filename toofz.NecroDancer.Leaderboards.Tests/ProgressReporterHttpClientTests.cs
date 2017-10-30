@@ -8,7 +8,7 @@ using RichardSzalay.MockHttp;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class ProgressReporterHttpClientTests
+    internal class ProgressReporterHttpClientTests
     {
         [TestClass]
         public class GetAsyncMethod_String

@@ -6,7 +6,7 @@ using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    interface ISteamClientAdapter : IDisposable
+    internal interface ISteamClientAdapter : IDisposable
     {
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.

@@ -2,7 +2,7 @@
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class EntryTests
+    internal class EntryTests
     {
         [TestClass]
         public class LeaderboardIdProperty

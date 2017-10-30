@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class HttpRequestMessageExtensionsTests
+    internal class HttpRequestMessageExtensionsTests
     {
         [TestClass]
         public class CloneAsyncMethod

@@ -12,7 +12,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam
             http = new ProgressReporterHttpClient(handler);
         }
 
-        readonly ProgressReporterHttpClient http;
+        private readonly ProgressReporterHttpClient http;
 
         #region GetUgcFile
 
@@ -30,7 +30,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         public void Dispose()
         {

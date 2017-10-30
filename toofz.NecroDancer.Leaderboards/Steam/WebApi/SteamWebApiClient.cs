@@ -13,7 +13,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.
@@ -26,7 +26,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
             http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("https://api.steampowered.com/") };
         }
 
-        readonly ProgressReporterHttpClient http;
+        private readonly ProgressReporterHttpClient http;
 
         /// <summary>
         /// A Steam Web API key. This is required by some API endpoints.
@@ -132,7 +132,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
         #region IDisposable Implementation
 
-        bool disposed;
+        private bool disposed;
 
         public void Dispose()
         {

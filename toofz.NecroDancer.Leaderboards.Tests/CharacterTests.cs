@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class CharacterTests
+    internal class CharacterTests
     {
         [TestClass]
         public class Constructor

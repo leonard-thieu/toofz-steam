@@ -5,7 +5,7 @@ using toofz.NecroDancer.Leaderboards.toofz;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class HttpErrorTests
+    internal class HttpErrorTests
     {
         [TestClass]
         public class Serialization

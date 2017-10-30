@@ -3,7 +3,7 @@
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
     [DataContract]
-    sealed class OAuth2BearerToken
+    internal sealed class OAuth2BearerToken
     {
         [DataMember(Name = "access_token", IsRequired = true)]
         public string AccessToken { get; set; }

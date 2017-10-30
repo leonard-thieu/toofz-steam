@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    class SimpleHttpMessageHandler : HttpMessageHandler
+    internal class SimpleHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
