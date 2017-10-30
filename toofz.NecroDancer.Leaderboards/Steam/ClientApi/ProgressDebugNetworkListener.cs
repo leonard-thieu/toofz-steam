@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
@@ -23,7 +22,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="msgType">Network message type of this packet message.</param>
         /// <param name="data">Raw packet data that will be sent.</param>
-        [ExcludeFromCodeCoverage]
         public void OnOutgoingNetworkMessage(EMsg msgType, byte[] data)
         {
             // Do nothing

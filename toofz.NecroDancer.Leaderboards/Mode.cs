@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Mode
     {
-        [ExcludeFromCodeCoverage]
-        Mode() { }
+        private Mode() { }
 
-        public Mode(int modeId, string name, string displayName)
+        public Mode(int modeId, string name, string displayName) : this()
         {
             ModeId = modeId;
             Name = name ?? throw new ArgumentNullException(nameof(name));

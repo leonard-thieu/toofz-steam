@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Run
     {
-        [ExcludeFromCodeCoverage]
-        Run() { }
+        private Run() { }
 
-        public Run(int runId, string name, string displayName)
+        public Run(int runId, string name, string displayName) : this()
         {
             RunId = runId;
             Name = name ?? throw new ArgumentNullException(nameof(name));

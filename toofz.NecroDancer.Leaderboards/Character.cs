@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class Character
     {
-        [ExcludeFromCodeCoverage]
-        Character() { }
+        private Character() { }
 
-        public Character(int characterId, string name, string displayName)
+        public Character(int characterId, string name, string displayName) : this()
         {
             CharacterId = characterId;
             Name = name ?? throw new ArgumentNullException(nameof(name));
