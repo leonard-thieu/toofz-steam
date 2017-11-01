@@ -1,21 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using toofz.NecroDancer.Leaderboards.Steam.CommunityData;
+﻿using toofz.NecroDancer.Leaderboards.Steam.CommunityData;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 {
-    class SteamCommunityDataApiTransientFaultHandlerTests
+    public class SteamCommunityDataApiTransientFaultHandlerTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange -> Act
                 var handler = new SteamCommunityDataApiTransientFaultHandler();
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(SteamCommunityDataApiTransientFaultHandler));
+                Assert.IsAssignableFrom<SteamCommunityDataApiTransientFaultHandler>(handler);
             }
         }
     }

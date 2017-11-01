@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpRequestMessageExtensionsTests
+    public class HttpRequestMessageExtensionsTests
     {
-        [TestClass]
         public class CloneAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task RequestIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 HttpRequestMessage request = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return HttpRequestMessageExtensions.CloneAsync(request);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesVersion()
             {
                 // Arrange
@@ -33,10 +32,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpRequestMessageExtensions.CloneAsync(request);
 
                 // Assert
-                Assert.AreEqual(new Version("1.1"), clone.Version);
+                Assert.Equal(new Version("1.1"), clone.Version);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesContent()
             {
                 // Arrange
@@ -48,10 +47,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 var cloneContent = await clone.Content.ReadAsStringAsync();
-                Assert.AreEqual("0123456789", cloneContent);
+                Assert.Equal("0123456789", cloneContent);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesMethod()
             {
                 // Arrange
@@ -61,10 +60,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpRequestMessageExtensions.CloneAsync(request);
 
                 // Assert
-                Assert.AreEqual(HttpMethod.Post, clone.Method);
+                Assert.Equal(HttpMethod.Post, clone.Method);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesRequestUri()
             {
                 // Arrange
@@ -74,10 +73,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpRequestMessageExtensions.CloneAsync(request);
 
                 // Assert
-                Assert.AreEqual(new Uri("http://example.org/"), clone.RequestUri);
+                Assert.Equal(new Uri("http://example.org/"), clone.RequestUri);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesHeaders()
             {
                 // Arrange
@@ -88,10 +87,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpRequestMessageExtensions.CloneAsync(request);
 
                 // Assert
-                Assert.AreEqual("example.org", clone.Headers.Host);
+                Assert.Equal("example.org", clone.Headers.Host);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesProperties()
             {
                 // Arrange
@@ -103,7 +102,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpRequestMessageExtensions.CloneAsync(request);
 
                 // Assert
-                Assert.AreEqual(property, clone.Properties["myProp"]);
+                Assert.Equal(property, clone.Properties["myProp"]);
             }
         }
     }

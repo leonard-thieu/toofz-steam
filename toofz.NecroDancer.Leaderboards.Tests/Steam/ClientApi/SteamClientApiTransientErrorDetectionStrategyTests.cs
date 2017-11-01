@@ -2,18 +2,17 @@
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
-    class SteamClientApiTransientErrorDetectionStrategyTests
+    public class SteamClientApiTransientErrorDetectionStrategyTests
     {
-        [TestClass]
         public class CreateRetryPolicyMethod
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsRetryPolicy()
             {
                 // Arrange
@@ -24,10 +23,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var retryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
 
                 // Assert
-                Assert.IsInstanceOfType(retryPolicy, typeof(RetryPolicy<SteamClientApiTransientErrorDetectionStrategy>));
+                Assert.IsAssignableFrom<RetryPolicy<SteamClientApiTransientErrorDetectionStrategy>>(retryPolicy);
             }
 
-            [TestMethod]
+            [Fact]
             public void OnRetrying_LogsDebugMessage()
             {
                 // Arrange
@@ -52,10 +51,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        [TestClass]
+
         public class IsTransientMethod
         {
-            [TestMethod]
+            [Fact]
             public void ExIsSteamClientApiExceptionWithTaskCanceledExceptionAsInnerException_ReturnsTrue()
             {
                 // Arrange
@@ -66,10 +65,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsTrue(isTransient);
+                Assert.True(isTransient);
             }
 
-            [TestMethod]
+            [Fact]
             public void ExIsSteamClientApiExceptionWithoutTaskCanceledExceptionAsInnerException_ReturnsFalse()
             {
                 // Arrange
@@ -80,10 +79,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsFalse(isTransient);
+                Assert.False(isTransient);
             }
 
-            [TestMethod]
+            [Fact]
             public void ExIsNotTaskCanceledException_ReturnsFalse()
             {
                 // Arrange
@@ -94,7 +93,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsFalse(isTransient);
+                Assert.False(isTransient);
             }
         }
     }

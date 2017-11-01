@@ -2,33 +2,31 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class LoggingHandlerTests
+    public class LoggingHandlerTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange -> Act
                 var handler = new LoggingHandler();
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(LoggingHandler));
+                Assert.IsAssignableFrom<LoggingHandler>(handler);
             }
         }
-
-        [TestClass]
+        
         public class SendAsync
         {
-            [TestMethod]
+            [Fact]
             public async Task LogsDebugStartDownload()
             {
                 // Arrange
@@ -48,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockLog.Verify(l => l.Debug("Start download http://fake.uri/"), Times.Once);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task LogsDebugEndDownload()
             {
                 // Arrange
@@ -68,7 +66,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockLog.Verify(l => l.Debug("End download http://fake.uri/"), Times.Once);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -86,7 +84,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var content = await response.Content.ReadAsStringAsync();
 
                 // Assert
-                Assert.AreEqual("myContent", content);
+                Assert.Equal("myContent", content);
             }
         }
     }

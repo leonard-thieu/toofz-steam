@@ -1,29 +1,28 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamRemoteStorage
 {
-    class UgcFileDetailsEnvelopeTests
+    public class UgcFileDetailsEnvelopeTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutData_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.UgcFileDetailsEnvelopeWithoutData;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -33,8 +32,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamRemoteStorage
                 var ugcFileDetailsEnvelope = JsonConvert.DeserializeObject<UgcFileDetailsEnvelope>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(ugcFileDetailsEnvelope, typeof(UgcFileDetailsEnvelope));
-                Assert.IsInstanceOfType(ugcFileDetailsEnvelope.Data, typeof(UgcFileDetails));
+                Assert.IsAssignableFrom<UgcFileDetailsEnvelope>(ugcFileDetailsEnvelope);
+                Assert.IsAssignableFrom<UgcFileDetails>(ugcFileDetailsEnvelope.Data);
             }
         }
     }

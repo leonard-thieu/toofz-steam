@@ -1,17 +1,16 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
-    class ProgressDebugNetworkListenerTests
+    public class ProgressDebugNetworkListenerTests
     {
-        [TestClass]
         public class OnIncomingNetworkMessage
         {
-            [TestMethod]
+            [Fact]
             public void ProgressIsNull_DoesNotThrowNullReferenceException()
             {
                 // Arrange
@@ -21,7 +20,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 listener.OnIncomingNetworkMessage(EMsg.AdminCmd, new byte[0]);
             }
 
-            [TestMethod]
+            [Fact]
             public void ProgressIsNotNull_ReportsDataLength()
             {
                 // Arrange

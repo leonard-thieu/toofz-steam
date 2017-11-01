@@ -1,16 +1,15 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
-    class SteamClientApiExceptionTests
+    public class SteamClientApiExceptionTests
     {
-        [TestClass]
         public class Constructor_String
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -20,14 +19,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var ex = new SteamClientApiException(message);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(SteamClientApiException));
+                Assert.IsAssignableFrom<SteamClientApiException>(ex);
             }
         }
 
-        [TestClass]
+
         public class Constructor_String_Exception
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -38,14 +37,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var ex = new SteamClientApiException(message, inner);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(SteamClientApiException));
+                Assert.IsAssignableFrom<SteamClientApiException>(ex);
             }
         }
 
-        [TestClass]
+
         public class Constructor_String_EResult
         {
-            [TestMethod]
+            [Fact]
             public void SetsResult()
             {
                 // Arrange
@@ -56,10 +55,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var ex = new SteamClientApiException(message, result);
 
                 // Assert
-                Assert.AreEqual(result, ex.Result);
+                Assert.Equal(result, ex.Result);
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -70,7 +69,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var ex = new SteamClientApiException(message, result);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(SteamClientApiException));
+                Assert.IsAssignableFrom<SteamClientApiException>(ex);
             }
         }
     }

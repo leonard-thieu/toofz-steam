@@ -1,57 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class LeaderboardTests
+    public class LeaderboardTests
     {
-        [TestClass]
         public class LeaderboardIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { LeaderboardId = 43895 };
 
                 // Act -> Assert
-                Assert.AreEqual(43895, leaderboard.LeaderboardId);
+                Assert.Equal(43895, leaderboard.LeaderboardId);
             }
         }
 
-        [TestClass]
         public class EntriesProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetBehavior()
             {
                 // Arrange
                 var leaderboard = new Leaderboard();
 
                 // Act -> Assert
-                Assert.IsInstanceOfType(leaderboard.Entries, typeof(List<Entry>));
+                Assert.IsAssignableFrom<List<Entry>>(leaderboard.Entries);
             }
         }
 
-        [TestClass]
         public class LastUpdateProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { LastUpdate = new DateTime(2017, 8, 28, 16, 27, 58) };
 
                 // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 28, 16, 27, 58), leaderboard.LastUpdate);
+                Assert.Equal(new DateTime(2017, 8, 28, 16, 27, 58), leaderboard.LastUpdate);
             }
         }
 
-        [TestClass]
         public class NameProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -63,14 +59,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var name2 = leaderboard.Name;
 
                 // Assert
-                Assert.AreEqual(name, name2);
+                Assert.Equal(name, name2);
             }
         }
 
-        [TestClass]
         public class DisplayNameProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -82,28 +77,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName2 = leaderboard.DisplayName;
 
                 // Assert
-                Assert.AreEqual(displayName, displayName2);
+                Assert.Equal(displayName, displayName2);
             }
         }
 
-        [TestClass]
         public class IsProductionProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { IsProduction = true };
 
                 // Act -> Assert
-                Assert.IsTrue(leaderboard.IsProduction);
+                Assert.True(leaderboard.IsProduction);
             }
         }
 
-        [TestClass]
         public class ProductProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -114,28 +107,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var product2 = leaderboard.Product;
 
                 // Assert
-                Assert.AreSame(product, product2);
+                Assert.Same(product, product2);
             }
         }
 
-        [TestClass]
         public class ProductIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { ProductId = 1 };
 
                 // Act -> Assert
-                Assert.AreEqual(1, leaderboard.ProductId);
+                Assert.Equal(1, leaderboard.ProductId);
             }
         }
 
-        [TestClass]
         public class ModeProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -146,14 +137,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var mode2 = leaderboard.Mode;
 
                 // Assert
-                Assert.AreSame(mode, mode2);
+                Assert.Same(mode, mode2);
             }
         }
 
-        [TestClass]
         public class ModeIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -165,14 +155,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var modeId2 = leaderboard.ModeId;
 
                 // Assert
-                Assert.AreEqual(modeId, modeId2);
+                Assert.Equal(modeId, modeId2);
             }
         }
 
-        [TestClass]
         public class RunProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -184,28 +173,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var run2 = leaderboard.Run;
 
                 // Assert
-                Assert.AreSame(run, run2);
+                Assert.Same(run, run2);
             }
         }
 
-        [TestClass]
         public class RunIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { RunId = 2 };
 
                 // Act -> Assert
-                Assert.AreEqual(2, leaderboard.RunId);
+                Assert.Equal(2, leaderboard.RunId);
             }
         }
 
-        [TestClass]
         public class CharacterProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -217,49 +204,46 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var character2 = leaderboard.Character;
 
                 // Assert
-                Assert.AreSame(character, character2);
+                Assert.Same(character, character2);
             }
         }
 
-        [TestClass]
         public class CharacterIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { CharacterId = 9 };
 
                 // Act -> Assert
-                Assert.AreEqual(9, leaderboard.CharacterId);
+                Assert.Equal(9, leaderboard.CharacterId);
             }
         }
 
-        [TestClass]
         public class IsCoOpProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { IsCoOp = true };
 
                 // Act -> Assert
-                Assert.IsTrue(leaderboard.IsCoOp);
+                Assert.True(leaderboard.IsCoOp);
             }
         }
 
-        [TestClass]
         public class IsCustomMusicProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var leaderboard = new Leaderboard { IsCustomMusic = true };
 
                 // Act -> Assert
-                Assert.IsTrue(leaderboard.IsCustomMusic);
+                Assert.True(leaderboard.IsCustomMusic);
             }
         }
     }

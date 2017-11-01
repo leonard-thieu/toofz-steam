@@ -3,17 +3,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpClientExtensionsTests
+    public class HttpClientExtensionsTests
     {
-        [TestClass]
         public class PostAsJsonAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task HttpClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -23,13 +22,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var cancellationToken = CancellationToken.None;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return HttpClientExtensions.PostAsJsonAsync(httpClient, requestUri, value, cancellationToken);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task SendsPostAsJson()
             {
                 // Arrange

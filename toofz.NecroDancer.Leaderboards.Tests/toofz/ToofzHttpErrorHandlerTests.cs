@@ -1,20 +1,19 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class ToofzHttpErrorHandlerTests
+    public class ToofzHttpErrorHandlerTests
     {
-        [TestClass]
         public class SendAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task RequestIsNotSuccessfulAndHttpErrorIsReturned_ThrowsHttpErrorException()
             {
                 // Arrange
@@ -26,13 +25,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<HttpErrorException>(() =>
+                await Assert.ThrowsAsync<HttpErrorException>(() =>
                 {
                     return handler.PublicSendAsync(request);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task RequestIsNotSuccessfulAndHttpErrorIsNotReturned_ReturnsResponse()
             {
                 // Arrange
@@ -47,10 +46,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -65,7 +64,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
         }
     }

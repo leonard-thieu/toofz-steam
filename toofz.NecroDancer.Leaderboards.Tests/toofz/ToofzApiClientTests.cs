@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class ToofzApiClientTests
+    public class ToofzApiClientTests
     {
         public ToofzApiClientTests()
         {
@@ -19,10 +19,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
         public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
         public ToofzApiClient Client { get; set; }
 
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -32,27 +31,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var client = new ToofzApiClient(handler, false);
 
                 // Assert
-                Assert.IsInstanceOfType(client, typeof(ToofzApiClient));
+                Assert.IsAssignableFrom<ToofzApiClient>(client);
             }
         }
 
-        [TestClass]
         public class GetPlayersAsyncMethod : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
                 Client.Dispose();
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetPlayersAsync();
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
@@ -62,20 +60,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await Client.GetPlayersAsync();
 
                 // Assert
-                Assert.AreEqual(453681, response.Total);
-                Assert.AreEqual(20, response.Players.Count());
+                Assert.Equal(453681, response.Total);
+                Assert.Equal(20, response.Players.Count());
                 var player = response.Players.First();
-                Assert.AreEqual(76561198020278823, player.Id);
-                Assert.AreEqual("Mr.moneybottoms", player.DisplayName);
-                Assert.AreEqual(new DateTime(2017, 9, 13, 12, 48, 1, 350, DateTimeKind.Utc), player.UpdatedAt);
-                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
+                Assert.Equal(76561198020278823, player.Id);
+                Assert.Equal("Mr.moneybottoms", player.DisplayName);
+                Assert.Equal(new DateTime(2017, 9, 13, 12, 48, 1, 350, DateTimeKind.Utc), player.UpdatedAt);
+                Assert.Equal("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
             }
         }
 
-        [TestClass]
         public class GetPlayersAsyncMethod_Params : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -87,13 +84,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetPlayersAsync(@params);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
@@ -108,20 +105,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await Client.GetPlayersAsync(@params);
 
                 // Assert
-                Assert.AreEqual(453681, response.Total);
-                Assert.AreEqual(20, response.Players.Count());
+                Assert.Equal(453681, response.Total);
+                Assert.Equal(20, response.Players.Count());
                 var player = response.Players.First();
-                Assert.AreEqual(76561198020278823, player.Id);
-                Assert.AreEqual("Mr.moneybottoms", player.DisplayName);
-                Assert.AreEqual(new DateTime(2017, 9, 13, 12, 48, 1, 350, DateTimeKind.Utc), player.UpdatedAt);
-                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
+                Assert.Equal(76561198020278823, player.Id);
+                Assert.Equal("Mr.moneybottoms", player.DisplayName);
+                Assert.Equal(new DateTime(2017, 9, 13, 12, 48, 1, 350, DateTimeKind.Utc), player.UpdatedAt);
+                Assert.Equal("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
             }
         }
 
-        [TestClass]
         public class PostPlayersAsyncMethod : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -136,26 +132,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.PostPlayersAsync(players);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task PlayersIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 IEnumerable<Player> players = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return Client.PostPlayersAsync(players);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
@@ -173,27 +169,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var bulkStore = await Client.PostPlayersAsync(players);
 
                 // Assert
-                Assert.AreEqual(10, bulkStore.RowsAffected);
+                Assert.Equal(10, bulkStore.RowsAffected);
             }
         }
 
-        [TestClass]
         public class GetReplaysAsyncMethod : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
                 Client.Dispose();
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetReplaysAsync();
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
@@ -203,17 +198,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await Client.GetReplaysAsync();
 
                 // Assert
-                Assert.AreEqual(43767, response.Total);
-                Assert.AreEqual(20, response.Replays.Count());
+                Assert.Equal(43767, response.Total);
+                Assert.Equal(20, response.Replays.Count());
                 var replay = response.Replays.First();
-                Assert.AreEqual(844845073340377377, replay.Id);
+                Assert.Equal(844845073340377377, replay.Id);
             }
         }
 
-        [TestClass]
         public class GetReplaysAsyncMethod_Params : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -224,13 +218,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetReplaysAsync(@params);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
@@ -244,17 +238,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var response = await Client.GetReplaysAsync(@params);
 
                 // Assert
-                Assert.AreEqual(43767, response.Total);
-                Assert.AreEqual(20, response.Replays.Count());
+                Assert.Equal(43767, response.Total);
+                Assert.Equal(20, response.Replays.Count());
                 var replay = response.Replays.First();
-                Assert.AreEqual(844845073340377377, replay.Id);
+                Assert.Equal(844845073340377377, replay.Id);
             }
         }
 
-        [TestClass]
         public class PostReplaysAsyncMethod : ToofzApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -265,26 +258,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.PostReplaysAsync(replays);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReplaysIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 IEnumerable<Replay> replays = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return Client.PostReplaysAsync(replays);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
@@ -298,14 +291,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var bulkStore = await Client.PostReplaysAsync(replays);
 
                 // Assert
-                Assert.AreEqual(10, bulkStore.RowsAffected);
+                Assert.Equal(10, bulkStore.RowsAffected);
             }
         }
 
-        [TestClass]
         public class DisposeMethod
         {
-            [TestMethod]
+            [Fact]
             public void DisposesHttpClient()
             {
                 // Arrange
@@ -316,10 +308,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
 
-            [TestMethod]
+            [Fact]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
@@ -331,7 +323,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
         }
     }

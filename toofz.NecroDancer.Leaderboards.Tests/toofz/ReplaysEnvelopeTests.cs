@@ -1,43 +1,42 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class ReplaysEnvelopeTests
+    public class ReplaysEnvelopeTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutTotal_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplaysEnvelopeWithoutTotal;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplaysEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutReplays_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplaysEnvelopeWithoutReplays;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplaysEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -47,11 +46,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var replaysEnvelope = JsonConvert.DeserializeObject<ReplaysEnvelope>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(replaysEnvelope, typeof(ReplaysEnvelope));
-                Assert.AreEqual(43767, replaysEnvelope.Total);
+                Assert.IsAssignableFrom<ReplaysEnvelope>(replaysEnvelope);
+                Assert.Equal(43767, replaysEnvelope.Total);
                 var replays = replaysEnvelope.Replays.ToList();
-                Assert.AreEqual(20, replays.Count);
-                CollectionAssert.AllItemsAreInstancesOfType(replays, typeof(ReplayDTO));
+                Assert.Equal(20, replays.Count);
+                foreach (var r in replays)
+                {
+                    Assert.IsAssignableFrom<ReplayDTO>(r);
+                }
             }
         }
     }

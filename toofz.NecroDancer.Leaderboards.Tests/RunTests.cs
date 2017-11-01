@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class RunTests
+    public class RunTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void NameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -17,13 +16,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName = "myDisplayName";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new Run(runId, name, displayName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void DisplayNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -32,13 +31,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 string displayName = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new Run(runId, name, displayName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -50,10 +49,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var run = new Run(runId, name, displayName);
 
                 // Assert
-                Assert.IsInstanceOfType(run, typeof(Run));
+                Assert.IsAssignableFrom<Run>(run);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsRunId()
             {
                 // Arrange
@@ -66,10 +65,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var runId2 = run.RunId;
 
                 // Assert
-                Assert.AreEqual(runId, runId2);
+                Assert.Equal(runId, runId2);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsName()
             {
                 // Arrange
@@ -82,10 +81,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var name2 = run.Name;
 
                 // Assert
-                Assert.AreEqual(name, name2);
+                Assert.Equal(name, name2);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsDisplayName()
             {
                 // Arrange
@@ -98,7 +97,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName2 = run.DisplayName;
 
                 // Assert
-                Assert.AreEqual(displayName, displayName2);
+                Assert.Equal(displayName, displayName2);
             }
         }
     }

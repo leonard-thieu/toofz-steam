@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpRequestStatusExceptionTests
+    public class HttpRequestStatusExceptionTests
     {
-        [TestClass]
         public class Constructor_HttpStatusCode_Uri
         {
-            [TestMethod]
+            [Fact]
             public void RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -17,13 +16,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 Uri requestUri = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var ex = new HttpRequestStatusException(statusCode, requestUri);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsStatusCode()
             {
                 // Arrange
@@ -34,10 +33,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(statusCode, ex.StatusCode);
+                Assert.Equal(statusCode, ex.StatusCode);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsRequestUri()
             {
                 // Arrange
@@ -48,10 +47,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(requestUri, ex.RequestUri);
+                Assert.Equal(requestUri, ex.RequestUri);
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -62,14 +61,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(statusCode, requestUri);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
+                Assert.IsAssignableFrom<HttpRequestStatusException>(ex);
             }
         }
-
-        [TestClass]
+        
         public class Constructor_String_HttpStatusCode_Uri
         {
-            [TestMethod]
+            [Fact]
             public void RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -78,13 +76,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 Uri requestUri = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var ex = new HttpRequestStatusException(message, statusCode, requestUri);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsMessage()
             {
                 // Arrange
@@ -96,10 +94,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(message, ex.Message);
+                Assert.Equal(message, ex.Message);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsStatusCode()
             {
                 // Arrange
@@ -111,10 +109,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(statusCode, ex.StatusCode);
+                Assert.Equal(statusCode, ex.StatusCode);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsRequestUri()
             {
                 // Arrange
@@ -126,10 +124,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri);
 
                 // Assert
-                Assert.AreEqual(requestUri, ex.RequestUri);
+                Assert.Equal(requestUri, ex.RequestUri);
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -141,14 +139,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
+                Assert.IsAssignableFrom<HttpRequestStatusException>(ex);
             }
         }
-
-        [TestClass]
+        
         public class Constructor_String_HttpStatusCode_Uri_String
         {
-            [TestMethod]
+            [Fact]
             public void RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -158,13 +155,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var responseContent = "myResponseContent";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsMessage()
             {
                 // Arrange
@@ -177,10 +174,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual(message, ex.Message);
+                Assert.Equal(message, ex.Message);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsStatusCode()
             {
                 // Arrange
@@ -193,10 +190,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual(statusCode, ex.StatusCode);
+                Assert.Equal(statusCode, ex.StatusCode);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsRequestUri()
             {
                 // Arrange
@@ -209,10 +206,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual(requestUri, ex.RequestUri);
+                Assert.Equal(requestUri, ex.RequestUri);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsResponseContent()
             {
                 // Arrange
@@ -225,10 +222,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.AreEqual(responseContent, ex.ResponseContent);
+                Assert.Equal(responseContent, ex.ResponseContent);
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -241,7 +238,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var ex = new HttpRequestStatusException(message, statusCode, requestUri, responseContent);
 
                 // Assert
-                Assert.IsInstanceOfType(ex, typeof(HttpRequestStatusException));
+                Assert.IsAssignableFrom<HttpRequestStatusException>(ex);
             }
         }
     }

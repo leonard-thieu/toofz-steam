@@ -133,6 +133,12 @@
   <data name="HttpErrorWithoutMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HttpErrorWithoutMessage.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="LeaderboardEntries" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LeaderboardEntries.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Leaderboards" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Leaderboards.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="OAuth2BearerToken" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OAuth2BearerToken.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -251,7 +257,7 @@
     <value>..\Resources\StarWarsEncoding.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UgcFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UgcFile.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\UgcFile.dat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UgcFileDetails" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UgcFileDetails.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -1,43 +1,42 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class PlayersEnvelopeTests
+    public class PlayersEnvelopeTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutTotal_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersEnvelopeWithoutTotal;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayersEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutPlayers_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersEnvelopeWithoutPlayers;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayersEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -47,10 +46,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var playersEnvelope = JsonConvert.DeserializeObject<PlayersEnvelope>(json);
 
                 // Assert
-                Assert.AreEqual(453681, playersEnvelope.Total);
+                Assert.Equal(453681, playersEnvelope.Total);
                 var players = playersEnvelope.Players.ToList();
-                Assert.AreEqual(20, players.Count);
-                CollectionAssert.AllItemsAreInstancesOfType(players, typeof(PlayerDTO));
+                Assert.Equal(20, players.Count);
+                foreach (var p in players)
+                {
+                    Assert.IsAssignableFrom<PlayerDTO>(p);
+                }
             }
         }
     }

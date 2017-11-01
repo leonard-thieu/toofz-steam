@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class ProductTests
+    public class ProductTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void NameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -17,13 +16,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName = "myDisplayName";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new Product(productId, name, displayName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void DisplayNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -32,13 +31,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 string displayName = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new Product(productId, name, displayName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -50,10 +49,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var product = new Product(productId, name, displayName);
 
                 // Assert
-                Assert.IsInstanceOfType(product, typeof(Product));
+                Assert.IsAssignableFrom<Product>(product);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsProductId()
             {
                 // Arrange
@@ -66,10 +65,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var productId2 = product.ProductId;
 
                 // Assert
-                Assert.AreEqual(productId, productId2);
+                Assert.Equal(productId, productId2);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsName()
             {
                 // Arrange
@@ -82,10 +81,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var name2 = product.Name;
 
                 // Assert
-                Assert.AreEqual(name, name2);
+                Assert.Equal(name, name2);
             }
 
-            [TestMethod]
+            [Fact]
             public void SetsDisplayName()
             {
                 // Arrange
@@ -98,7 +97,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName2 = product.DisplayName;
 
                 // Assert
-                Assert.AreEqual(displayName, displayName2);
+                Assert.Equal(displayName, displayName2);
             }
         }
     }

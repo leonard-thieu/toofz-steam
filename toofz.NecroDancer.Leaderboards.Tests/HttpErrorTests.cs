@@ -1,29 +1,28 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpErrorTests
+    public class HttpErrorTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void HttpErrorWithoutMessage_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.HttpErrorWithoutMessage;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<HttpError>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void HttpErrorWithMessage_Deserializes()
             {
                 // Arrange
@@ -33,11 +32,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var httpError = JsonConvert.DeserializeObject<HttpError>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(httpError, typeof(HttpError));
-                Assert.AreEqual("An error has occurred.", httpError.Message);
+                Assert.IsAssignableFrom<HttpError>(httpError);
+                Assert.Equal("An error has occurred.", httpError.Message);
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -47,12 +46,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var httpError = JsonConvert.DeserializeObject<HttpError>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(httpError, typeof(HttpError));
-                Assert.AreEqual("An error has occurred.", httpError.Message);
-                Assert.IsNotNull(httpError.ExceptionMessage);
-                Assert.IsNotNull(httpError.ExceptionType);
-                Assert.IsNotNull(httpError.StackTrace);
-                Assert.IsNotNull(httpError.InnerException);
+                Assert.IsAssignableFrom<HttpError>(httpError);
+                Assert.Equal("An error has occurred.", httpError.Message);
+                Assert.NotNull(httpError.ExceptionMessage);
+                Assert.NotNull(httpError.ExceptionType);
+                Assert.NotNull(httpError.StackTrace);
+                Assert.NotNull(httpError.InnerException);
             }
         }
     }

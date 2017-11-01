@@ -1,18 +1,17 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpErrorHandlerTests
+    public class HttpErrorHandlerTests
     {
-        [TestClass]
         public class SendAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task RequestIsNotSuccessful_ThrowsHttpRequestStatusException()
             {
                 // Arrange
@@ -24,13 +23,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<HttpRequestStatusException>(() =>
+                await Assert.ThrowsAsync<HttpRequestStatusException>(() =>
                 {
                     return handler.PublicSendAsync(request);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -45,7 +44,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
         }
     }

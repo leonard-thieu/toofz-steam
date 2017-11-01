@@ -1,147 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B492909-63E4-4F96-898E-802EC5A37B0F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>toofz.NecroDancer.Leaderboards</RootNamespace>
-    <AssemblyName>toofz.NecroDancer.Leaderboards</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>16.1.0</Version>
+    <Authors>Leonard Thieu</Authors>
+    <PackageLicenseUrl>https://github.com/leonard-thieu/toofz-leaderboards-core/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/leonard-thieu/toofz-leaderboards-core</PackageProjectUrl>
+    <PackageIconUrl>https://user-images.githubusercontent.com/5265970/29717713-27e1a95c-897e-11e7-9d28-dae64be705b5.png</PackageIconUrl>
+    <PackageTags>toofz;necrodancer;leaderboards</PackageTags>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\toofz.NecroDancer.Leaderboards.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Flurl, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Flurl.2.5.0\lib\net40\Flurl.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="SteamKit2, Version=3.0.1.32, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SteamKit2.3.0.1\lib\net461\SteamKit2.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.XML" />
+    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling" Version="6.0.1304">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Flurl" Version="2.5.0" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="toofz.SteamKit2" Version="4.0.2" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Steam\ClientApi\ISteamClientAdapter.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientAdapter.cs">
-      <DependentUpon>ISteamClientAdapter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ISteamClientApiClient.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiClient.cs">
-      <DependentUpon>ISteamClientApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListener.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiException.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategy.cs" />
-    <Compile Include="Steam\CommunityData\GetLeaderboardEntriesParams.cs" />
-    <Compile Include="Steam\CommunityData\ISteamCommunityDataClient.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataClient.cs">
-      <DependentUpon>ISteamCommunityDataClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\CommunityData\Leaderboard.cs" />
-    <Compile Include="Steam\CommunityData\LeaderboardEntriesEnvelope.cs" />
-    <Compile Include="Steam\CommunityData\LeaderboardEntry.cs" />
-    <Compile Include="Steam\CommunityData\LeaderboardsEnvelope.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientErrorDetectionStrategy.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientFaultHandler.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelope.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetails.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelope.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaries.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummary.cs" />
-    <Compile Include="Steam\WebApi\ISteamWebApiClient.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiClient.cs">
-      <DependentUpon>ISteamWebApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategy.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandler.cs" />
-    <Compile Include="Steam\IUgcHttpClient.cs" />
-    <Compile Include="Steam\UgcHttpClient.cs">
-      <DependentUpon>IUgcHttpClient.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="toofz\BulkStoreDTO.cs" />
-    <Compile Include="toofz\GetPlayersParams.cs" />
-    <Compile Include="toofz\GetReplaysParams.cs" />
-    <Compile Include="toofz\HttpError.cs" />
-    <Compile Include="toofz\HttpErrorException.cs" />
-    <Compile Include="toofz\IPagination.cs" />
-    <Compile Include="toofz\IToofzApiClient.cs" />
-    <Compile Include="toofz\ToofzApiClient.cs">
-      <DependentUpon>IToofzApiClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="toofz\OAuth2BearerToken.cs" />
-    <Compile Include="toofz\OAuth2Handler.cs" />
-    <Compile Include="toofz\PlayerDTO.cs" />
-    <Compile Include="toofz\PlayersEnvelope.cs" />
-    <Compile Include="toofz\ReplayDTO.cs" />
-    <Compile Include="toofz\ReplaysEnvelope.cs" />
-    <Compile Include="toofz\ToofzHttpErrorHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Character.cs" />
-    <Compile Include="DailyEntry.cs" />
-    <Compile Include="DailyLeaderboard.cs" />
-    <Compile Include="Entry.cs" />
-    <Compile Include="GZipHandler.cs" />
-    <Compile Include="HttpClientExtensions.cs" />
-    <Compile Include="HttpContentExtensions.cs" />
-    <Compile Include="HttpErrorHandler.cs" />
-    <Compile Include="HttpRequestMessageExtensions.cs" />
-    <Compile Include="HttpRequestStatusException.cs" />
-    <Compile Include="Leaderboard.cs" />
-    <Compile Include="LoggingHandler.cs" />
-    <Compile Include="Mode.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="ProgressReporterHttpClient.cs" />
-    <Compile Include="Replay.cs" />
-    <Compile Include="Run.cs" />
-    <Compile Include="TransientFaultHandlerBase.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

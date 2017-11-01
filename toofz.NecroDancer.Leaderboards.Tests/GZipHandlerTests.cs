@@ -6,29 +6,27 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class GZipHandlerTests
+    public class GZipHandlerTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange -> Act
                 var handler = new GZipHandler();
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(GZipHandler));
+                Assert.IsAssignableFrom<GZipHandler>(handler);
             }
         }
 
-        [TestClass]
         public class SendAsyncMethod
         {
             public SendAsyncMethod()
@@ -41,7 +39,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             MockHttpMessageHandler mockHandler;
             HttpMessageHandlerAdapter handler;
 
-            [TestMethod]
+            [Fact]
             public async Task AddsAcceptEncodingGzipToRequest()
             {
                 // Arrange
@@ -52,10 +50,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 var request = response.RequestMessage;
-                CollectionAssert.Contains(request.Headers.AcceptEncoding.ToList(), new StringWithQualityHeaderValue("gzip"));
+                Assert.Contains(new StringWithQualityHeaderValue("gzip"), request.Headers.AcceptEncoding.ToList());
             }
 
-            [TestMethod]
+            [Fact]
             public async Task NoContent_ReturnsResponse()
             {
                 // Arrange
@@ -65,10 +63,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ContentIsNotCompressed_ReturnsUnmodifiedResponse()
             {
                 // Arrange
@@ -80,10 +78,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost/"));
 
                 // Assert
-                Assert.AreSame(content, response.Content);
+                Assert.Same(content, response.Content);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ContentIsCompressed_ReturnsResponseWithDecompressedContent()
             {
                 // Arrange
@@ -102,7 +100,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 var content2 = await response.Content.ReadAsStringAsync();
-                Assert.AreEqual("0123456789", content2);
+                Assert.Equal("0123456789", content2);
             }
         }
     }

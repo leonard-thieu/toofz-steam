@@ -5,16 +5,15 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class HttpContentExtensionsTests
+    public class HttpContentExtensionsTests
     {
-        [TestClass]
         public class CloneAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task HttpContentIsNull_ReturnsNull()
             {
                 // Arrange
@@ -24,10 +23,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpContentExtensions.CloneAsync(httpContent);
 
                 // Assert
-                Assert.IsNull(clone);
+                Assert.Null(clone);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesContent()
             {
                 // Arrange
@@ -38,10 +37,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 var cloneContent = await clone.ReadAsStringAsync();
-                Assert.AreEqual("0123456789", cloneContent);
+                Assert.Equal("0123456789", cloneContent);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesHeaders()
             {
                 // Arrange
@@ -51,14 +50,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpContentExtensions.CloneAsync(content);
 
                 // Assert
-                Assert.AreEqual("utf-8", clone.Headers.ContentType.CharSet);
+                Assert.Equal("utf-8", clone.Headers.ContentType.CharSet);
             }
         }
 
-        [TestClass]
         public class CloneAsyncMethod_Stream
         {
-            [TestMethod]
+            [Fact]
             public async Task HttpContentIsNull_ReturnsNull()
             {
                 // Arrange
@@ -70,10 +68,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpContentExtensions.CloneAsync(httpContent, stream, cancellationToken);
 
                 // Assert
-                Assert.IsNull(clone);
+                Assert.Null(clone);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesContent()
             {
                 // Arrange
@@ -86,10 +84,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Assert
                 var cloneContent = await clone.ReadAsStringAsync();
-                Assert.AreEqual("0123456789", cloneContent);
+                Assert.Equal("0123456789", cloneContent);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ClonesHeaders()
             {
                 // Arrange
@@ -101,27 +99,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var clone = await HttpContentExtensions.CloneAsync(content, stream, cancellationToken);
 
                 // Assert
-                Assert.AreEqual("utf-8", clone.Headers.ContentType.CharSet);
+                Assert.Equal("utf-8", clone.Headers.ContentType.CharSet);
             }
         }
 
-        [TestClass]
         public class ReadAsAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task HttpContentIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 HttpContent httpContent = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return HttpContentExtensions.ReadAsAsync<object>(httpContent);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ResponseFailsDeserialization_ReturnsDefaultOfType()
             {
                 // Arrange
@@ -131,10 +128,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var content = await httpContent.ReadAsAsync<TestDto>();
 
                 // Assert
-                Assert.IsNull(content);
+                Assert.Null(content);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsDeserializedObject()
             {
                 // Arrange
@@ -144,8 +141,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var content = await httpContent.ReadAsAsync<TestDto>();
 
                 // Assert
-                Assert.IsInstanceOfType(content, typeof(TestDto));
-                Assert.AreEqual("MyValue", content.MyProperty);
+                Assert.IsAssignableFrom<TestDto>(content);
+                Assert.Equal("MyValue", content.MyProperty);
             }
 
             [DataContract]

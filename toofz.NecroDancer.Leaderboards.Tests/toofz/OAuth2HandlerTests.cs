@@ -5,21 +5,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class OAuth2HandlerTests
+    public class OAuth2HandlerTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void UserNameIsNull_ThrowsArgumentException()
             {
                 // Arrange
@@ -27,13 +26,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 string password = "myPassword";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.Throws<ArgumentException>(() =>
                 {
                     new OAuth2Handler(userName, password);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void UserNameIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
@@ -41,13 +40,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 string password = "myPassword";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.Throws<ArgumentException>(() =>
                 {
                     new OAuth2Handler(userName, password);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void PasswordIsNull_ThrowsArgumentException()
             {
                 // Arrange
@@ -55,13 +54,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 string password = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.Throws<ArgumentException>(() =>
                 {
                     new OAuth2Handler(userName, password);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void PasswordIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
@@ -69,13 +68,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 string password = "";
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.Throws<ArgumentException>(() =>
                 {
                     new OAuth2Handler(userName, password);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -86,14 +85,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var handler = new OAuth2Handler(userName, password);
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(OAuth2Handler));
+                Assert.IsAssignableFrom<OAuth2Handler>(handler);
             }
         }
 
-        [TestClass]
+
         public class SendAsync
         {
-            [TestMethod]
+            [Fact]
             public async Task Authorized_ReturnsResponse()
             {
                 // Arrange
@@ -116,10 +115,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 
                 // Assert
                 var authorization = request.Headers.Authorization;
-                Assert.AreEqual("Bearer", authorization.Scheme);
+                Assert.Equal("Bearer", authorization.Scheme);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task Unauthorized_Authenticates()
             {
                 // Arrange
@@ -141,10 +140,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 
                 // Assert
                 mockHandler.VerifyNoOutstandingExpectation();
-                Assert.AreEqual("myAccessToken", oAuth2Handler.BearerToken.AccessToken);
+                Assert.Equal("myAccessToken", oAuth2Handler.BearerToken.AccessToken);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task UnauthorizedAndReceivedInvalidBearerToken_ThrowsInvalidDataException()
             {
                 // Arrange
@@ -161,13 +160,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var cancellationToken = CancellationToken.None;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<InvalidDataException>(() =>
+                await Assert.ThrowsAsync<InvalidDataException>(() =>
                 {
                     return handler.PublicSendAsync(request, cancellationToken);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task UnauthorizedAndReceivedNonBearerTokenResponse_ThrowsInvalidDataException()
             {
                 // Arrange
@@ -184,7 +183,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var cancellationToken = CancellationToken.None;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<InvalidDataException>(() =>
+                await Assert.ThrowsAsync<InvalidDataException>(() =>
                 {
                     return handler.PublicSendAsync(request, cancellationToken);
                 });

@@ -1,27 +1,25 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class DailyEntryTests
+    public class DailyEntryTests
     {
-        [TestClass]
         public class LeaderboardIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { LeaderboardId = 234 };
 
                 // Act -> Assert
-                Assert.AreEqual(234, dailyEntry.LeaderboardId);
+                Assert.Equal(234, dailyEntry.LeaderboardId);
             }
         }
 
-        [TestClass]
         public class LeaderboardProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
@@ -29,43 +27,40 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var dailyEntry = new DailyEntry { Leaderboard = leaderboard };
 
                 // Act -> Assert
-                Assert.AreEqual(leaderboard, dailyEntry.Leaderboard);
+                Assert.Equal(leaderboard, dailyEntry.Leaderboard);
             }
         }
 
-        [TestClass]
         public class RankProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { Rank = 345 };
 
                 // Act -> Assert
-                Assert.AreEqual(345, dailyEntry.Rank);
+                Assert.Equal(345, dailyEntry.Rank);
             }
         }
 
-        [TestClass]
         public class SteamIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { SteamId = 765 };
 
                 // Act -> Assert
-                Assert.AreEqual(765L, dailyEntry.SteamId);
+                Assert.Equal(765L, dailyEntry.SteamId);
 
             }
         }
 
-        [TestClass]
         public class PlayerProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
@@ -73,63 +68,59 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var dailyEntry = new DailyEntry { Player = player };
 
                 // Act -> Assert
-                Assert.AreEqual(player, dailyEntry.Player);
+                Assert.Equal(player, dailyEntry.Player);
             }
         }
 
-        [TestClass]
         public class ReplayIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { ReplayId = 9082374 };
 
                 // Act -> Assert
-                Assert.AreEqual(9082374L, dailyEntry.ReplayId);
+                Assert.Equal(9082374L, dailyEntry.ReplayId);
             }
         }
 
-        [TestClass]
         public class ScoreProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { Score = 10 };
 
                 // Act -> Assert
-                Assert.AreEqual(10, dailyEntry.Score);
+                Assert.Equal(10, dailyEntry.Score);
             }
         }
 
-        [TestClass]
         public class ZoneProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { Zone = 1 };
 
                 // Act -> Assert
-                Assert.AreEqual(1, dailyEntry.Zone);
+                Assert.Equal(1, dailyEntry.Zone);
             }
         }
 
-        [TestClass]
         public class LevelProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyEntry = new DailyEntry { Level = 2 };
 
                 // Act -> Assert
-                Assert.AreEqual(2, dailyEntry.Level);
+                Assert.Equal(2, dailyEntry.Level);
             }
         }
     }
