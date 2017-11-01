@@ -1,92 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class PlayerTests
+    public class PlayerTests
     {
-        [TestClass]
         public class SteamIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var player = new Player { SteamId = 34897238 };
 
                 // Act -> Assert
-                Assert.AreEqual(34897238L, player.SteamId);
+                Assert.Equal(34897238L, player.SteamId);
             }
         }
 
-        [TestClass]
+
         public class ExistsProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var player = new Player { Exists = true };
 
                 // Act - Assert
-                Assert.AreEqual(true, player.Exists);
+                Assert.True(player.Exists);
             }
         }
 
-        [TestClass]
+
         public class NameProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var player = new Player { Name = "MYnAME" };
 
                 // Act -> Assert
-                Assert.AreEqual("MYnAME", player.Name);
+                Assert.Equal("MYnAME", player.Name);
             }
         }
 
-        [TestClass]
+
         public class AvatarProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var player = new Player { Avatar = "http://my.avatar.url/" };
 
                 // Act -> Assert
-                Assert.AreEqual("http://my.avatar.url/", player.Avatar);
+                Assert.Equal("http://my.avatar.url/", player.Avatar);
             }
         }
 
-        [TestClass]
+
         public class LastUpdateProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var player = new Player { LastUpdate = new DateTime(2017, 8, 30, 18, 53, 49) };
 
                 // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 30, 18, 53, 49), player.LastUpdate);
+                Assert.Equal(new DateTime(2017, 8, 30, 18, 53, 49), player.LastUpdate);
             }
         }
 
-        [TestClass]
+
         public class EntriesProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetBehavior()
             {
                 // Arrange
                 var player = new Player();
 
                 // Act -> Assert
-                Assert.IsInstanceOfType(player.Entries, typeof(List<Entry>));
+                Assert.IsAssignableFrom<List<Entry>>(player.Entries);
             }
         }
     }

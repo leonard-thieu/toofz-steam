@@ -1,69 +1,68 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class PlayerDTOTests
+    public class PlayerDTOTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutId_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersDTOWithoutId;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayerDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutDisplayName_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersDTOWithoutDisplayName;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayerDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutUpdatedAt_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersDTOWithoutUpdatedAt;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayerDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutAvatar_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayersDTOWithoutAvatar;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayerDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -73,11 +72,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var player = JsonConvert.DeserializeObject<PlayerDTO>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(player, typeof(PlayerDTO));
-                Assert.AreEqual(76561198020278823, player.Id);
-                Assert.AreEqual("Mr.moneybottoms", player.DisplayName);
-                Assert.AreEqual(DateTime.Parse("2017-09-13T12:48:01.35Z").ToUniversalTime(), player.UpdatedAt);
-                Assert.AreEqual("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
+                Assert.IsAssignableFrom<PlayerDTO>(player);
+                Assert.Equal(76561198020278823, player.Id);
+                Assert.Equal("Mr.moneybottoms", player.DisplayName);
+                Assert.Equal(DateTime.Parse("2017-09-13T12:48:01.35Z").ToUniversalTime(), player.UpdatedAt);
+                Assert.Equal("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cb/cb555a66da219db0dd0504b69ccbd810678fe203.jpg", player.Avatar);
             }
         }
     }

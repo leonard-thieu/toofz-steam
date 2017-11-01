@@ -1,27 +1,25 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class EntryTests
+    public class EntryTests
     {
-        [TestClass]
         public class LeaderboardIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { LeaderboardId = 123 };
 
                 // Act -> Assert
-                Assert.AreEqual(123, entry.LeaderboardId);
+                Assert.Equal(123, entry.LeaderboardId);
             }
         }
 
-        [TestClass]
         public class LeaderboardProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
@@ -29,42 +27,39 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var entry = new Entry { Leaderboard = leaderboard };
 
                 // Act -> Assert
-                Assert.AreEqual(leaderboard, entry.Leaderboard);
+                Assert.Equal(leaderboard, entry.Leaderboard);
             }
         }
 
-        [TestClass]
         public class RankProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { Rank = 321 };
 
                 // Act -> Assert
-                Assert.AreEqual(321, entry.Rank);
+                Assert.Equal(321, entry.Rank);
             }
         }
 
-        [TestClass]
         public class SteamIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { SteamId = 459687893 };
 
                 // Act -> Assert
-                Assert.AreEqual(459687893L, entry.SteamId);
+                Assert.Equal(459687893L, entry.SteamId);
             }
         }
 
-        [TestClass]
         public class PlayerProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
@@ -72,63 +67,59 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var entry = new Entry { Player = player };
 
                 // Act -> Assert
-                Assert.AreEqual(player, entry.Player);
+                Assert.Equal(player, entry.Player);
             }
         }
 
-        [TestClass]
         public class ReplayIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { ReplayId = 239847589234 };
 
                 // Act -> Assert
-                Assert.AreEqual(239847589234L, entry.ReplayId);
+                Assert.Equal(239847589234L, entry.ReplayId);
             }
         }
 
-        [TestClass]
         public class ScoreProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { Score = 10 };
 
                 // Act -> Assert
-                Assert.AreEqual(10, entry.Score);
+                Assert.Equal(10, entry.Score);
             }
         }
 
-        [TestClass]
         public class ZoneProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { Zone = 1 };
 
                 // Act -> Assert
-                Assert.AreEqual(1, entry.Zone);
+                Assert.Equal(1, entry.Zone);
             }
         }
 
-        [TestClass]
         public class LevelProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var entry = new Entry { Level = 2 };
 
                 // Act -> Assert
-                Assert.AreEqual(2, entry.Level);
+                Assert.Equal(2, entry.Level);
             }
         }
     }

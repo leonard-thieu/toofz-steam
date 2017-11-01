@@ -2,32 +2,31 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class TransientFaultHandlerBaseTests
+    public class TransientFaultHandlerBaseTests
     {
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void RetryPolicyIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 RetryPolicy retryPolicy = null;
 
                 // Act -> Assert
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new TransientFaultHandlerBaseAdapter(retryPolicy);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -38,14 +37,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var handler = new TransientFaultHandlerBaseAdapter(retryPolicy);
 
                 // Assert
-                Assert.IsInstanceOfType(handler, typeof(TransientFaultHandlerBaseAdapter));
+                Assert.IsAssignableFrom<TransientFaultHandlerBaseAdapter>(handler);
             }
         }
-
-        [TestClass]
         public class SendAsyncMethod
         {
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -61,7 +58,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
         }
 

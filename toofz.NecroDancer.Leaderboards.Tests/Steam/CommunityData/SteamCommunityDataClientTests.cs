@@ -3,15 +3,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.CommunityData;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 {
-    class SteamCommunityDataClientTests
+    public class SteamCommunityDataClientTests
     {
         public SteamCommunityDataClientTests()
         {
@@ -21,10 +20,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
         public SteamCommunityDataClient Client { get; set; }
 
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -34,42 +32,40 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var client = new SteamCommunityDataClient(handler);
 
                 // Assert
-                Assert.IsInstanceOfType(client, typeof(SteamCommunityDataClient));
+                Assert.IsAssignableFrom<SteamCommunityDataClient>(client);
             }
         }
 
-        [TestClass]
         public class GetLeaderboardsAsyncMethod_UInt32 : SteamCommunityDataClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
                 Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/?xml=1")
-                    .Respond(new StringContent(CommunityDataResources.Leaderboards, Encoding.UTF8, "text/xml"));
+                    .Respond(new StringContent(Resources.Leaderboards, Encoding.UTF8, "text/xml"));
                 var appId = 247080U;
 
                 // Act
                 var leaderboardsEnvelope = await Client.GetLeaderboardsAsync(appId);
 
                 // Assert
-                Assert.AreEqual(411, leaderboardsEnvelope.Leaderboards.Count);
+                Assert.Equal(411, leaderboardsEnvelope.Leaderboards.Count);
                 var leaderboard = leaderboardsEnvelope.Leaderboards.First();
-                Assert.AreEqual("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1", leaderboard.Url);
-                Assert.AreEqual(2047387, leaderboard.LeaderboardId);
-                Assert.AreEqual("DLC HARDCORE All Chars DLC_PROD", leaderboard.Name);
-                Assert.AreEqual("All Characters (DLC) Score (Amplified)", leaderboard.DisplayName);
-                Assert.AreEqual(317, leaderboard.EntryCount);
-                Assert.AreEqual(2, leaderboard.SortMethod);
-                Assert.AreEqual(1, leaderboard.DisplayType);
+                Assert.Equal("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1", leaderboard.Url);
+                Assert.Equal(2047387, leaderboard.LeaderboardId);
+                Assert.Equal("DLC HARDCORE All Chars DLC_PROD", leaderboard.Name);
+                Assert.Equal("All Characters (DLC) Score (Amplified)", leaderboard.DisplayName);
+                Assert.Equal(317, leaderboard.EntryCount);
+                Assert.Equal(2, leaderboard.SortMethod);
+                Assert.Equal(1, leaderboard.DisplayType);
             }
         }
 
-        [TestClass]
         public class GetLeaderboardsAsyncMethod_String : SteamCommunityDataClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -77,60 +73,59 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var communityGameName = 247080U.ToString();
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetLeaderboardsAsync(communityGameName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 string communityGameName = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return Client.GetLeaderboardsAsync(communityGameName);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
                 Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/?xml=1")
-                    .Respond(new StringContent(CommunityDataResources.Leaderboards, Encoding.UTF8, "text/xml"));
+                    .Respond(new StringContent(Resources.Leaderboards, Encoding.UTF8, "text/xml"));
                 var communityGameName = 247080U.ToString();
 
                 // Act
                 var leaderboardsEnvelope = await Client.GetLeaderboardsAsync(communityGameName);
 
                 // Assert
-                Assert.AreEqual(411, leaderboardsEnvelope.Leaderboards.Count);
+                Assert.Equal(411, leaderboardsEnvelope.Leaderboards.Count);
                 var leaderboard = leaderboardsEnvelope.Leaderboards.First();
-                Assert.AreEqual("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1", leaderboard.Url);
-                Assert.AreEqual(2047387, leaderboard.LeaderboardId);
-                Assert.AreEqual("DLC HARDCORE All Chars DLC_PROD", leaderboard.Name);
-                Assert.AreEqual("All Characters (DLC) Score (Amplified)", leaderboard.DisplayName);
-                Assert.AreEqual(317, leaderboard.EntryCount);
-                Assert.AreEqual(2, leaderboard.SortMethod);
-                Assert.AreEqual(1, leaderboard.DisplayType);
+                Assert.Equal("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1", leaderboard.Url);
+                Assert.Equal(2047387, leaderboard.LeaderboardId);
+                Assert.Equal("DLC HARDCORE All Chars DLC_PROD", leaderboard.Name);
+                Assert.Equal("All Characters (DLC) Score (Amplified)", leaderboard.DisplayName);
+                Assert.Equal(317, leaderboard.EntryCount);
+                Assert.Equal(2, leaderboard.SortMethod);
+                Assert.Equal(1, leaderboard.DisplayType);
             }
         }
 
-        [TestClass]
         public class GetLeaderboardEntriesAsyncMethod_UInt32 : SteamCommunityDataClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange
                 Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1")
-                    .Respond(new StringContent(CommunityDataResources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
+                    .Respond(new StringContent(Resources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
                 var appId = 247080U;
                 var leaderboardId = 2047387;
 
@@ -139,20 +134,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 
                 // Assert
                 var entries = leaderboardEntriesEnvelope.Entries;
-                Assert.AreEqual(317, entries.Count);
+                Assert.Equal(317, entries.Count);
                 var entry = entries.First();
-                Assert.AreEqual(76561197998799529, entry.SteamId);
-                Assert.AreEqual(134377, entry.Score);
-                Assert.AreEqual(1, entry.Rank);
-                Assert.AreEqual(849347241492683863UL, entry.UgcId);
-                Assert.AreEqual("0b00000001000000", entry.Details);
+                Assert.Equal(76561197998799529, entry.SteamId);
+                Assert.Equal(134377, entry.Score);
+                Assert.Equal(1, entry.Rank);
+                Assert.Equal(849347241492683863UL, entry.UgcId);
+                Assert.Equal("0b00000001000000", entry.Details);
             }
         }
 
-        [TestClass]
         public class GetLeaderboardEntriesAsyncMethod_String : SteamCommunityDataClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -161,13 +155,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var leaderboardId = 2047387;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -175,19 +169,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var leaderboardId = 2047387;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return Client.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange
                 Handler
                     .When("http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1")
-                    .Respond(new StringContent(CommunityDataResources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
+                    .Respond(new StringContent(Resources.LeaderboardEntries, Encoding.UTF8, "text/xml"));
                 var communityGameName = 247080U.ToString();
                 var leaderboardId = 2047387;
 
@@ -196,20 +190,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 
                 // Assert
                 var entries = leaderboardEntriesEnvelope.Entries;
-                Assert.AreEqual(317, entries.Count);
+                Assert.Equal(317, entries.Count);
                 var entry = entries.First();
-                Assert.AreEqual(76561197998799529, entry.SteamId);
-                Assert.AreEqual(134377, entry.Score);
-                Assert.AreEqual(1, entry.Rank);
-                Assert.AreEqual(849347241492683863UL, entry.UgcId);
-                Assert.AreEqual("0b00000001000000", entry.Details);
+                Assert.Equal(76561197998799529, entry.SteamId);
+                Assert.Equal(134377, entry.Score);
+                Assert.Equal(1, entry.Rank);
+                Assert.Equal(849347241492683863UL, entry.UgcId);
+                Assert.Equal("0b00000001000000", entry.Details);
             }
         }
 
-        [TestClass]
         public class DisposeMethod
         {
-            [TestMethod]
+            [Fact]
             public void DisposesHttpClient()
             {
                 // Arrange
@@ -220,10 +213,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
 
-            [TestMethod]
+            [Fact]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
@@ -235,7 +228,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
         }
     }

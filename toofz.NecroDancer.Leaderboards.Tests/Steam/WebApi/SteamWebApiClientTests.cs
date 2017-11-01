@@ -2,16 +2,16 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 {
-    class SteamWebApiClientTests
+    public class SteamWebApiClientTests
     {
         public SteamWebApiClientTests()
         {
@@ -26,10 +26,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             set { Client.SteamWebApiKey = value; }
         }
 
-        [TestClass]
         public class Constructor
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsInstance()
             {
                 // Arrange
@@ -39,14 +38,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var client = new SteamWebApiClient(handler);
 
                 // Assert
-                Assert.IsInstanceOfType(client, typeof(SteamWebApiClient));
+                Assert.IsAssignableFrom<SteamWebApiClient>(client);
             }
         }
 
-        [TestClass]
         public class GetPlayerSummariesAsync : SteamWebApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -55,13 +53,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamIds = new long[0];
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -69,13 +67,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamIds = new long[0];
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
                     return Client.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task SteamIdsIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -83,13 +81,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 long[] steamIds = null;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return Client.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task TooManySteamIds_ThrowsArgumentException()
             {
                 // Arrange
@@ -97,13 +95,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var steamIds = new long[SteamWebApiClient.MaxPlayerSummariesPerRequest + 1];
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentException>(() =>
+                await Assert.ThrowsAsync<ArgumentException>(() =>
                 {
                     return Client.GetPlayerSummariesAsync(steamIds);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsPlayerSummaries()
             {
                 // Arrange
@@ -119,10 +117,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var playerSummariesEnvelope = await Client.GetPlayerSummariesAsync(steamIds);
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
+                Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ResponseContainsâ_DoesNotThrowDecoderFallbackException()
             {
                 // Arrange
@@ -138,14 +136,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var playerSummariesEnvelope = await Client.GetPlayerSummariesAsync(steamIds);
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
+                Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
             }
         }
 
-        [TestClass]
         public class GetUgcFileDetailsAsync : SteamWebApiClientTests
         {
-            [TestMethod]
+            [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -155,13 +152,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var ugcId = 22837952671856412;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(() =>
+                await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
                     return Client.GetUgcFileDetailsAsync(appId, ugcId);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -170,13 +167,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var ugcId = 22837952671856412;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
                     return Client.GetUgcFileDetailsAsync(appId, ugcId);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsUgcFileDetails()
             {
                 // Arrange
@@ -194,14 +191,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var ugcFileDetailsEnvelope = await Client.GetUgcFileDetailsAsync(appId, ugcId);
 
                 // Assert
-                Assert.IsInstanceOfType(ugcFileDetailsEnvelope, typeof(UgcFileDetailsEnvelope));
+                Assert.IsAssignableFrom<UgcFileDetailsEnvelope>(ugcFileDetailsEnvelope);
             }
         }
 
-        [TestClass]
         public class DisposeMethod
         {
-            [TestMethod]
+            [Fact]
             public void DisposesHttpClient()
             {
                 // Arrange
@@ -212,10 +208,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
 
-            [TestMethod]
+            [Fact]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
@@ -227,7 +223,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 client.Dispose();
 
                 // Assert
-                Assert.AreEqual(1, handler.DisposeCount);
+                Assert.Equal(1, handler.DisposeCount);
             }
         }
     }

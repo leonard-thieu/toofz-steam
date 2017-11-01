@@ -2,18 +2,17 @@
 using System.Net;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 {
-    class SteamWebApiTransientErrorDetectionStrategyTests
+    public class SteamWebApiTransientErrorDetectionStrategyTests
     {
-        [TestClass]
         public class CreateRetryPolicyMethod
         {
-            [TestMethod]
+            [Fact]
             public void ReturnsRetryPolicy()
             {
                 // Arrange
@@ -24,10 +23,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var retryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
 
                 // Assert
-                Assert.IsInstanceOfType(retryPolicy, typeof(RetryPolicy<SteamWebApiTransientErrorDetectionStrategy>));
+                Assert.IsAssignableFrom<RetryPolicy<SteamWebApiTransientErrorDetectionStrategy>>(retryPolicy);
             }
 
-            [TestMethod]
+            [Fact]
             public void OnRetrying_LogsDebugMessage()
             {
                 // Arrange
@@ -54,15 +53,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             }
         }
 
-        [TestClass]
+
         public class IsTransientMethod
         {
-            [DataTestMethod]
-            [DataRow(HttpStatusCode.RequestTimeout)]
-            [DataRow(HttpStatusCode.InternalServerError)]
-            [DataRow(HttpStatusCode.BadGateway)]
-            [DataRow(HttpStatusCode.ServiceUnavailable)]
-            [DataRow(HttpStatusCode.GatewayTimeout)]
+            [Theory]
+            [InlineData(HttpStatusCode.RequestTimeout)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            [InlineData(HttpStatusCode.BadGateway)]
+            [InlineData(HttpStatusCode.ServiceUnavailable)]
+            [InlineData(HttpStatusCode.GatewayTimeout)]
             public void ExIsHttpRequestStatusExceptionAndHasTransientStatusCode_ReturnsTrue(HttpStatusCode statusCode)
             {
                 // Arrange
@@ -74,10 +73,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsTrue(isTransient);
+                Assert.True(isTransient);
             }
 
-            [TestMethod]
+            [Fact]
             public void ExIsHttpRequestStatusExceptionAndDoesNotHaveTransientStatusCode_ReturnsFalse()
             {
                 // Arrange
@@ -90,10 +89,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsFalse(isTransient);
+                Assert.False(isTransient);
             }
 
-            [TestMethod]
+            [Fact]
             public void ExIsNotHttpRequestStatusException_ReturnsFalse()
             {
                 // Arrange
@@ -104,7 +103,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 var isTransient = strategy.IsTransient(ex);
 
                 // Assert
-                Assert.IsFalse(isTransient);
+                Assert.False(isTransient);
             }
         }
     }

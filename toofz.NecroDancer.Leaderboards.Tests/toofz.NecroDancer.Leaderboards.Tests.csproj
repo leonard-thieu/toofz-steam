@@ -1,258 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{81D4C7F2-4DEA-4A5F-B818-55FCC25C350A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>toofz.NecroDancer.Leaderboards.Tests</RootNamespace>
-    <AssemblyName>toofz.NecroDancer.Leaderboards.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;NU1701</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.142.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.7.142\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="RichardSzalay.MockHttp, Version=3.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RichardSzalay.MockHttp.3.2.1\lib\net45\RichardSzalay.MockHttp.dll</HintPath>
-    </Reference>
-    <Reference Include="SteamKit2, Version=3.0.1.32, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.SteamKit2.3.0.1\lib\net461\SteamKit2.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.1\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-    </Reference>
-    <Reference Include="toofz.TestsShared, Version=4.1.0.83, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\toofz.TestsShared.4.1.0\lib\net45\toofz.TestsShared.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Moq" Version="4.7.142" />
+    <PackageReference Include="RichardSzalay.MockHttp" Version="3.2.1" />
+    <PackageReference Include="toofz.TestsShared" Version="5.0.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\toofz.NecroDancer.Leaderboards\toofz.NecroDancer.Leaderboards.csproj">
-      <Project>{2b492909-63e4-4f96-898e-802ec5a37b0f}</Project>
-      <Name>toofz.NecroDancer.Leaderboards</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\toofz.NecroDancer.Leaderboards\toofz.NecroDancer.Leaderboards.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\CommunityDataResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CommunityDataResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <Compile Include="Properties\CommunityDataResources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
-      <DependentUpon>CommunityDataResources.resx</DependentUpon>
-    </Compile>
-    <None Include="Resources\Leaderboards.xml" />
-    <None Include="Resources\LeaderboardEntries.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="Resources\BulkStoreDTO.json" />
-    <None Include="Resources\BulkStoreDTOWithoutRowsAffected.json" />
-    <None Include="Resources\HttpError.json" />
-    <None Include="Resources\HttpErrorWithMessage.json" />
-    <None Include="Resources\HttpErrorWithoutMessage.json" />
-    <None Include="Resources\OAuth2BearerToken.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutAccessToken.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutExpires.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutExpiresIn.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutIssued.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutTokenType.json" />
-    <None Include="Resources\OAuth2BearerTokenWithoutUserName.json" />
-    <None Include="Resources\PlayerSummaries.json" />
-    <None Include="Resources\PlayerSummariesEnvelope.json" />
-    <None Include="Resources\PlayerSummariesEnvelopeWithoutResponse.json" />
-    <None Include="Resources\PlayerSummariesWithoutPlayers.json" />
-    <None Include="Resources\PlayerSummary.json" />
-    <None Include="Resources\PlayerSummaryWithoutAvatar.json" />
-    <None Include="Resources\PlayerSummaryWithoutAvatarFull.json" />
-    <None Include="Resources\PlayerSummaryWithoutAvatarMedium.json" />
-    <None Include="Resources\PlayerSummaryWithoutCommunityVisibilityState.json" />
-    <None Include="Resources\PlayerSummaryWithoutLastLogOff.json" />
-    <None Include="Resources\PlayerSummaryWithoutPersonaName.json" />
-    <None Include="Resources\PlayerSummaryWithoutPersonaState.json" />
-    <None Include="Resources\PlayerSummaryWithoutProfileUrl.json" />
-    <None Include="Resources\PlayerSummaryWithoutSteamId.json" />
-    <None Include="Resources\PlayersDTO.json" />
-    <None Include="Resources\PlayersDTOWithoutAvatar.json" />
-    <None Include="Resources\PlayersDTOWithoutDisplayName.json" />
-    <None Include="Resources\PlayersDTOWithoutId.json" />
-    <None Include="Resources\PlayersDTOWithoutUpdatedAt.json" />
-    <None Include="Resources\PlayersEnvelope.json" />
-    <None Include="Resources\PlayersEnvelopeWithoutPlayers.json" />
-    <None Include="Resources\PlayersEnvelopeWithoutTotal.json" />
-    <None Include="Resources\ReplayDTO.json" />
-    <None Include="Resources\ReplayDTOWithoutError.json" />
-    <None Include="Resources\ReplayDTOWithoutId.json" />
-    <None Include="Resources\ReplayDTOWithoutKilledBy.json" />
-    <None Include="Resources\ReplayDTOWithoutSeed.json" />
-    <None Include="Resources\ReplayDTOWithoutVersion.json" />
-    <None Include="Resources\ReplaysEnvelope.json" />
-    <None Include="Resources\ReplaysEnvelopeWithoutReplays.json" />
-    <None Include="Resources\ReplaysEnvelopeWithoutTotal.json" />
-    <None Include="Resources\StarWarsEncoding.json" />
-    <None Include="Resources\UgcFile.dat" />
-    <None Include="Resources\UgcFileDetails.json" />
-    <None Include="Resources\UgcFileDetailsEnvelope.json" />
-    <None Include="Resources\UgcFileDetailsEnvelopeWithoutData.json" />
-    <None Include="Resources\UgcFileDetailsWithoutFileName.json" />
-    <None Include="Resources\UgcFileDetailsWithoutSize.json" />
-    <None Include="Resources\UgcFileDetailsWithoutUrl.json" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Steam\ClientApi\ProgressDebugNetworkListenerTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientAdapterTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiClientTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiExceptionTests.cs" />
-    <Compile Include="Steam\ClientApi\SteamClientApiTransientErrorDetectionStrategyTests.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientErrorDetectionStrategyTests.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataApiTransientFaultHandlerTests.cs" />
-    <Compile Include="Steam\CommunityData\SteamCommunityDataClientTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsEnvelopeTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamRemoteStorage\UgcFileDetailsTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesEnvelopeTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummariesTests.cs" />
-    <Compile Include="Steam\WebApi\ISteamUser\PlayerSummaryTests.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiClientTests.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiTransientErrorDetectionStrategyTests.cs" />
-    <Compile Include="Steam\WebApi\SteamWebApiTransientFaultHandlerTests.cs" />
-    <Compile Include="Steam\UgcHttpClientTests.cs" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="toofz\BulkStoreDTOTests.cs" />
-    <Compile Include="toofz\HttpErrorExceptionTests.cs" />
-    <Compile Include="toofz\OAuth2BearerTokenTests.cs" />
-    <Compile Include="toofz\OAuth2HandlerTests.cs" />
-    <Compile Include="toofz\PlayerDTOTests.cs" />
-    <Compile Include="toofz\PlayersEnvelopeTests.cs" />
-    <Compile Include="toofz\ReplayDTOTests.cs" />
-    <Compile Include="toofz\ReplaysEnvelopeTests.cs" />
-    <Compile Include="toofz\ToofzApiClientTests.cs" />
-    <Compile Include="toofz\ToofzHttpErrorHandlerTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CharacterTests.cs" />
-    <Compile Include="DailyEntryTests.cs" />
-    <Compile Include="DailyLeaderboardTests.cs" />
-    <Compile Include="EntryTests.cs" />
-    <Compile Include="GZipHandlerTests.cs" />
-    <Compile Include="HttpClientExtensionsTests.cs" />
-    <Compile Include="HttpContentExtensionsTests.cs" />
-    <Compile Include="HttpErrorHandlerTests.cs" />
-    <Compile Include="HttpErrorTests.cs" />
-    <Compile Include="HttpRequestMessageExtensionsTests.cs" />
-    <Compile Include="HttpRequestStatusExceptionTests.cs" />
-    <Compile Include="LeaderboardTests.cs" />
-    <Compile Include="LoggingHandlerTests.cs" />
-    <Compile Include="ModeTests.cs" />
-    <Compile Include="PlayerTests.cs" />
-    <Compile Include="ProductTests.cs" />
-    <Compile Include="ProgressReporterHttpClientTests.cs" />
-    <Compile Include="ReplayTests.cs" />
-    <Compile Include="RunTests.cs" />
-    <Compile Include="SimpleHttpMessageHandler.cs" />
-    <Compile Include="TransientFaultHandlerBaseTests.cs" />
-  </ItemGroup>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
-  </Target>
-  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
+
 </Project>

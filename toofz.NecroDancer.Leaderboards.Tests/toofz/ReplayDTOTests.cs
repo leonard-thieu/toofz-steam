@@ -1,81 +1,80 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 {
-    class ReplayDTOTests
+    public class ReplayDTOTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutId_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplayDTOWithoutId;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplayDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutError_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplayDTOWithoutError;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplayDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutSeed_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplayDTOWithoutSeed;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplayDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutVersion_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplayDTOWithoutVersion;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplayDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void WithoutKilledBy_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.ReplayDTOWithoutKilledBy;
 
                 // Act
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<ReplayDTO>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -85,12 +84,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 var replay = JsonConvert.DeserializeObject<ReplayDTO>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(replay, typeof(ReplayDTO));
-                Assert.AreEqual(844845073340377377, replay.Id);
-                Assert.IsNull(replay.Error);
-                Assert.IsNull(replay.Seed);
-                Assert.IsNull(replay.Version);
-                Assert.IsNull(replay.KilledBy);
+                Assert.IsAssignableFrom<ReplayDTO>(replay);
+                Assert.Equal(844845073340377377, replay.Id);
+                Assert.Null(replay.Error);
+                Assert.Null(replay.Seed);
+                Assert.Null(replay.Version);
+                Assert.Null(replay.KilledBy);
             }
         }
     }

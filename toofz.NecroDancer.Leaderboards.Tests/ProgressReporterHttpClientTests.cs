@@ -2,18 +2,17 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class ProgressReporterHttpClientTests
+    public class ProgressReporterHttpClientTests
     {
-        [TestClass]
         public class GetAsyncMethod_String
         {
-            [TestMethod]
+            [Fact]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -24,13 +23,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var cancellationToken = CancellationToken.None;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return httpClient.GetAsync(requestUri, progress, cancellationToken);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReportsContentLength()
             {
                 // Arrange
@@ -59,7 +58,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockProgress.Verify(p => p.Report(24), Times.Once);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -73,14 +72,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await httpClient.GetAsync(requestUri, progress, cancellationToken);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
         }
 
-        [TestClass]
+
         public class GetAsync_Uri
         {
-            [TestMethod]
+            [Fact]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -91,13 +90,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var cancellationToken = CancellationToken.None;
 
                 // Act -> Assert
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(() =>
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
                     return httpClient.GetAsync(requestUri, progress, cancellationToken);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReportsContentLength()
             {
                 // Arrange
@@ -126,7 +125,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 mockProgress.Verify(p => p.Report(24), Times.Once);
             }
 
-            [TestMethod]
+            [Fact]
             public async Task ReturnsResponse()
             {
                 // Arrange
@@ -140,7 +139,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var response = await httpClient.GetAsync(requestUri, progress, cancellationToken);
 
                 // Assert
-                Assert.IsInstanceOfType(response, typeof(HttpResponseMessage));
+                Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
         }
     }

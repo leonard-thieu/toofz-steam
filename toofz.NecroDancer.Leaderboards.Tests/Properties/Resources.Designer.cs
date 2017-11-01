@@ -118,6 +118,51 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+        ///&lt;response&gt;
+        ///  &lt;appID&gt;247080&lt;/appID&gt;
+        ///  &lt;appFriendlyName&gt;247080&lt;/appFriendlyName&gt;
+        ///  &lt;leaderboardID&gt;2047387&lt;/leaderboardID&gt;
+        ///  &lt;totalLeaderboardEntries&gt;317&lt;/totalLeaderboardEntries&gt;
+        ///  &lt;entryStart&gt;0&lt;/entryStart&gt;
+        ///  &lt;entryEnd&gt;317&lt;/entryEnd&gt;
+        ///  &lt;resultCount&gt;317&lt;/resultCount&gt;
+        ///  &lt;entries&gt;
+        ///    &lt;entry&gt;
+        ///      &lt;steamid&gt;76561197998799529&lt;/steamid&gt;
+        ///      &lt;score&gt;134377&lt;/score&gt;
+        ///      &lt;rank&gt;1&lt;/rank&gt;
+        ///      &lt;ugcid&gt;849347241492683863&lt;/ugcid&gt;
+        ///      &lt;details&gt;&lt;![C [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LeaderboardEntries {
+            get {
+                return ResourceManager.GetString("LeaderboardEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+        ///&lt;response&gt;
+        ///  &lt;appID&gt;247080&lt;/appID&gt;
+        ///  &lt;appFriendlyName&gt;247080&lt;/appFriendlyName&gt;
+        ///  &lt;leaderboardCount&gt;411&lt;/leaderboardCount&gt;
+        ///  &lt;leaderboard&gt;
+        ///    &lt;url&gt;http://steamcommunity.com/stats/247080/leaderboards/2047387/?xml=1&lt;/url&gt;
+        ///    &lt;lbid&gt;2047387&lt;/lbid&gt;
+        ///    &lt;name&gt;DLC HARDCORE All Chars DLC_PROD&lt;/name&gt;
+        ///    &lt;display_name&gt;All Characters (DLC) Score (Amplified)&lt;/display_name&gt;
+        ///    &lt;entries&gt;317&lt;/entries&gt;
+        ///    &lt;sortmethod&gt;2&lt;/sortmethod&gt;
+        ///    &lt;displaytype&gt;1&lt;/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Leaderboards {
+            get {
+                return ResourceManager.GetString("Leaderboards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;access_token&quot;: &quot;myAccessToken&quot;,
         ///  &quot;token_type&quot;: &quot;bearer&quot;,
@@ -761,12 +806,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to BROWN DIREBAT%*#%*24\n1\n0\n0\n1\n1\n0\n1\n107608\n2\n1006686362\n1\n512\n337\n170\n0|170|2:2,4:2,6:2,8:2,10:2,12:3,14:3,16:3,18:3,20:3,22:3,24:3,26:2,28:3,30:0,32:3,34:2,36:3,38:3,40:2,42:0,44:2,46:0,48:0,50:0,52:0,54:3,56:3,58:2,60:3,62:2,64:1,66:3,68:3,70:3,72:2,74:2,76:2,78:2,80:0,82:3,84:3,86:0,88:0,90:3,92:3,94:1,96:1,98:1,100:1,102:1,104:1,106:1,108:1,110:1,112:1,114:1,116:1,118:1,120:1,122:2,124:1,126:1,128:2,130:0,132:2,134:0,136:2,138:2,140:2,142:2,144:2,146:2,148:2,150:1,152:2,154:1,156:1,158:1,1 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] UgcFile {
+        internal static string UgcFile {
             get {
-                object obj = ResourceManager.GetObject("UgcFile", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("UgcFile", resourceCulture);
             }
         }
         

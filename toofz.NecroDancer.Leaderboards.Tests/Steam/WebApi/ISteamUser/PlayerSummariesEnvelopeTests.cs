@@ -1,29 +1,28 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
 {
-    class PlayerSummariesEnvelopeTests
+    public class PlayerSummariesEnvelopeTests
     {
-        [TestClass]
         public class Serialization
         {
-            [TestMethod]
+            [Fact]
             public void WithoutResponse_DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayerSummariesEnvelopeWithoutResponse;
 
                 // Act -> Assert
-                Assert.ThrowsException<JsonSerializationException>(() =>
+                Assert.Throws<JsonSerializationException>(() =>
                 {
                     JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
                 });
             }
 
-            [TestMethod]
+            [Fact]
             public void Deserializes()
             {
                 // Arrange
@@ -33,8 +32,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
                 var playerSummariesEnvelope = JsonConvert.DeserializeObject<PlayerSummariesEnvelope>(json);
 
                 // Assert
-                Assert.IsInstanceOfType(playerSummariesEnvelope, typeof(PlayerSummariesEnvelope));
-                Assert.IsInstanceOfType(playerSummariesEnvelope.Response, typeof(PlayerSummaries));
+                Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
+                Assert.IsAssignableFrom<PlayerSummaries>(playerSummariesEnvelope.Response);
             }
         }
     }

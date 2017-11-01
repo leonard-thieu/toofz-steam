@@ -1,57 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
-    internal class DailyLeaderboardTests
+    public class DailyLeaderboardTests
     {
-        [TestClass]
         public class LeaderboardIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyLeaderboard = new DailyLeaderboard { LeaderboardId = 43895 };
 
                 // Act -> Assert
-                Assert.AreEqual(43895, dailyLeaderboard.LeaderboardId);
+                Assert.Equal(43895, dailyLeaderboard.LeaderboardId);
             }
         }
 
-        [TestClass]
         public class EntriesProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetBehavior()
             {
                 // Arrange
                 var dailyLeaderboard = new DailyLeaderboard();
 
                 // Act -> Assert
-                Assert.IsInstanceOfType(dailyLeaderboard.Entries, typeof(List<DailyEntry>));
+                Assert.IsAssignableFrom<List<DailyEntry>>(dailyLeaderboard.Entries);
             }
         }
 
-        [TestClass]
         public class LastUpdateProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyLeaderboard = new DailyLeaderboard { LastUpdate = new DateTime(2017, 8, 28, 16, 27, 58) };
 
                 // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 28, 16, 27, 58), dailyLeaderboard.LastUpdate);
+                Assert.Equal(new DateTime(2017, 8, 28, 16, 27, 58), dailyLeaderboard.LastUpdate);
             }
         }
 
-        [TestClass]
         public class NameProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -63,14 +59,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var name2 = dailyLeaderboard.Name;
 
                 // Assert
-                Assert.AreEqual(name, name2);
+                Assert.Equal(name, name2);
             }
         }
 
-        [TestClass]
         public class DisplayNameProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -82,28 +77,26 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var displayName2 = dailyLeaderboard.DisplayName;
 
                 // Assert
-                Assert.AreEqual(displayName, displayName2);
+                Assert.Equal(displayName, displayName2);
             }
         }
 
-        [TestClass]
         public class IsProductionProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyLeaderboard = new DailyLeaderboard { IsProduction = true };
 
                 // Act -> Assert
-                Assert.IsTrue(dailyLeaderboard.IsProduction);
+                Assert.True(dailyLeaderboard.IsProduction);
             }
         }
 
-        [TestClass]
         public class ProductProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
@@ -114,35 +107,33 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var product2 = dailyLeaderboard.Product;
 
                 // Assert
-                Assert.AreSame(product, product2);
+                Assert.Same(product, product2);
             }
         }
 
-        [TestClass]
         public class ProductIdProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyLeaderboard = new DailyLeaderboard { ProductId = 1 };
 
                 // Act -> Assert
-                Assert.AreEqual(1, dailyLeaderboard.ProductId);
+                Assert.Equal(1, dailyLeaderboard.ProductId);
             }
         }
 
-        [TestClass]
         public class DateProperty
         {
-            [TestMethod]
+            [Fact]
             public void GetSetBehavior()
             {
                 // Arrange -> Act
                 var dailyLeaderboard = new DailyLeaderboard { Date = new DateTime(2017, 8, 28) };
 
                 // Act -> Assert
-                Assert.AreEqual(new DateTime(2017, 8, 28), dailyLeaderboard.Date);
+                Assert.Equal(new DateTime(2017, 8, 28), dailyLeaderboard.Date);
             }
         }
     }
