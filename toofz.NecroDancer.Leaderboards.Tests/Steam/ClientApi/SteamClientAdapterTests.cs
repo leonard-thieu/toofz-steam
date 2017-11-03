@@ -53,7 +53,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class IsLoggedOnProperty
         {
             public IsLoggedOnProperty()
@@ -64,8 +63,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 client = new SteamClientAdapter(steamClient, manager);
             }
 
-            Mock<ISteamClient> mockSteamClient;
-            SteamClientAdapter client;
+            private Mock<ISteamClient> mockSteamClient;
+            private SteamClientAdapter client;
 
             [Fact]
             public void SessionIDIsNull_ReturnsFalse()
@@ -94,7 +93,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class ProgressDebugNetworkListenerProperty
         {
             [Fact]
@@ -115,7 +113,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class GetSteamUserStatsMethod
         {
             [Fact]
@@ -134,7 +131,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class IsConnectedProperty
         {
             public IsConnectedProperty()
@@ -145,8 +141,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 client = new SteamClientAdapter(steamClient, manager);
             }
 
-            Mock<ISteamClient> mockSteamClient;
-            SteamClientAdapter client;
+            private Mock<ISteamClient> mockSteamClient;
+            private SteamClientAdapter client;
 
             [Fact]
             public void IsNotConnected_ReturnsFalse()
@@ -174,7 +170,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 Assert.True(isConnected);
             }
         }
-
 
         public class DisconnectMethod
         {

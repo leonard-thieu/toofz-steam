@@ -35,9 +35,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi.ISteamUser
                 // Assert
                 Assert.IsAssignableFrom<PlayerSummaries>(playerSummaries);
                 var players = playerSummaries.Players.ToList();
-#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
                 Assert.Equal(1, players.Count);
-#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
                 Assert.Collection(players, p => Assert.IsAssignableFrom<PlayerSummary>(p));
             }
         }

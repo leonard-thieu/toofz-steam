@@ -146,7 +146,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             }
 
             [DataContract]
-            class TestDto
+            private class TestDto
             {
                 [DataMember(IsRequired = true)]
                 public string MyProperty { get; set; }

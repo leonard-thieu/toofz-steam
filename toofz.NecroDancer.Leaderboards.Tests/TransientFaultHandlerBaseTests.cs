@@ -2,10 +2,10 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Xunit;
 using Moq;
 using RichardSzalay.MockHttp;
 using toofz.TestsShared;
+using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
 {
@@ -40,6 +40,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 Assert.IsAssignableFrom<TransientFaultHandlerBaseAdapter>(handler);
             }
         }
+
         public class SendAsyncMethod
         {
             [Fact]

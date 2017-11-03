@@ -409,10 +409,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class GetLeaderboardEntriesAsyncMethod
         {
-            const string UserName = "userName";
-            const string Password = "password";
-            const uint AppId = 247080;
-            const int LeaderboardId = 739999;
+            private const string UserName = "userName";
+            private const string Password = "password";
+            private const uint AppId = 247080;
+            private const int LeaderboardId = 739999;
 
             public GetLeaderboardEntriesAsyncMethod()
             {
@@ -437,11 +437,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
             }
 
-            Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
-            Mock<IAsyncJob<ILeaderboardEntriesCallback>> mockLeaderboardEntriesResponse;
-            Mock<ISteamUserStats> mockSteamUserStats;
-            Mock<ISteamClientAdapter> mockSteamClient;
-            SteamClientApiClient steamClientApiClient;
+            private Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
+            private Mock<IAsyncJob<ILeaderboardEntriesCallback>> mockLeaderboardEntriesResponse;
+            private Mock<ISteamUserStats> mockSteamUserStats;
+            private Mock<ISteamClientAdapter> mockSteamClient;
+            private SteamClientApiClient steamClientApiClient;
 
             [Fact]
             public async Task NotConnected_ThrowsInvalidOperationException()

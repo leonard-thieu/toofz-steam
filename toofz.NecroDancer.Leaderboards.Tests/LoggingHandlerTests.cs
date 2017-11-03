@@ -23,7 +23,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 Assert.IsAssignableFrom<LoggingHandler>(handler);
             }
         }
-        
+
         public class SendAsync
         {
             [Fact]

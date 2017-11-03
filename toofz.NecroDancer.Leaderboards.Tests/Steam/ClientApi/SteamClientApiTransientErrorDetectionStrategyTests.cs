@@ -50,8 +50,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLog.Verify(l => l.Debug(It.IsAny<string>()), Times.Once);
             }
         }
-
-
+        
         public class IsTransientMethod
         {
             [Fact]
