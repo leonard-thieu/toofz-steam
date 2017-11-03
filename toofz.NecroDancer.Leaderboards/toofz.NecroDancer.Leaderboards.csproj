@@ -22,9 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling" Version="6.0.1304">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
+    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="1.2.0" />
     <PackageReference Include="Flurl" Version="2.5.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
