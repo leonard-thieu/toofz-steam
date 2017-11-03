@@ -130,8 +130,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             var request = steamClient.GetSteamUserStats().FindLeaderboard(appId, name);
             var response = await ExecuteRequestAsync(request, name, cancellationToken).ConfigureAwait(false);
 
-            // TODO: This should check if ID is not 0.
-            if (response.Result != EResult.OK)
+            if (response.Result != EResult.OK || response.ID == 0)
                 throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.", response.Result);
 
             return response;

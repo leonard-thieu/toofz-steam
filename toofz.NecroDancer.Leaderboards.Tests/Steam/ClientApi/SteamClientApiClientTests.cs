@@ -83,7 +83,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class ProgressGetter
         {
             [Fact]
@@ -120,7 +119,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 Assert.IsAssignableFrom<IProgress<long>>(progress);
             }
         }
-
 
         public class ProgressSetter
         {
@@ -160,7 +158,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class TimeoutProperty
         {
             [Fact]
@@ -195,7 +192,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 Assert.Equal(timeout, timeout2);
             }
         }
-
 
         public class ConnectAndLogOnAsyncMethod
         {
@@ -272,7 +268,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class DisconnectMethod
         {
             [Fact]
@@ -293,13 +288,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-
         public class FindLeaderboardAsyncMethod
         {
-            const string UserName = "userName";
-            const string Password = "password";
-            const uint AppId = 247080;
-            const string LeaderboardName = "Leaderboard Name";
+            private const string UserName = "userName";
+            private const string Password = "password";
+            private const uint AppId = 247080;
+            private const string LeaderboardName = "Leaderboard Name";
 
             public FindLeaderboardAsyncMethod()
             {
@@ -324,11 +318,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
             }
 
-            Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
-            Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>> mockLeaderboardResponse;
-            Mock<ISteamUserStats> mockSteamUserStats;
-            Mock<ISteamClientAdapter> mockSteamClient;
-            SteamClientApiClient steamClientApiClient;
+            private Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
+            private Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>> mockLeaderboardResponse;
+            private Mock<ISteamUserStats> mockSteamUserStats;
+            private Mock<ISteamClientAdapter> mockSteamClient;
+            private SteamClientApiClient steamClientApiClient;
 
             [Fact]
             public async Task NotConnected_ThrowsInvalidOperationException()
@@ -371,10 +365,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [Fact]
+            public async Task IDIsZero_ThrowsSteamClientApiException()
+            {
+                // Arrange
+                mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+                mockLeaderboardCallback.Setup(le => le.ID).Returns(0);
+
+                // Act -> Assert
+                await Assert.ThrowsAsync<SteamClientApiException>(() =>
+                {
+                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                });
+            }
+
+            [Fact]
             public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
             {
                 // Arrange
                 mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+                mockLeaderboardCallback.Setup(le => le.ID).Returns(1);
 
                 // Act
                 var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
@@ -388,6 +397,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             {
                 // Arrange
                 mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
+                mockLeaderboardCallback.Setup(le => le.ID).Returns(1);
 
                 // Act
                 await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
@@ -396,7 +406,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
             }
         }
-
 
         public class GetLeaderboardEntriesAsyncMethod
         {
@@ -500,7 +509,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardEntriesResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
             }
         }
-
 
         public class DisposeMethod
         {
