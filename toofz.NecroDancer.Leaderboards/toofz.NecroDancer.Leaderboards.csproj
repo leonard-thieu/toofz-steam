@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>17.0.1</Version>
+    <Version>17.1.0</Version>
     <Authors>Leonard Thieu</Authors>
     <PackageLicenseUrl>https://github.com/leonard-thieu/toofz-leaderboards-core/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/leonard-thieu/toofz-leaderboards-core</PackageProjectUrl>
