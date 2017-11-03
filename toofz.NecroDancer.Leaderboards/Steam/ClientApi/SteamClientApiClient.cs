@@ -30,21 +30,30 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="userName"/> is null or empty.
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="userName"/> is null.
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// <paramref name="password"/> is null or empty.
+        /// <paramref name="userName"/> is empty.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="password"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="password"/> is empty.
         /// </exception>
         public SteamClientApiClient(string userName, string password) : this(userName, password, CreateSteamClient()) { }
 
         internal SteamClientApiClient(string userName, string password, ISteamClientAdapter steamClient)
         {
-            // TODO: Consider having separate checks for null that throw ArgumentNullException.
-            if (string.IsNullOrEmpty(userName))
-                throw new ArgumentException($"{nameof(userName)} is null or empty.", nameof(userName));
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentException($"{nameof(password)} is null or empty.", nameof(password));
+            if (userName == null)
+                throw new ArgumentNullException(nameof(userName));
+            if (userName == "")
+                throw new ArgumentException($"{nameof(userName)} is empty.", nameof(userName));
+            if (password == null)
+                throw new ArgumentNullException(nameof(password));
+            if (password == "")
+                throw new ArgumentException($"{nameof(password)} is empty.", nameof(password));
 
             this.userName = userName;
             this.password = password;

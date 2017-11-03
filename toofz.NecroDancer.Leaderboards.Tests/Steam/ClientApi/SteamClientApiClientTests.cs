@@ -13,14 +13,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class Constructor
         {
             [Fact]
-            public void UserNameIsNull_ThrowsArgumentException()
+            public void UserNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 string userName = null;
                 string password = "password";
 
                 // Act -> Assert
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
@@ -41,14 +41,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [Fact]
-            public void PasswordIsNull_ThrowsArgumentException()
+            public void PasswordIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
                 string userName = "userName";
                 string password = null;
 
                 // Act -> Assert
-                Assert.Throws<ArgumentException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     new SteamClientApiClient(userName, password);
                 });
