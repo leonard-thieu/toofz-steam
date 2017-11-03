@@ -40,6 +40,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         internal SteamClientApiClient(string userName, string password, ISteamClientAdapter steamClient)
         {
+            // TODO: Consider having separate checks for null that throw ArgumentNullException.
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentException($"{nameof(userName)} is null or empty.", nameof(userName));
             if (string.IsNullOrEmpty(password))
@@ -87,15 +88,21 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             if (!steamClient.IsConnected)
             {
-                await steamClient.ConnectAsync().ConfigureAwait(false);
+                await steamClient
+                    .ConnectAsync()
+                    .TimeoutAfter(Timeout)
+                    .ConfigureAwait(false);
             }
             if (!steamClient.IsLoggedOn)
             {
-                await steamClient.LogOnAsync(new LogOnDetails
-                {
-                    Username = userName,
-                    Password = password,
-                }).ConfigureAwait(false);
+                await steamClient
+                    .LogOnAsync(new LogOnDetails
+                    {
+                        Username = userName,
+                        Password = password,
+                    })
+                    .TimeoutAfter(Timeout)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -120,27 +127,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             string name,
             CancellationToken cancellationToken = default)
         {
-            var leaderboard =
-                await ExecuteRequestAsync(async () =>
-                {
-                    Log.Debug($"Start download {name}");
+            var request = steamClient.GetSteamUserStats().FindLeaderboard(appId, name);
+            var response = await ExecuteRequestAsync(request, name, cancellationToken).ConfigureAwait(false);
 
-                    var asyncJob = steamClient.GetSteamUserStats().FindLeaderboard(appId, name);
-                    asyncJob.Timeout = Timeout;
-                    var result = await asyncJob.ToTask().ConfigureAwait(false);
+            // TODO: This should check if ID is not 0.
+            if (response.Result != EResult.OK)
+                throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.", response.Result);
 
-                    Log.Debug($"End download {name}");
-
-                    return result;
-                }, cancellationToken)
-                .ConfigureAwait(false);
-
-            switch (leaderboard.Result)
-            {
-                case EResult.OK: return leaderboard;
-                default:
-                    throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.", leaderboard.Result);
-            }
+            return response;
         }
 
         /// <summary>
@@ -154,35 +148,27 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             int lbid,
             CancellationToken cancellationToken = default)
         {
-            var leaderboardEntries =
-                await ExecuteRequestAsync(async () =>
-                {
-                    Log.Debug($"Start download {lbid}");
+            var request = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global);
+            var response = await ExecuteRequestAsync(request, lbid.ToString(), cancellationToken).ConfigureAwait(false);
 
-                    var asyncJob = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global);
-                    asyncJob.Timeout = Timeout;
-                    var result = await asyncJob.ToTask().ConfigureAwait(false);
+            if (response.Result != EResult.OK)
+                throw new SteamClientApiException($"Unable to get leaderboard entries for '{lbid}'.", response.Result);
 
-                    Log.Debug($"End download {lbid}");
-
-                    return result;
-                }, cancellationToken)
-                .ConfigureAwait(false);
-
-            switch (leaderboardEntries.Result)
-            {
-                case EResult.OK: return leaderboardEntries;
-                default:
-                    throw new SteamClientApiException($"Unable to retrieve entries for leaderboard '{lbid}'.", leaderboardEntries.Result);
-            }
+            return response;
         }
 
         // TODO: Make this configurable.
         private static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
 
-        private Task<TResult> ExecuteRequestAsync<TResult>(Func<Task<TResult>> taskFunc, CancellationToken cancellationToken)
+        private async Task<TResult> ExecuteRequestAsync<TResult>(
+            IAsyncJob<TResult> request,
+            string requestName,
+            CancellationToken cancellationToken)
+            where TResult : ICallbackMsg
         {
-            return RetryPolicy.ExecuteAsync(async () =>
+            Log.Debug($"Start download {requestName}");
+
+            var response = await RetryPolicy.ExecuteAsync(async () =>
             {
                 await requestSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
                 try
@@ -191,7 +177,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                     try
                     {
-                        return await taskFunc().ConfigureAwait(false);
+                        request.Timeout = Timeout;
+
+                        return await request
+                            .ToTask()
+                            .TimeoutAfter(Timeout) // Used in case SteamKit deadlocks
+                            .ConfigureAwait(false);
                     }
                     catch (TaskCanceledException ex)
                     {
@@ -202,7 +193,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     requestSemaphore.Release();
                 }
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
+
+            Log.Debug($"End download {requestName}");
+
+            return response;
         }
 
         private void EnsureConnectedAndLoggedOn()
