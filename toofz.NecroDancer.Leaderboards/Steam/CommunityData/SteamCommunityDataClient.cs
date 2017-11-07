@@ -12,6 +12,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
         private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
 
+        private static string GetRandomCacheBustingValue()
+        {
+            var guid = Guid.NewGuid();
+
+            return Convert.ToBase64String(guid.ToByteArray());
+        }
+
         public SteamCommunityDataClient(HttpMessageHandler handler)
         {
             http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("http://steamcommunity.com/") };
@@ -43,6 +50,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                 .SetQueryParams(new
                 {
                     xml = 1,
+                    v = GetRandomCacheBustingValue(),
                 });
             var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -87,6 +95,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                     xml = 1,
                     start = @params.StartRange,
                     end = @params.EndRange,
+                    v = GetRandomCacheBustingValue(),
                 });
             var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -102,10 +111,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         public void Dispose()
         {
-            if (!disposed)
-            {
-                http.Dispose();
-            }
+            if (disposed) { return; }
+
+            http.Dispose();
 
             disposed = true;
         }
