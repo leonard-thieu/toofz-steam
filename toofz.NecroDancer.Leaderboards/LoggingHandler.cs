@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -29,11 +30,14 @@ namespace toofz.NecroDancer.Leaderboards
         /// <returns>
         /// Returns <see cref="Task{TResult}"/>. The task object representing the asynchronous operation.
         /// </returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="request"/> is null.
         /// </exception>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
             log.Debug($"Start download {request.RequestUri}");
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             log.Debug($"End download {response.RequestMessage.RequestUri}");
