@@ -11,7 +11,22 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
         /// </summary>
         IProgress<long> Progress { get; set; }
+        /// <summary>
+        /// Gets or sets the period of time before jobs will be considered timed out and will be canceled.
+        /// </summary>
+        TimeSpan Timeout { get; set; }
 
+        /// <summary>
+        /// Connects and logs on to Steam.
+        /// </summary>
+        /// <returns>
+        /// The task representing connecting and logging on to Steam.
+        /// </returns>
+        Task ConnectAndLogOnAsync();
+        /// <summary>
+        /// Disconnects from Steam.
+        /// </summary>
+        void Disconnect();
         /// <summary>
         /// Gets leaderboard entries for the specified AppID and leaderboard ID.
         /// </summary>

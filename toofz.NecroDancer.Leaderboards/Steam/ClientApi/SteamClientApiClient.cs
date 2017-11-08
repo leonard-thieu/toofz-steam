@@ -93,6 +93,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         #region Connection
 
+        /// <summary>
+        /// Connects and logs on to Steam.
+        /// </summary>
+        /// <returns>
+        /// The task representing connecting and logging on to Steam.
+        /// </returns>
         public async Task ConnectAndLogOnAsync()
         {
             if (!steamClient.IsConnected)
