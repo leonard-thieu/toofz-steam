@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using SteamKit2;
 using static SteamKit2.SteamUser;
@@ -15,6 +19,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
         private static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+
+        private static readonly TelemetryClient TelemetryClient = new TelemetryClient();
 
         private static ISteamClientAdapter CreateSteamClient()
         {
@@ -177,41 +183,81 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private async Task<TResult> ExecuteRequestAsync<TResult>(
             IAsyncJob<TResult> request,
             string requestName,
+            CancellationToken cancellationToken,
+            [CallerMemberName] string memberName = "")
+            where TResult : ICallbackMsg
+        {
+            using (var operation = TelemetryClient.StartOperation<DependencyTelemetry>(memberName))
+            {
+                operation.Telemetry.Type = "Steam3";
+                operation.Telemetry.Data = requestName;
+                Log.Debug($"Start download {requestName}");
+
+                try
+                {
+                    var response = await RetryPolicy
+                        .ExecuteAsync(() => ExecuteRequestAsync(request, cancellationToken), cancellationToken)
+                        .ConfigureAwait(false);
+
+                    Log.Debug($"End download {requestName}");
+                    operation.Telemetry.Success = true;
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    TelemetryClient.TrackException(ex);
+                    operation.Telemetry.Success = false;
+                    throw;
+                }
+            }
+        }
+
+        private async Task<TResult> ExecuteRequestAsync<TResult>(
+            IAsyncJob<TResult> request,
             CancellationToken cancellationToken)
             where TResult : ICallbackMsg
         {
-            Log.Debug($"Start download {requestName}");
-
-            var response = await RetryPolicy.ExecuteAsync(async () =>
+            await requestSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+            try
             {
-                await requestSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+                EnsureConnectedAndLoggedOn();
+
+                var telemetry = new DependencyTelemetry();
+                var timer = Stopwatch.StartNew();
                 try
                 {
-                    EnsureConnectedAndLoggedOn();
+                    request.Timeout = Timeout;
 
-                    try
-                    {
-                        request.Timeout = Timeout;
+                    telemetry.Type = "Steam3";
+                    telemetry.Timestamp = DateTimeOffset.UtcNow;
 
-                        return await request
-                            .ToTask()
-                            .TimeoutAfter(Timeout) // Used in case SteamKit deadlocks
-                            .ConfigureAwait(false);
-                    }
-                    catch (TaskCanceledException ex)
-                    {
-                        throw new SteamClientApiException("Request timed out.", ex);
-                    }
+                    var response = await request
+                        .ToTask()
+                        .TimeoutAfter(Timeout) // Used in case SteamKit deadlocks
+                        .ConfigureAwait(false);
+
+                    telemetry.Success = true;
+
+                    return response;
+                }
+                catch (TaskCanceledException ex)
+                {
+                    telemetry.Success = false;
+
+                    throw new SteamClientApiException("Request timed out.", ex);
                 }
                 finally
                 {
-                    requestSemaphore.Release();
+                    timer.Stop();
+                    telemetry.Duration = timer.Elapsed;
+                    TelemetryClient.TrackDependency(telemetry);
                 }
-            }, cancellationToken).ConfigureAwait(false);
-
-            Log.Debug($"End download {requestName}");
-
-            return response;
+            }
+            finally
+            {
+                requestSemaphore.Release();
+            }
         }
 
         private void EnsureConnectedAndLoggedOn()
