@@ -117,10 +117,9 @@ namespace toofz.NecroDancer.Leaderboards.toofz
 
         public void Dispose()
         {
-            if (!disposed)
-            {
-                http.Dispose();
-            }
+            if (disposed) { return; }
+
+            http.Dispose();
 
             disposed = true;
         }

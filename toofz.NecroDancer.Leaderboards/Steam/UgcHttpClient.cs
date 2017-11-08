@@ -34,10 +34,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam
 
         public void Dispose()
         {
-            if (!disposed)
-            {
-                http.Dispose();
-            }
+            if (disposed) { return; }
+
+            http.Dispose();
 
             disposed = true;
         }

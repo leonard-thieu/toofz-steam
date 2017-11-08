@@ -136,10 +136,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
         public void Dispose()
         {
-            if (!disposed)
-            {
-                http.Dispose();
-            }
+            if (disposed) { return; }
+
+            http.Dispose();
 
             disposed = true;
         }
