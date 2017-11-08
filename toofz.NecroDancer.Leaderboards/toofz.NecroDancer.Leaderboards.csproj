@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageVersion>17.2.0</PackageVersion>
+    <PackageVersion>18.0.0</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Leaderboards Core</Title>
     <Description>Provides types for working with Crypt of the NecroDancer leaderboards.</Description>
