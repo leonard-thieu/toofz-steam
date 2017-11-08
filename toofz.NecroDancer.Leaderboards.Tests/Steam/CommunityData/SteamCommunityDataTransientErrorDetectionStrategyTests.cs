@@ -5,7 +5,7 @@ using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 {
-    public class SteamCommunityDataApiTransientErrorDetectionStrategyTests
+    public class SteamCommunityDataTransientErrorDetectionStrategyTests
     {
         public class Constructor
         {
@@ -13,10 +13,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ReturnsInstance()
             {
                 // Arrange -> Act
-                var strategy = new SteamCommunityDataApiTransientErrorDetectionStrategy();
+                var strategy = new SteamCommunityDataTransientErrorDetectionStrategy();
 
                 // Assert
-                Assert.IsAssignableFrom<SteamCommunityDataApiTransientErrorDetectionStrategy>(strategy);
+                Assert.IsAssignableFrom<SteamCommunityDataTransientErrorDetectionStrategy>(strategy);
             }
         }
 
@@ -26,7 +26,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ExIsNotHttpRequestStatusException_ReturnsFalse()
             {
                 // Arrange
-                var strategy = new SteamCommunityDataApiTransientErrorDetectionStrategy();
+                var strategy = new SteamCommunityDataTransientErrorDetectionStrategy();
                 var ex = new Exception();
 
                 // Act
@@ -46,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ExIsHttpRequestStatusExceptionAndStatusCodeIsTransient_ReturnsTrue(HttpStatusCode statusCode)
             {
                 // Arrange
-                var strategy = new SteamCommunityDataApiTransientErrorDetectionStrategy();
+                var strategy = new SteamCommunityDataTransientErrorDetectionStrategy();
                 var ex = new HttpRequestStatusException(statusCode, new Uri("http://localhost/"));
 
                 // Act
@@ -60,7 +60,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
-                var strategy = new SteamCommunityDataApiTransientErrorDetectionStrategy();
+                var strategy = new SteamCommunityDataTransientErrorDetectionStrategy();
                 var ex = new HttpRequestStatusException(HttpStatusCode.NotFound, new Uri("http://localhost/"));
 
                 // Act

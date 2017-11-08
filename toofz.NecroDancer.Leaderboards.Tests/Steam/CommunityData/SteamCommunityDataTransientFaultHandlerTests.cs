@@ -3,7 +3,7 @@ using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
 {
-    public class SteamCommunityDataApiTransientFaultHandlerTests
+    public class SteamCommunityDataTransientFaultHandlerTests
     {
         public class Constructor
         {
@@ -11,10 +11,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void ReturnsInstance()
             {
                 // Arrange -> Act
-                var handler = new SteamCommunityDataApiTransientFaultHandler();
+                var handler = new SteamCommunityDataTransientFaultHandler();
 
                 // Assert
-                Assert.IsAssignableFrom<SteamCommunityDataApiTransientFaultHandler>(handler);
+                Assert.IsAssignableFrom<SteamCommunityDataTransientFaultHandler>(handler);
             }
         }
     }

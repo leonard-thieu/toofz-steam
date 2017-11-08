@@ -5,13 +5,13 @@ using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
-    internal sealed class SteamCommunityDataApiTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
+    internal sealed class SteamCommunityDataTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy
     {
         #region Static Members
 
-        public static RetryPolicy<SteamCommunityDataApiTransientErrorDetectionStrategy> CreateRetryPolicy(RetryStrategy retryStrategy, ILog log)
+        public static RetryPolicy<SteamCommunityDataTransientErrorDetectionStrategy> CreateRetryPolicy(RetryStrategy retryStrategy, ILog log)
         {
-            var retryPolicy = new RetryPolicy<SteamCommunityDataApiTransientErrorDetectionStrategy>(retryStrategy);
+            var retryPolicy = new RetryPolicy<SteamCommunityDataTransientErrorDetectionStrategy>(retryStrategy);
             retryPolicy.Retrying += (s, e) =>
             {
                 log.Debug($"{e.LastException.Message} Retrying ({e.CurrentRetryCount}) in {e.Delay}...");
