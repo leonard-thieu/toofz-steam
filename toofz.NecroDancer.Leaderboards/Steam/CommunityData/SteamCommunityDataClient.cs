@@ -12,19 +12,31 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
         private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
 
-        private static string GetRandomCacheBustingValue()
-        {
-            var guid = Guid.NewGuid();
+        /// <summary>
+        /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler.
+        /// </summary>
+        /// <param name="handler">
+        /// The HTTP handler stack to use for sending requests.
+        /// </param>
+        public SteamCommunityDataClient(HttpMessageHandler handler) : this(handler, new SteamCommunityDataClientSettings()) { }
 
-            return Convert.ToBase64String(guid.ToByteArray());
-        }
-
-        public SteamCommunityDataClient(HttpMessageHandler handler)
+        /// <summary>
+        /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler and settings.
+        /// </summary>
+        /// <param name="handler">
+        /// The HTTP handler stack to use for sending requests.
+        /// </param>
+        /// <param name="settings">
+        /// The settings to apply to <see cref="SteamCommunityDataClient"/>.
+        /// </param>
+        public SteamCommunityDataClient(HttpMessageHandler handler, SteamCommunityDataClientSettings settings)
         {
             http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("http://steamcommunity.com/") };
+            isCacheBustingEnabled = settings.IsCacheBustingEnabled;
         }
 
         private readonly ProgressReporterHttpClient http;
+        private readonly bool isCacheBustingEnabled;
 
         #region GetLeaderboards
 
@@ -105,10 +117,31 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         #endregion
 
+        #region GetRandomCacheBustingValue
+
+        private static readonly char[] Base64Padding = { '=' };
+
+        private string GetRandomCacheBustingValue()
+        {
+            if (!isCacheBustingEnabled) { return null; }
+
+            var guid = Guid.NewGuid();
+
+            return Convert.ToBase64String(guid.ToByteArray())
+                .TrimEnd(Base64Padding)
+                .Replace('+', '-')
+                .Replace('/', '_');
+        }
+
+        #endregion
+
         #region IDisposable Implementation
 
         private bool disposed;
 
+        /// <summary>
+        /// Disposes of resources used by <see cref="SteamCommunityDataClient"/>.
+        /// </summary>
         public void Dispose()
         {
             if (disposed) { return; }
