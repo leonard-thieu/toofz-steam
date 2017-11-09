@@ -25,7 +25,15 @@ namespace toofz.NecroDancer.Leaderboards
             if (timeout == TimeSpan.Zero)
             {
                 // We've already timed out.
-                tcs.SetException(new TimeoutException());
+                // Throw so we get a stack trace
+                try
+                {
+                    throw new TimeoutException();
+                }
+                catch (TimeoutException ex)
+                {
+                    tcs.SetException(ex);
+                }
                 return tcs.Task;
             }
 
@@ -36,7 +44,15 @@ namespace toofz.NecroDancer.Leaderboards
                 var myTcs = (TaskCompletionSource<TResult>)state;
 
                 // Fault our proxy with a TimeoutException
-                myTcs.TrySetException(new TimeoutException());
+                // Throw so we get a stack trace
+                try
+                {
+                    throw new TimeoutException();
+                }
+                catch (TimeoutException ex)
+                {
+                    myTcs.TrySetException(ex);
+                }
             }, tcs, timeout, Timeout.InfiniteTimeSpan);
 
             // Wire up the logic for what happens when source task completes
