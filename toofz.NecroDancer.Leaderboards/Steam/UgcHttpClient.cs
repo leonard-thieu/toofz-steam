@@ -2,14 +2,23 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 
 namespace toofz.NecroDancer.Leaderboards.Steam
 {
     public sealed class UgcHttpClient : IUgcHttpClient
     {
-        public UgcHttpClient(HttpMessageHandler handler)
+        /// <summary>
+        /// Initializes an instance of the <see cref="UgcHttpClient"/> class.
+        /// </summary>
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public UgcHttpClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler);
+            http = new ProgressReporterHttpClient(handler, true, telemetryClient);
         }
 
         private readonly ProgressReporterHttpClient http;

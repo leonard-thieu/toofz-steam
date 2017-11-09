@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using log4net;
+using Microsoft.ApplicationInsights;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
@@ -17,12 +18,16 @@ namespace toofz.NecroDancer.Leaderboards.toofz
         /// </summary>
         /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
         /// <param name="disposeHandler">
-        /// true if the inner handler should be disposed of by Dispose(); false if you intend 
-        /// to reuse the inner handler.
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
         /// </param>
-        public ToofzApiClient(HttpMessageHandler handler, bool disposeHandler)
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public ToofzApiClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, disposeHandler);
+            http = new ProgressReporterHttpClient(handler, disposeHandler, telemetryClient);
         }
 
         private readonly ProgressReporterHttpClient http;

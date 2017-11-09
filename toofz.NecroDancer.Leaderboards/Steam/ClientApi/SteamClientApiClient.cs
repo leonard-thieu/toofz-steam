@@ -20,8 +20,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
         private static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
 
-        private static readonly TelemetryClient TelemetryClient = new TelemetryClient();
-
         private static ISteamClientAdapter CreateSteamClient()
         {
             var steamClient = new SteamClient { DebugNetworkListener = new ProgressDebugNetworkListener() };
@@ -36,6 +34,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="userName"/> is null.
         /// </exception>
@@ -48,9 +47,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// <paramref name="password"/> is empty.
         /// </exception>
-        public SteamClientApiClient(string userName, string password) : this(userName, password, CreateSteamClient()) { }
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient) : this(userName, password, telemetryClient, CreateSteamClient()) { }
 
-        internal SteamClientApiClient(string userName, string password, ISteamClientAdapter steamClient)
+        internal SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, ISteamClientAdapter steamClient)
         {
             if (userName == null)
                 throw new ArgumentNullException(nameof(userName));
@@ -63,11 +65,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             this.userName = userName;
             this.password = password;
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
             this.steamClient = steamClient;
         }
 
         private readonly string userName;
         private readonly string password;
+        private readonly TelemetryClient telemetryClient;
         private readonly ISteamClientAdapter steamClient;
 
         /// <summary>
@@ -187,7 +191,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             [CallerMemberName] string memberName = "")
             where TResult : ICallbackMsg
         {
-            using (var operation = TelemetryClient.StartOperation<DependencyTelemetry>(memberName))
+            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(memberName))
             {
                 operation.Telemetry.Type = "Steam3";
                 operation.Telemetry.Data = requestName;
@@ -206,7 +210,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 }
                 catch (Exception ex)
                 {
-                    TelemetryClient.TrackException(ex);
+                    telemetryClient.TrackException(ex);
                     operation.Telemetry.Success = false;
                     throw;
                 }
@@ -251,7 +255,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     timer.Stop();
                     telemetry.Duration = timer.Elapsed;
-                    TelemetryClient.TrackDependency(telemetry);
+                    telemetryClient.TrackDependency(telemetry);
                 }
             }
             finally

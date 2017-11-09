@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Flurl;
+using Microsoft.ApplicationInsights;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
@@ -15,23 +16,25 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler.
         /// </summary>
-        /// <param name="handler">
-        /// The HTTP handler stack to use for sending requests.
-        /// </param>
-        public SteamCommunityDataClient(HttpMessageHandler handler) : this(handler, new SteamCommunityDataClientSettings()) { }
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, telemetryClient, new SteamCommunityDataClientSettings()) { }
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler and settings.
         /// </summary>
-        /// <param name="handler">
-        /// The HTTP handler stack to use for sending requests.
-        /// </param>
-        /// <param name="settings">
-        /// The settings to apply to <see cref="SteamCommunityDataClient"/>.
-        /// </param>
-        public SteamCommunityDataClient(HttpMessageHandler handler, SteamCommunityDataClientSettings settings)
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <param name="settings">The settings to apply to <see cref="SteamCommunityDataClient"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient, SteamCommunityDataClientSettings settings)
         {
-            http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("http://steamcommunity.com/") };
+            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
             isCacheBustingEnabled = settings.IsCacheBustingEnabled;
         }
 

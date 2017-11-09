@@ -10,11 +10,24 @@ namespace toofz.NecroDancer.Leaderboards
 {
     internal sealed class ProgressReporterHttpClient : HttpClient
     {
-        private static readonly TelemetryClient TelemetryClient = new TelemetryClient();
+        /// <summary>
+        /// Initializes an instance of the <see cref="ProgressReporterHttpClient"/> class.
+        /// </summary>
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
+        /// </param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public ProgressReporterHttpClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient) : base(handler, disposeHandler)
+        {
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+        }
 
-        public ProgressReporterHttpClient(HttpMessageHandler handler) : base(handler) { }
-
-        public ProgressReporterHttpClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler) { }
+        private readonly TelemetryClient telemetryClient;
 
         public async Task<HttpResponseMessage> GetAsync(
             string requestUri,
@@ -25,7 +38,7 @@ namespace toofz.NecroDancer.Leaderboards
             if (requestUri == null)
                 throw new ArgumentNullException(nameof(requestUri));
 
-            using (var operation = TelemetryClient.StartOperation<DependencyTelemetry>(memberName))
+            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(memberName))
             {
                 operation.Telemetry.Type = "Http";
                 operation.Telemetry.Data = requestUri;
@@ -41,7 +54,7 @@ namespace toofz.NecroDancer.Leaderboards
                 }
                 catch (Exception ex)
                 {
-                    TelemetryClient.TrackException(ex);
+                    telemetryClient.TrackException(ex);
                     operation.Telemetry.Success = false;
                     throw;
                 }

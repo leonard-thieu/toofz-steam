@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using log4net;
+using Microsoft.ApplicationInsights;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
@@ -18,12 +19,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.
         /// </summary>
-        /// <param name="handler">
-        /// The HTTP handler stack to use for sending requests.
-        /// </param>
-        public SteamWebApiClient(HttpMessageHandler handler)
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamWebApiClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler) { BaseAddress = new Uri("https://api.steampowered.com/") };
+            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("https://api.steampowered.com/") };
         }
 
         private readonly ProgressReporterHttpClient http;

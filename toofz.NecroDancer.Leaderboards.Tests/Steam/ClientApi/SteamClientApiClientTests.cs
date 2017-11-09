@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
@@ -10,19 +11,22 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
     public class SteamClientApiClientTests
     {
-        public class Constructor
+        private string userName = "myUserName";
+        private string password = "myPassword";
+        private TelemetryClient telemetryClient = new TelemetryClient();
+
+        public class Constructor : SteamClientApiClientTests
         {
             [Fact]
             public void UserNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                string userName = null;
-                string password = "password";
+                userName = null;
 
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password);
+                    new SteamClientApiClient(userName, password, telemetryClient);
                 });
             }
 
@@ -30,13 +34,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void UserNameIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
-                string userName = "";
-                string password = "password";
+                userName = "";
 
                 // Act -> Assert
                 Assert.Throws<ArgumentException>(() =>
                 {
-                    new SteamClientApiClient(userName, password);
+                    new SteamClientApiClient(userName, password, telemetryClient);
                 });
             }
 
@@ -44,13 +47,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void PasswordIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                string userName = "userName";
-                string password = null;
+                password = null;
 
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password);
+                    new SteamClientApiClient(userName, password, telemetryClient);
                 });
             }
 
@@ -58,40 +60,33 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void PasswordIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "";
+                password = "";
 
                 // Act -> Assert
                 Assert.Throws<ArgumentException>(() =>
                 {
-                    new SteamClientApiClient(userName, password);
+                    new SteamClientApiClient(userName, password, telemetryClient);
                 });
             }
 
             [Fact]
             public void ReturnsInstance()
             {
-                // Arrange
-                string userName = "userName";
-                string password = "password";
-
-                // Act
-                var client = new SteamClientApiClient(userName, password);
+                // Arrange -> Act
+                var client = new SteamClientApiClient(userName, password, telemetryClient);
 
                 // Assert
                 Assert.IsAssignableFrom<SteamClientApiClient>(client);
             }
         }
 
-        public class ProgressGetter
+        public class ProgressGetter : SteamClientApiClientTests
         {
             [Fact]
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
-                var client = new SteamClientApiClient(userName, password);
+                var client = new SteamClientApiClient(userName, password, telemetryClient);
                 client.Dispose();
 
                 // Act -> Assert
@@ -105,12 +100,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ReturnsProgress()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() });
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 var progress = client.Progress;
@@ -120,15 +113,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class ProgressSetter
+        public class ProgressSetter : SteamClientApiClientTests
         {
             [Fact]
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
-                var client = new SteamClientApiClient(userName, password);
+                var client = new SteamClientApiClient(userName, password, telemetryClient);
                 client.Dispose();
 
                 // Act -> Assert
@@ -142,12 +133,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void SetsProgress()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener());
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
                 var progress = Mock.Of<IProgress<long>>();
 
                 // Act
@@ -158,15 +147,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class TimeoutProperty
+        public class TimeoutProperty : SteamClientApiClientTests
         {
             [Fact]
             public void ReturnsDefault()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
-                var client = new SteamClientApiClient(userName, password);
+                var client = new SteamClientApiClient(userName, password, telemetryClient);
 
                 // Act
                 var timeout = client.Timeout;
@@ -179,9 +166,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void GetSetBehavior()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
-                var client = new SteamClientApiClient(userName, password);
+                var client = new SteamClientApiClient(userName, password, telemetryClient);
                 var timeout = TimeSpan.FromSeconds(1);
 
                 // Act
@@ -193,18 +178,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class ConnectAndLogOnAsyncMethod
+        public class ConnectAndLogOnAsyncMethod : SteamClientApiClientTests
         {
             [Fact]
             public async Task NotConnectedToSteam_ConnectsToSteam()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -217,12 +200,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task ConnectedToSteam_DoesNotConnectToSteam()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -235,12 +216,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task NotLoggedOnToSteam_LogsOnToSteam()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -253,12 +232,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public async Task LoggedOnToSteam_DoesNotLogOnToSteam()
             {
                 // Arrange
-                var userName = "myUserName";
-                var password = "myPassword";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -268,17 +245,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class DisconnectMethod
+        public class DisconnectMethod : SteamClientApiClientTests
         {
             [Fact]
             public void DisconnectsFromSteam()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 client.Disconnect();
@@ -288,10 +263,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class FindLeaderboardAsyncMethod
+        public class FindLeaderboardAsyncMethod : SteamClientApiClientTests
         {
-            private const string UserName = "userName";
-            private const string Password = "password";
             private const uint AppId = 247080;
             private const string LeaderboardName = "Leaderboard Name";
 
@@ -315,7 +288,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
                 var steamClient = mockSteamClient.Object;
 
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
+                steamClientApiClient = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
             }
 
             private Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
@@ -407,10 +380,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class GetLeaderboardEntriesAsyncMethod
+        public class GetLeaderboardEntriesAsyncMethod : SteamClientApiClientTests
         {
-            private const string UserName = "userName";
-            private const string Password = "password";
             private const uint AppId = 247080;
             private const int LeaderboardId = 739999;
 
@@ -434,7 +405,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
                 var steamClient = mockSteamClient.Object;
 
-                steamClientApiClient = new SteamClientApiClient(UserName, Password, steamClient);
+                steamClientApiClient = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
             }
 
             private Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
@@ -510,17 +481,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class DisposeMethod
+        public class DisposeMethod : SteamClientApiClientTests
         {
             [Fact]
             public void DisposesSteamClient()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 client.Dispose();
@@ -533,11 +502,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void DisposeMoreThanOnce_DoesNothing()
             {
                 // Arrange
-                string userName = "userName";
-                string password = "password";
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, steamClient);
+                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient);
 
                 // Act
                 client.Dispose();

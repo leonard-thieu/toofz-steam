@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Moq;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -10,14 +11,21 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 {
     public class ProgressReporterHttpClientTests
     {
-        public class GetAsyncMethod_String
+        public ProgressReporterHttpClientTests()
+        {
+            httpClient = new ProgressReporterHttpClient(handler, true, telemetryClient);
+        }
+
+        private MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private TelemetryClient telemetryClient = new TelemetryClient();
+        private ProgressReporterHttpClient httpClient;
+
+        public class GetAsyncMethod_String : ProgressReporterHttpClientTests
         {
             [Fact]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                var httpClient = new ProgressReporterHttpClient(handler);
                 string requestUri = null;
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;
@@ -33,7 +41,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReportsContentLength()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
                 handler
                     .When("*")
                     .Respond(() =>
@@ -45,7 +52,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                         return Task.FromResult(response);
                     });
-                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = "http://example.org/";
                 var mockProgress = new Mock<IProgress<long>>();
                 var progress = mockProgress.Object;
@@ -62,8 +68,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsResponse()
             {
                 // Arrange
-                var handler = new MockHttpMessageHandler();
-                var httpClient = new ProgressReporterHttpClient(handler);
                 var requestUri = "http://example.org/";
                 IProgress<long> progress = null;
                 var cancellationToken = CancellationToken.None;

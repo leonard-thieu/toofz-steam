@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
@@ -12,11 +13,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
     {
         public UgcHttpClientTests()
         {
-            Client = new UgcHttpClient(Handler);
+            client = new UgcHttpClient(handler, telemetryClient);
         }
 
-        public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
-        public UgcHttpClient Client { get; set; }
+        private MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private TelemetryClient telemetryClient = new TelemetryClient();
+        public UgcHttpClient client { get; set; }
 
         public class Constructor
         {
@@ -25,9 +27,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
+                var telemetryClient = new TelemetryClient();
 
                 // Act
-                var client = new UgcHttpClient(handler);
+                var client = new UgcHttpClient(handler, telemetryClient);
 
                 // Assert
                 Assert.IsAssignableFrom<UgcHttpClient>(client);
@@ -40,13 +43,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
                 var requestUri = "http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/";
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.GetUgcFileAsync(requestUri);
+                    return client.GetUgcFileAsync(requestUri);
                 });
             }
 
@@ -59,7 +62,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
                 // Act -> Assert
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
-                    return Client.GetUgcFileAsync(requestUri);
+                    return client.GetUgcFileAsync(requestUri);
                 });
             }
 
@@ -67,13 +70,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             public async Task ReturnsUgcFile()
             {
                 // Arrange
-                Handler
+                handler
                     .When(HttpMethod.Get, "http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/")
                     .Respond(new StringContent(Resources.UgcFile));
                 var requestUri = "http://cloud-3.steamusercontent.com/ugc/22837952671856412/756063F4E07B686916257652BBEB972C3C9E6F8D/";
 
                 // Act
-                var ugcFile = await Client.GetUgcFileAsync(requestUri);
+                var ugcFile = await client.GetUgcFileAsync(requestUri);
 
                 // Assert
                 Assert.IsAssignableFrom<byte[]>(ugcFile);
@@ -82,12 +85,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
 
         public class DisposeMethod
         {
+            private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
+            private TelemetryClient telemetryClient = new TelemetryClient();
+
             [Fact]
             public void DisposesHttpClient()
             {
                 // Arrange
-                var handler = new SimpleHttpMessageHandler();
-                var client = new UgcHttpClient(handler);
+                var client = new UgcHttpClient(handler, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -100,8 +105,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
-                var handler = new SimpleHttpMessageHandler();
-                var client = new UgcHttpClient(handler);
+                var client = new UgcHttpClient(handler, telemetryClient);
 
                 // Act
                 client.Dispose();

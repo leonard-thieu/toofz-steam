@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using toofz.NecroDancer.Leaderboards.toofz;
@@ -13,11 +14,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
     {
         public ToofzApiClientTests()
         {
-            Client = new ToofzApiClient(Handler, false) { BaseAddress = new Uri("http://example.org/") };
+            client = new ToofzApiClient(handler, false, telemetryClient) { BaseAddress = new Uri("http://example.org/") };
         }
 
-        public MockHttpMessageHandler Handler { get; set; } = new MockHttpMessageHandler();
-        public ToofzApiClient Client { get; set; }
+        private MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private TelemetryClient telemetryClient = new TelemetryClient();
+        private ToofzApiClient client;
 
         public class Constructor
         {
@@ -26,9 +28,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
+                var telemetryClient = new TelemetryClient();
 
                 // Act
-                var client = new ToofzApiClient(handler, false);
+                var client = new ToofzApiClient(handler, false, telemetryClient);
 
                 // Assert
                 Assert.IsAssignableFrom<ToofzApiClient>(client);
@@ -41,12 +44,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.GetPlayersAsync();
+                    return client.GetPlayersAsync();
                 });
             }
 
@@ -54,10 +57,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
-                Handler.When("http://example.org/players").Respond("application/json", Resources.PlayersEnvelope);
+                handler.When("http://example.org/players").Respond("application/json", Resources.PlayersEnvelope);
 
                 // Act
-                var response = await Client.GetPlayersAsync();
+                var response = await client.GetPlayersAsync();
 
                 // Assert
                 Assert.Equal(453681, response.Total);
@@ -76,7 +79,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
                 var @params = new GetPlayersParams
                 {
                     Limit = 20,
@@ -86,7 +89,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.GetPlayersAsync(@params);
+                    return client.GetPlayersAsync(@params);
                 });
             }
 
@@ -94,7 +97,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsPlayersEnvelope()
             {
                 // Arrange
-                Handler.When("http://example.org/players?limit=20&sort=updated_at").Respond("application/json", Resources.PlayersEnvelope);
+                handler.When("http://example.org/players?limit=20&sort=updated_at").Respond("application/json", Resources.PlayersEnvelope);
                 var @params = new GetPlayersParams
                 {
                     Limit = 20,
@@ -102,7 +105,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act
-                var response = await Client.GetPlayersAsync(@params);
+                var response = await client.GetPlayersAsync(@params);
 
                 // Assert
                 Assert.Equal(453681, response.Total);
@@ -121,7 +124,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
                 var players = new List<Player>
                 {
                     new Player
@@ -134,7 +137,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.PostPlayersAsync(players);
+                    return client.PostPlayersAsync(players);
                 });
             }
 
@@ -147,7 +150,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
-                    return Client.PostPlayersAsync(players);
+                    return client.PostPlayersAsync(players);
                 });
             }
 
@@ -155,7 +158,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
-                Handler.When("http://example.org/players").Respond("application/json", Resources.BulkStoreDTO);
+                handler.When("http://example.org/players").Respond("application/json", Resources.BulkStoreDTO);
                 var players = new List<Player>
                 {
                     new Player
@@ -166,7 +169,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 };
 
                 // Act
-                var bulkStore = await Client.PostPlayersAsync(players);
+                var bulkStore = await client.PostPlayersAsync(players);
 
                 // Assert
                 Assert.Equal(10, bulkStore.RowsAffected);
@@ -179,12 +182,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.GetReplaysAsync();
+                    return client.GetReplaysAsync();
                 });
             }
 
@@ -192,10 +195,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
-                Handler.When("http://example.org/replays").Respond("application/json", Resources.ReplaysEnvelope);
+                handler.When("http://example.org/replays").Respond("application/json", Resources.ReplaysEnvelope);
 
                 // Act
-                var response = await Client.GetReplaysAsync();
+                var response = await client.GetReplaysAsync();
 
                 // Assert
                 Assert.Equal(43767, response.Total);
@@ -211,7 +214,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
                 var @params = new GetReplaysParams
                 {
                     Limit = 20,
@@ -220,7 +223,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.GetReplaysAsync(@params);
+                    return client.GetReplaysAsync(@params);
                 });
             }
 
@@ -228,14 +231,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsReplaysEnvelope()
             {
                 // Arrange
-                Handler.When("http://example.org/replays?limit=20").Respond("application/json", Resources.ReplaysEnvelope);
+                handler.When("http://example.org/replays?limit=20").Respond("application/json", Resources.ReplaysEnvelope);
                 var @params = new GetReplaysParams
                 {
                     Limit = 20,
                 };
 
                 // Act
-                var response = await Client.GetReplaysAsync(@params);
+                var response = await client.GetReplaysAsync(@params);
 
                 // Assert
                 Assert.Equal(43767, response.Total);
@@ -251,7 +254,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                Client.Dispose();
+                client.Dispose();
                 var replays = new List<Replay>
                 {
                     new Replay(),
@@ -260,7 +263,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
                 {
-                    return Client.PostReplaysAsync(replays);
+                    return client.PostReplaysAsync(replays);
                 });
             }
 
@@ -273,7 +276,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
                 // Act -> Assert
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
-                    return Client.PostReplaysAsync(replays);
+                    return client.PostReplaysAsync(replays);
                 });
             }
 
@@ -281,14 +284,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public async Task ReturnsBulkStoreDTO()
             {
                 // Arrange
-                Handler.When("http://example.org/replays").Respond("application/json", Resources.BulkStoreDTO);
+                handler.When("http://example.org/replays").Respond("application/json", Resources.BulkStoreDTO);
                 var replays = new List<Replay>
                 {
                     new Replay(),
                 };
 
                 // Act
-                var bulkStore = await Client.PostReplaysAsync(replays);
+                var bulkStore = await client.PostReplaysAsync(replays);
 
                 // Assert
                 Assert.Equal(10, bulkStore.RowsAffected);
@@ -297,12 +300,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
 
         public class DisposeMethod
         {
+            private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
+            private TelemetryClient telemetryClient = new TelemetryClient();
+
             [Fact]
             public void DisposesHttpClient()
             {
                 // Arrange
-                var handler = new SimpleHttpMessageHandler();
-                var client = new ToofzApiClient(handler, true);
+                var client = new ToofzApiClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -315,8 +320,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.toofz
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
-                var handler = new SimpleHttpMessageHandler();
-                var client = new ToofzApiClient(handler, true);
+                var client = new ToofzApiClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
