@@ -7,7 +7,7 @@
 ## Overview
 
 **toofz Leaderboards Core** is a .NET library designed for retrieving leaederboards, players, and user-generated content from [Steam](http://store.steampowered.com/about/). 
-**toofz Leaderboards Core** includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
+It includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
 [Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and **Steam Client API**.
 
 **toofz Leaderboards Core** is a component of [toofz](http://crypt.toofz.com/).
