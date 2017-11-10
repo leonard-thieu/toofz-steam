@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
     public sealed class SteamCommunityDataClient : ISteamCommunityDataClient
     {
         private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
+        private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler.
@@ -82,7 +82,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// </summary>
         public const int MaxLeaderboardEntriesPerRequest = 5001;
 
-        public Task<IEnumerable<Entry>> GetLeaderboardEntriesAsync(
+        public Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             uint appId,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
@@ -92,7 +92,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             return GetLeaderboardEntriesAsync(appId.ToString(), leaderboardId, @params, progress, cancellationToken);
         }
 
-        public async Task<IEnumerable<Entry>> GetLeaderboardEntriesAsync(
+        public async Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,
             GetLeaderboardEntriesParams @params = default,
@@ -115,7 +115,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-            return SteamCommunityDataReader.ReadLeaderboardEntries(content);
+            return (LeaderboardEntriesEnvelope)LeaderboardEntriesEnvelopeSerializer.Deserialize(content);
         }
 
         #endregion
