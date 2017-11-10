@@ -133,17 +133,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var leaderboardId = 2047387;
 
                 // Act
-                var leaderboardEntriesEnvelope = await steamCommunityDataClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
+                var entries = await steamCommunityDataClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
 
                 // Assert
-                var entries = leaderboardEntriesEnvelope.Entries;
-                Assert.Equal(317, entries.Count);
+                Assert.Equal(317, entries.Count());
                 var entry = entries.First();
                 Assert.Equal(76561197998799529, entry.SteamId);
                 Assert.Equal(134377, entry.Score);
                 Assert.Equal(1, entry.Rank);
-                Assert.Equal(849347241492683863UL, entry.UgcId);
-                Assert.Equal("0b00000001000000", entry.Details);
+                Assert.Equal(849347241492683863L, entry.ReplayId);
+                Assert.Equal(11, entry.Zone);
+                Assert.Equal(1, entry.Level);
             }
         }
 
@@ -189,17 +189,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 var leaderboardId = 2047387;
 
                 // Act
-                var leaderboardEntriesEnvelope = await steamCommunityDataClient.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
+                var entries = await steamCommunityDataClient.GetLeaderboardEntriesAsync(communityGameName, leaderboardId);
 
                 // Assert
-                var entries = leaderboardEntriesEnvelope.Entries;
-                Assert.Equal(317, entries.Count);
+                Assert.Equal(317, entries.Count());
                 var entry = entries.First();
                 Assert.Equal(76561197998799529, entry.SteamId);
                 Assert.Equal(134377, entry.Score);
                 Assert.Equal(1, entry.Rank);
-                Assert.Equal(849347241492683863UL, entry.UgcId);
-                Assert.Equal("0b00000001000000", entry.Details);
+                Assert.Equal(849347241492683863L, entry.ReplayId);
+                Assert.Equal(11, entry.Zone);
+                Assert.Equal(1, entry.Level);
             }
         }
 
