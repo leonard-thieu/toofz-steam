@@ -195,14 +195,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             {
                 operation.Telemetry.Type = "Steam3";
                 operation.Telemetry.Data = requestName;
-                Log.Debug($"Start download {requestName}");
 
                 try
                 {
+                    Log.Debug($"Start download {requestName}");
                     var response = await RetryPolicy
                         .ExecuteAsync(() => ExecuteRequestAsync(request, cancellationToken), cancellationToken)
                         .ConfigureAwait(false);
-
                     Log.Debug($"End download {requestName}");
                     operation.Telemetry.Success = true;
 
@@ -228,13 +227,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 EnsureConnectedAndLoggedOn();
 
                 var telemetry = new DependencyTelemetry();
+                telemetry.Type = "Steam3";
+                telemetry.Timestamp = DateTimeOffset.UtcNow;
                 var timer = Stopwatch.StartNew();
                 try
                 {
                     request.Timeout = Timeout;
-
-                    telemetry.Type = "Steam3";
-                    telemetry.Timestamp = DateTimeOffset.UtcNow;
 
                     var response = await request
                         .ToTask()
