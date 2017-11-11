@@ -93,7 +93,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                tcs.SetException(new SteamClientApiException("Unable to connect to Steam."));
+                try
+                {
+                    throw new SteamClientApiException("Unable to connect to Steam.");
+                }
+                catch (SteamClientApiException ex)
+                {
+                    tcs.SetException(ex);
+                }
                 onConnected.Dispose();
                 onDisconnected.Dispose();
             });
@@ -133,8 +140,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         }
                     default:
                         {
-                            var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
-                            tcs.SetException(ex);
+                            try
+                            {
+                                throw new SteamClientApiException("Unable to logon to Steam.", response.Result);
+                            }
+                            catch (SteamClientApiException ex)
+                            {
+                                tcs.SetException(ex);
+                            }
                             break;
                         }
                 }
@@ -144,7 +157,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                tcs.SetException(new SteamClientApiException("Unable to connect to Steam."));
+                try
+                {
+                    throw new SteamClientApiException("Unable to connect to Steam.");
+                }
+                catch (SteamClientApiException ex)
+                {
+                    tcs.SetException(ex);
+                }
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
             });
