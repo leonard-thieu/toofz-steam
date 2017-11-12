@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using SteamKit2;
 using static SteamKit2.SteamClient;
@@ -48,6 +49,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Gets a value indicating whether this instance is connected to the remote CM server.
         /// </summary>
         bool IsConnected { get; }
+        /// <summary>
+        /// The remote IP of the connection.
+        /// </summary>
+        IPAddress RemoteIP { get; }
         /// <summary>
         /// Disconnects this client.
         /// </summary>

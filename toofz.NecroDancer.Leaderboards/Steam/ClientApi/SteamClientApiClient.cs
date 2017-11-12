@@ -207,10 +207,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                     return response;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    telemetryClient.TrackException(ex);
                     operation.Telemetry.Success = false;
+
                     throw;
                 }
             }
@@ -228,8 +228,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                 var telemetry = new DependencyTelemetry();
                 telemetry.Type = "Steam3";
+                telemetry.Target = steamClient.RemoteIP?.ToString();
                 telemetry.Timestamp = DateTimeOffset.UtcNow;
                 var timer = Stopwatch.StartNew();
+
                 try
                 {
                     request.Timeout = Timeout;
@@ -248,6 +250,12 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     telemetry.Success = false;
 
                     throw new SteamClientApiException("Request timed out.", ex);
+                }
+                catch (Exception)
+                {
+                    telemetry.Success = false;
+
+                    throw;
                 }
                 finally
                 {

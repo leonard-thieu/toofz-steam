@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -184,6 +185,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Gets a value indicating whether this instance is connected to the remote CM server.
         /// </summary>
         public bool IsConnected => steamClient.IsConnected;
+        /// <summary>
+        /// The remote IP of the connection.
+        /// </summary>
+        public IPAddress RemoteIP => steamClient.RemoteIP;
 
         /// <summary>
         /// Disconnects this client.
