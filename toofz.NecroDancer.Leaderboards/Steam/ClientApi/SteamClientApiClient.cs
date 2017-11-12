@@ -153,7 +153,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var request = steamClient.GetSteamUserStats().FindLeaderboard(appId, name);
-            var response = await ExecuteRequestAsync(request, name, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteRequestAsync("Find leaderboard", request, name, cancellationToken).ConfigureAwait(false);
 
             if (response.Result != EResult.OK || response.ID == 0)
                 throw new SteamClientApiException($"Unable to find the leaderboard '{name}'.", response.Result);
@@ -173,7 +173,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             CancellationToken cancellationToken = default)
         {
             var request = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global);
-            var response = await ExecuteRequestAsync(request, lbid.ToString(), cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteRequestAsync("Get leaderboard entries", request, lbid.ToString(), cancellationToken).ConfigureAwait(false);
 
             if (response.Result != EResult.OK)
                 throw new SteamClientApiException($"Unable to get leaderboard entries for '{lbid}'.", response.Result);
@@ -185,39 +185,43 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private static readonly SemaphoreSlim requestSemaphore = new SemaphoreSlim(8 * Environment.ProcessorCount, 8 * Environment.ProcessorCount);
 
         private async Task<TResult> ExecuteRequestAsync<TResult>(
+            string operationName,
             IAsyncJob<TResult> request,
             string requestName,
-            CancellationToken cancellationToken,
-            [CallerMemberName] string memberName = "")
+            CancellationToken cancellationToken)
             where TResult : ICallbackMsg
         {
-            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(memberName))
+            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(operationName))
             {
-                operation.Telemetry.Type = "Steam3";
-                operation.Telemetry.Data = requestName;
+                var telemetry = operation.Telemetry;
+                telemetry.Type = "Steam3";
+                telemetry.Target = steamClient.RemoteIP?.ToString();
+                telemetry.Data = requestName;
 
                 try
                 {
-                    Log.Debug($"Start download {requestName}");
+                    Log.Debug($"Start download {operationName} {requestName}");
                     var response = await RetryPolicy
-                        .ExecuteAsync(() => ExecuteRequestAsync(request, cancellationToken), cancellationToken)
+                        .ExecuteAsync(() => ExecuteRequestCoreAsync(operationName, request, requestName, cancellationToken), cancellationToken)
                         .ConfigureAwait(false);
-                    Log.Debug($"End download {requestName}");
-                    operation.Telemetry.Success = true;
+                    Log.Debug($"End download {operationName} {requestName}");
+                    telemetry.Success = true;
 
                     return response;
                 }
                 catch (Exception)
                 {
-                    operation.Telemetry.Success = false;
+                    telemetry.Success = false;
 
                     throw;
                 }
             }
         }
 
-        private async Task<TResult> ExecuteRequestAsync<TResult>(
+        private async Task<TResult> ExecuteRequestCoreAsync<TResult>(
+            string operationName,
             IAsyncJob<TResult> request,
+            string requestName,
             CancellationToken cancellationToken)
             where TResult : ICallbackMsg
         {
@@ -226,9 +230,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             {
                 EnsureConnectedAndLoggedOn();
 
-                var telemetry = new DependencyTelemetry();
+                var telemetry = new DependencyTelemetry { Name = operationName };
                 telemetry.Type = "Steam3";
                 telemetry.Target = steamClient.RemoteIP?.ToString();
+                telemetry.Data = requestName;
                 telemetry.Timestamp = DateTimeOffset.UtcNow;
                 var timer = Stopwatch.StartNew();
 
