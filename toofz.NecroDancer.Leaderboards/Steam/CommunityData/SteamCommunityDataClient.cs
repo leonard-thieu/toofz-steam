@@ -10,8 +10,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
     public sealed class SteamCommunityDataClient : ISteamCommunityDataClient
     {
-        private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardsEnvelope));
-        private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = new XmlSerializer(typeof(LeaderboardEntriesEnvelope));
+        private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardsEnvelope) })[0];
+        private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardEntriesEnvelope) })[0];
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler.
