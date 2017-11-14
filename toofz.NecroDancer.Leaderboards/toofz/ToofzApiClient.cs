@@ -62,7 +62,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 sort = @params.Sort,
             });
 
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get players to update", requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<PlayersEnvelope>().ConfigureAwait(false);
         }
@@ -97,7 +97,7 @@ namespace toofz.NecroDancer.Leaderboards.toofz
                 limit = @params.Limit,
             });
 
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get replays to update", requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<ReplaysEnvelope>().ConfigureAwait(false);
         }

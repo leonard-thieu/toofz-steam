@@ -82,7 +82,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     key = SteamWebApiKey,
                     steamids = string.Join(",", steamIds),
                 });
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get player summaries", requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<PlayerSummariesEnvelope>().ConfigureAwait(false);
         }
@@ -126,7 +126,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     appid = appId,
                     ugcid = ugcId,
                 });
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get UGC file details", requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsAsync<UgcFileDetailsEnvelope>().ConfigureAwait(false);
         }

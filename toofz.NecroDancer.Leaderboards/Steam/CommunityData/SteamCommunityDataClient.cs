@@ -67,7 +67,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                     xml = 1,
                     v = GetRandomCacheBustingValue(),
                 });
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get leaderboards", requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             return (LeaderboardsEnvelope)LeaderboardsEnvelopeSerializer.Deserialize(content);
@@ -112,7 +112,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                     end = @params.EndRange,
                     v = GetRandomCacheBustingValue(),
                 });
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get leaderboard entries", requestUri, progress, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             return (LeaderboardEntriesEnvelope)LeaderboardEntriesEnvelopeSerializer.Deserialize(content);

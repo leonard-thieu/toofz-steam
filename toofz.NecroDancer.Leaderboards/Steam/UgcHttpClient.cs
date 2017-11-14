@@ -30,7 +30,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam
             IProgress<long> progress = default,
             CancellationToken cancellationToken = default)
         {
-            var response = await http.GetAsync(requestUri, progress, cancellationToken).ConfigureAwait(false);
+            var response = await http.GetAsync("Get UGC file", requestUri, progress, cancellationToken).ConfigureAwait(false);
 
             return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }

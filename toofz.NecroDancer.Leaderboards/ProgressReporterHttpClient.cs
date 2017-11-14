@@ -30,15 +30,15 @@ namespace toofz.NecroDancer.Leaderboards
         private readonly TelemetryClient telemetryClient;
 
         public async Task<HttpResponseMessage> GetAsync(
+            string operationName,
             string requestUri,
             IProgress<long> progress,
-            CancellationToken cancellationToken,
-            [CallerMemberName] string memberName = "")
+            CancellationToken cancellationToken)
         {
             if (requestUri == null)
                 throw new ArgumentNullException(nameof(requestUri));
 
-            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(memberName))
+            using (var operation = telemetryClient.StartOperation<DependencyTelemetry>(operationName))
             {
                 operation.Telemetry.Type = "Http";
                 operation.Telemetry.Data = requestUri;
