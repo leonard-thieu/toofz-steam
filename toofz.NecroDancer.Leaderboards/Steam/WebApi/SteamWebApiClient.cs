@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
+using log4net;
 using Microsoft.ApplicationInsights;
-using toofz.NecroDancer.Leaderboards.Logging;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
@@ -14,7 +14,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamWebApiClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.

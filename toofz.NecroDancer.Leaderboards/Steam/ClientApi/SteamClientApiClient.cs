@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Polly;
 using Polly.Retry;
 using SteamKit2;
-using toofz.NecroDancer.Leaderboards.Logging;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
 
@@ -15,7 +16,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
     public sealed class SteamClientApiClient : ISteamClientApiClient
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamClientApiClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
         internal static readonly PolicyBuilder RetryStrategy = Policy
             .Handle<SteamClientApiException>(ex => ex.InnerException is TaskCanceledException);
@@ -219,11 +220,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                 try
                 {
-                    Log.Debug($"Start download {operationName} {requestName}");
+                    if (Log.IsDebugEnabled) { Log.Debug($"Start download {operationName} {requestName}"); }
                     var response = await retryPolicy
                         .ExecuteAsync(cancellation => ExecuteRequestCoreAsync(operationName, request, requestName, cancellation), cancellationToken)
                         .ConfigureAwait(false);
-                    Log.Debug($"End download {operationName} {requestName}");
+                    if (Log.IsDebugEnabled) { Log.Debug($"End download {operationName} {requestName}"); }
                     telemetry.Success = true;
 
                     return response;
@@ -294,7 +295,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private void OnRetry(Exception ex, TimeSpan duration)
         {
             telemetryClient.TrackException(ex);
-            Log.Debug(() => $"{ex} Retrying in {duration}...");
+            if (Log.IsDebugEnabled) { Log.Debug($"{ex} Retrying in {duration}..."); }
         }
 
         #region IDisposable Implementation

@@ -7,13 +7,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using toofz.NecroDancer.Leaderboards.Logging;
+using log4net;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class OAuth2Handler : DelegatingHandler
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(OAuth2Handler));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(OAuth2Handler));
         private static readonly AuthenticationHeaderValue BearerHeader = new AuthenticationHeaderValue("Bearer");
 
         public OAuth2Handler(string userName, string password) : this(userName, password, Log) { }

@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Microsoft.ApplicationInsights;
 using Polly.Retry;
-using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards
 {
@@ -14,7 +14,7 @@ namespace toofz.NecroDancer.Leaderboards
     /// </summary>
     public abstract class TransientFaultHandlerBase : DelegatingHandler
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(TransientFaultHandlerBase));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(TransientFaultHandlerBase));
 
         internal const HttpStatusCode HttpStatusCode_TooManyRequests = (HttpStatusCode)429;
 
@@ -75,7 +75,10 @@ namespace toofz.NecroDancer.Leaderboards
         protected void OnRetry(Exception ex, TimeSpan duration)
         {
             telemetryClient.TrackException(ex);
-            Log.Debug(() => $"{ex} Retrying in {duration}...");
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug($"{ex} Retrying in {duration}...");
+            }
         }
     }
 }

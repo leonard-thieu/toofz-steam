@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using SteamKit2;
-using toofz.NecroDancer.Leaderboards.Logging;
 using static SteamKit2.SteamClient;
 using static SteamKit2.SteamUser;
 
@@ -11,7 +11,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
     internal sealed class SteamClientAdapter : ISteamClientAdapter
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamClientAdapter));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientAdapter));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamClientAdapter"/> class.

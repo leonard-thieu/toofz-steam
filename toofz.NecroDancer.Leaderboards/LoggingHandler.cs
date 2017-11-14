@@ -2,13 +2,13 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using toofz.NecroDancer.Leaderboards.Logging;
+using log4net;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class LoggingHandler : DelegatingHandler
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(LoggingHandler));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LoggingHandler));
 
         /// <summary>
         /// Initializes an instance of the <see cref="LoggingHandler"/> class.
@@ -38,9 +38,9 @@ namespace toofz.NecroDancer.Leaderboards
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            log.Debug($"Start download {request.RequestUri}");
+            if (log.IsDebugEnabled) { log.Debug($"Start download {request.RequestUri}"); }
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            log.Debug($"End download {response.RequestMessage.RequestUri}");
+            if (log.IsDebugEnabled) { log.Debug($"End download {response.RequestMessage.RequestUri}"); }
 
             return response;
         }
