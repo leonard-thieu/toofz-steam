@@ -4,7 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly;
+using Polly.Retry;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Logging;
 using static SteamKit2.SteamUser;
@@ -16,8 +17,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     {
         private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamClientApiClient));
 
-        private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        private static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+        internal static readonly PolicyBuilder RetryStrategy = Policy
+            .Handle<SteamClientApiException>(ex => ex.InnerException is TaskCanceledException);
 
         private static ISteamClientAdapter CreateSteamClient()
         {
@@ -66,12 +67,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.password = password;
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
             this.steamClient = steamClient;
+
+            retryPolicy = RetryStrategy
+                .WaitAndRetryAsync(
+                    10,
+                    retryAttempt => RetryUtil.GetExponentialBackoff(
+                        retryAttempt,
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(20),
+                        TimeSpan.FromSeconds(2)),
+                    (Action<Exception, TimeSpan>)OnRetry);
         }
 
         private readonly string userName;
         private readonly string password;
         private readonly TelemetryClient telemetryClient;
         private readonly ISteamClientAdapter steamClient;
+        private readonly RetryPolicy retryPolicy;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -134,6 +146,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Disconnects from Steam.
         /// </summary>
         public void Disconnect() => steamClient.Disconnect();
+
+        private void EnsureConnectedAndLoggedOn()
+        {
+            if (!steamClient.IsConnected)
+                throw new InvalidOperationException("Not connected to Steam.");
+            if (!steamClient.IsLoggedOn)
+                throw new InvalidOperationException("Not logged on to Steam.");
+        }
 
         #endregion
 
@@ -200,8 +220,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 try
                 {
                     Log.Debug($"Start download {operationName} {requestName}");
-                    var response = await RetryPolicy
-                        .ExecuteAsync(() => ExecuteRequestCoreAsync(operationName, request, requestName, cancellationToken), cancellationToken)
+                    var response = await retryPolicy
+                        .ExecuteAsync(cancellation => ExecuteRequestCoreAsync(operationName, request, requestName, cancellation), cancellationToken)
                         .ConfigureAwait(false);
                     Log.Debug($"End download {operationName} {requestName}");
                     telemetry.Success = true;
@@ -211,7 +231,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 catch (Exception)
                 {
                     telemetry.Success = false;
-
                     throw;
                 }
             }
@@ -252,13 +271,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 catch (TaskCanceledException ex)
                 {
                     telemetry.Success = false;
-
                     throw new SteamClientApiException("Request timed out.", ex);
                 }
                 catch (Exception)
                 {
                     telemetry.Success = false;
-
                     throw;
                 }
                 finally
@@ -274,12 +291,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             }
         }
 
-        private void EnsureConnectedAndLoggedOn()
+        private void OnRetry(Exception ex, TimeSpan duration)
         {
-            if (!steamClient.IsConnected)
-                throw new InvalidOperationException("Not connected to Steam.");
-            if (!steamClient.IsLoggedOn)
-                throw new InvalidOperationException("Not logged on to Steam.");
+            telemetryClient.TrackException(ex);
+            Log.Debug(() => $"{ex} Retrying in {duration}...");
         }
 
         #region IDisposable Implementation
