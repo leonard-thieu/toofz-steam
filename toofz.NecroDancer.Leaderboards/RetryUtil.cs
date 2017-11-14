@@ -36,6 +36,7 @@ namespace toofz.NecroDancer.Leaderboards
 
         private static readonly Random Jitterer = new Random();
 
+        // TODO: Add support for Retry-After header.
         /// <summary>
         /// Calculates the exponential delay between retries with a random jitter.
         /// </summary>

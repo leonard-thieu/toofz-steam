@@ -17,7 +17,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.RequestTimeout:         // 408
-                    case HttpStatusCode.Forbidden:              // 403
+                    case HttpStatusCode_TooManyRequests:        // 429
                     case HttpStatusCode.InternalServerError:    // 500
                     case HttpStatusCode.BadGateway:             // 502
                     case HttpStatusCode.ServiceUnavailable:     // 503

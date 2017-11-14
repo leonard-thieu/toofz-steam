@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace toofz.NecroDancer.Leaderboards
     public abstract class TransientFaultHandlerBase : DelegatingHandler
     {
         private static readonly ILog Log = LogProvider.GetLogger(typeof(TransientFaultHandlerBase));
+
+        internal const HttpStatusCode HttpStatusCode_TooManyRequests = (HttpStatusCode)429;
 
         /// <summary>
         /// Initializes an instance of the <see cref="TransientFaultHandlerBase"/> class.
