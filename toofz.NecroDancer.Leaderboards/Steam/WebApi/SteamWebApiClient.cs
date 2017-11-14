@@ -91,7 +91,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
         #region GetUGCFileDetails
 
-        // TODO: Handle a potential error response from the Steam Web API. See: https://wiki.teamfortress.com/wiki/WebAPI/GetUGCFileDetails#Result_data.
         /// <summary>
         /// Returns file details for a UGC ID.
         /// </summary>
