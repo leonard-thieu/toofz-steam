@@ -2,13 +2,13 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
+using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     public sealed class LoggingHandler : DelegatingHandler
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LoggingHandler));
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(LoggingHandler));
 
         /// <summary>
         /// Initializes an instance of the <see cref="LoggingHandler"/> class.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {

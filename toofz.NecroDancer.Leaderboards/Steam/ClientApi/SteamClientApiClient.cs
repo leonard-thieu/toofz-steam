@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using SteamKit2;
+using toofz.NecroDancer.Leaderboards.Logging;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
 
@@ -15,7 +14,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
     public sealed class SteamClientApiClient : ISteamClientApiClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamClientApiClient));
 
         private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
         private static readonly RetryPolicy RetryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);

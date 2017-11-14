@@ -4,14 +4,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using log4net;
 using Microsoft.ApplicationInsights;
+using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards.toofz
 {
     public sealed class ToofzApiClient : IToofzApiClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ToofzApiClient));
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(ToofzApiClient));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToofzApiClient"/> class with a specific handler.

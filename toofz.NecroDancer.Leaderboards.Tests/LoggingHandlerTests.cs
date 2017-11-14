@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using log4net;
 using Moq;
 using RichardSzalay.MockHttp;
+using toofz.NecroDancer.Leaderboards.Logging;
 using toofz.TestsShared;
 using Xunit;
 
@@ -31,6 +32,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var mockLog = new Mock<ILog>();
+                mockLog.Setup(l => l.Log(LogLevel.Debug, null, null)).Returns(true);
                 var log = mockLog.Object;
                 var mockHandler = new MockHttpMessageHandler();
                 mockHandler
@@ -43,7 +45,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
 
                 // Assert
-                mockLog.Verify(l => l.Debug("Start download http://fake.uri/"), Times.Once);
+                mockLog.Verify(
+                    l => l.Log(
+                        LogLevel.Debug,
+                        LogUtil.IsMessage("Start download http://fake.uri/"),
+                        null),
+                    Times.Once);
             }
 
             [Fact]
@@ -51,6 +58,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             {
                 // Arrange
                 var mockLog = new Mock<ILog>();
+                mockLog.Setup(l => l.Log(LogLevel.Debug, null, null)).Returns(true);
                 var log = mockLog.Object;
                 var mockHandler = new MockHttpMessageHandler();
                 mockHandler
@@ -63,7 +71,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
 
                 // Assert
-                mockLog.Verify(l => l.Debug("End download http://fake.uri/"), Times.Once);
+                mockLog.Verify(
+                    l => l.Log(
+                        LogLevel.Debug,
+                        LogUtil.IsMessage("End download http://fake.uri/"),
+                        null),
+                    Times.Once);
             }
 
             [Fact]

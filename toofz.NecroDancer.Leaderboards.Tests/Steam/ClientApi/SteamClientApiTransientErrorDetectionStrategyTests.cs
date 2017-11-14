@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Moq;
+using toofz.NecroDancer.Leaderboards.Logging;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
 
@@ -32,6 +32,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var retryStrategy = new FixedInterval(1, TimeSpan.Zero);
                 var mockLog = new Mock<ILog>();
+                mockLog.Setup(l => l.Log(LogLevel.Debug, null, null)).Returns(true);
                 var log = mockLog.Object;
                 var retryPolicy = SteamClientApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
                 var count = 0;
@@ -47,10 +48,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 });
 
                 // Assert
-                mockLog.Verify(l => l.Debug(It.IsAny<string>()), Times.Once);
+                mockLog.Verify(
+                    l => l.Log(
+                        LogLevel.Debug,
+                        LogUtil.IsAnyMessage(),
+                        null),
+                    Times.Once);
             }
         }
-        
+
         public class IsTransientMethod
         {
             [Fact]

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
-using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Moq;
+using toofz.NecroDancer.Leaderboards.Logging;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
 using Xunit;
 
@@ -32,6 +32,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 // Arrange
                 var retryStrategy = new FixedInterval(1, TimeSpan.Zero);
                 var mockLog = new Mock<ILog>();
+                mockLog.Setup(l => l.Log(LogLevel.Debug, null, null)).Returns(true);
                 var log = mockLog.Object;
                 var retryPolicy = SteamWebApiTransientErrorDetectionStrategy.CreateRetryPolicy(retryStrategy, log);
                 var count = 0;
@@ -49,7 +50,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 });
 
                 // Assert
-                mockLog.Verify(l => l.Debug(It.IsAny<string>()), Times.Once);
+                mockLog.Verify(
+                    l => l.Log(
+                        LogLevel.Debug,
+                        LogUtil.IsAnyMessage(),
+                        null),
+                    Times.Once);
             }
         }
 
