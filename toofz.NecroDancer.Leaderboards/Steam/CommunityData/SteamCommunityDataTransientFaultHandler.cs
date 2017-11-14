@@ -1,5 +1,8 @@
 ﻿using System;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using System.Net;
+using Microsoft.ApplicationInsights;
+using Polly;
+using Polly.Retry;
 using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
@@ -11,12 +14,53 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
     {
         private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamCommunityDataTransientFaultHandler));
 
-        private static readonly RetryStrategy RetryStrategy = new ExponentialBackoff(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(2));
-        private static readonly RetryPolicy RetryPolicy = SteamCommunityDataTransientErrorDetectionStrategy.CreateRetryPolicy(RetryStrategy, Log);
+        internal static readonly PolicyBuilder RetryStrategy = Policy
+            .Handle<HttpRequestStatusException>(ex =>
+            {
+                switch (ex.StatusCode)
+                {
+                    case HttpStatusCode.RequestTimeout:         // 408
+                    case HttpStatusCode.Forbidden:              // 403
+                    case HttpStatusCode.InternalServerError:    // 500
+                    case HttpStatusCode.BadGateway:             // 502
+                    case HttpStatusCode.ServiceUnavailable:     // 503
+                    case HttpStatusCode.GatewayTimeout:         // 504
+                        return true;
+                    default:
+                        return false;
+                }
+            });
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataTransientFaultHandler"/> class.
         /// </summary>
-        public SteamCommunityDataTransientFaultHandler() : base(RetryPolicy) { }
+        /// <param name="telemetryClient">The client used for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamCommunityDataTransientFaultHandler(TelemetryClient telemetryClient)
+        {
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+
+            RetryPolicy = RetryStrategy
+                .WaitAndRetryAsync(
+                    10,
+                    retryAttempt => RetryUtil.GetExponentialBackoff(
+                        retryAttempt,
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(20),
+                        TimeSpan.FromSeconds(2)),
+                    (Action<Exception, TimeSpan>)OnRetry);
+        }
+
+        private readonly TelemetryClient telemetryClient;
+
+        protected override RetryPolicy RetryPolicy { get; }
+
+        private void OnRetry(Exception ex, TimeSpan duration)
+        {
+            telemetryClient.TrackException(ex);
+            Log.Debug(() => $"{ex} Retrying in {duration}...");
+        }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly.Retry;
 
 namespace toofz.NecroDancer.Leaderboards
 {
@@ -11,21 +10,7 @@ namespace toofz.NecroDancer.Leaderboards
     /// </summary>
     public abstract class TransientFaultHandlerBase : DelegatingHandler
     {
-        /// <summary>
-        /// Initializes an instance of the <see cref="TransientFaultHandlerBase"/> class with the specified retry policy.
-        /// </summary>
-        /// <param name="retryPolicy">
-        /// The <see cref="RetryPolicy"/> that executes retries on transient faults.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="retryPolicy"/> is null.
-        /// </exception>
-        protected TransientFaultHandlerBase(RetryPolicy retryPolicy)
-        {
-            this.retryPolicy = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
-        }
-
-        private readonly RetryPolicy retryPolicy;
+        protected abstract RetryPolicy RetryPolicy { get; }
 
         /// <summary>
         /// Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
@@ -42,7 +27,7 @@ namespace toofz.NecroDancer.Leaderboards
         {
             var isInitialSend = true;
 
-            return retryPolicy.ExecuteAsync(async () =>
+            return RetryPolicy.ExecuteAsync(async cancellation =>
             {
                 // When retrying, the request must be cloned as the same request object cannot be sent more than once.
                 if (!isInitialSend)
@@ -53,7 +38,7 @@ namespace toofz.NecroDancer.Leaderboards
                     }
                 }
 
-                var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                var response = await base.SendAsync(request, cancellation).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
                     isInitialSend = false;
@@ -62,7 +47,7 @@ namespace toofz.NecroDancer.Leaderboards
                 }
 
                 return response;
-            }, cancellationToken);
+            }, cancellationToken, continueOnCapturedContext: false);
         }
     }
 }
