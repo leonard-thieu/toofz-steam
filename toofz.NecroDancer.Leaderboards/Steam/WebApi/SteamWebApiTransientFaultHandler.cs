@@ -3,7 +3,6 @@ using System.Net;
 using Microsoft.ApplicationInsights;
 using Polly;
 using Polly.Retry;
-using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
@@ -12,8 +11,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
     /// </summary>
     public sealed class SteamWebApiTransientFaultHandler : TransientFaultHandlerBase
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(SteamWebApiTransientFaultHandler));
-
         internal static readonly PolicyBuilder RetryStrategy = Policy
             .Handle<HttpRequestStatusException>(ex =>
             {
@@ -37,10 +34,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamWebApiTransientFaultHandler(TelemetryClient telemetryClient)
+        public SteamWebApiTransientFaultHandler(TelemetryClient telemetryClient) : base(telemetryClient)
         {
-            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
-
             RetryPolicy = RetryStrategy
                 .WaitAndRetryAsync(
                     10,
@@ -52,14 +47,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     (Action<Exception, TimeSpan>)OnRetry);
         }
 
-        private readonly TelemetryClient telemetryClient;
-
         protected override RetryPolicy RetryPolicy { get; }
-
-        private void OnRetry(Exception ex, TimeSpan duration)
-        {
-            telemetryClient.TrackException(ex);
-            Log.Debug(() => $"{ex} Retrying in {duration}...");
-        }
     }
 }

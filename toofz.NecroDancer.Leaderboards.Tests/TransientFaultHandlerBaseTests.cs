@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Polly;
 using Polly.Retry;
 using RichardSzalay.MockHttp;
@@ -45,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
         private class TransientFaultHandlerBaseAdapter : TransientFaultHandlerBase
         {
-            public TransientFaultHandlerBaseAdapter()
+            public TransientFaultHandlerBaseAdapter() : base(new TelemetryClient())
             {
                 RetryPolicy = Policy.Handle<HttpRequestStatusException>().RetryAsync();
             }

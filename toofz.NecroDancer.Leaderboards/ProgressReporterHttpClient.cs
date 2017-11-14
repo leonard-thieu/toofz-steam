@@ -52,9 +52,8 @@ namespace toofz.NecroDancer.Leaderboards
 
                     return response;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    telemetryClient.TrackException(ex);
                     operation.Telemetry.Success = false;
                     throw;
                 }

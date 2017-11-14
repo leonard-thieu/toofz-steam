@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Polly.Retry;
+using toofz.NecroDancer.Leaderboards.Logging;
 
 namespace toofz.NecroDancer.Leaderboards
 {
@@ -10,6 +13,22 @@ namespace toofz.NecroDancer.Leaderboards
     /// </summary>
     public abstract class TransientFaultHandlerBase : DelegatingHandler
     {
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(TransientFaultHandlerBase));
+
+        /// <summary>
+        /// Initializes an instance of the <see cref="TransientFaultHandlerBase"/> class.
+        /// </summary>
+        /// <param name="telemetryClient">The client used for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        protected TransientFaultHandlerBase(TelemetryClient telemetryClient)
+        {
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+        }
+
+        private readonly TelemetryClient telemetryClient;
+
         protected abstract RetryPolicy RetryPolicy { get; }
 
         /// <summary>
@@ -48,6 +67,12 @@ namespace toofz.NecroDancer.Leaderboards
 
                 return response;
             }, cancellationToken, continueOnCapturedContext: false);
+        }
+
+        protected void OnRetry(Exception ex, TimeSpan duration)
+        {
+            telemetryClient.TrackException(ex);
+            Log.Debug(() => $"{ex} Retrying in {duration}...");
         }
     }
 }
