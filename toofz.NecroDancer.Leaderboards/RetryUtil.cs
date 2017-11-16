@@ -5,7 +5,7 @@ namespace toofz.NecroDancer.Leaderboards
     /// <summary>
     /// An exponential backoff sleep duration provider.
     /// </summary>
-    internal static class RetryUtil
+    public static class RetryUtil
     {
         #region https://topaz.codeplex.com/
 
@@ -34,6 +34,20 @@ namespace toofz.NecroDancer.Leaderboards
          * and limitations under the License.
          */
 
+        /// <summary>
+        /// Creates a sleep duration provider that calculates the exponential delay between retries with a random jitter.
+        /// </summary>
+        /// <param name="minBackoff">The minimum backoff time.</param>
+        /// <param name="maxBackoff">The maximum backoff time.</param>
+        /// <param name="deltaBackoff">The value that will be used to calculate a random delta in the exponential delay between retries.</param>
+        /// <returns>
+        /// A sleep duration provider that calcuates the duration to sleep until the next retry.
+        /// </returns>
+        public static Func<int, TimeSpan> GetExponentialBackoff(TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
+        {
+            return (int currentRetryCount) => GetExponentialBackoff(currentRetryCount, minBackoff, maxBackoff, deltaBackoff);
+        }
+
         private static readonly Random Jitterer = new Random();
 
         // TODO: Add support for Retry-After header.
@@ -47,7 +61,7 @@ namespace toofz.NecroDancer.Leaderboards
         /// <returns>
         /// The duration to sleep until the next retry.
         /// </returns>
-        public static TimeSpan GetExponentialBackoff(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
+        private static TimeSpan GetExponentialBackoff(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
         {
             var delta = (int)((Math.Pow(2.0, currentRetryCount) - 1.0) * Jitterer.Next((int)(deltaBackoff.TotalMilliseconds * 0.8), (int)(deltaBackoff.TotalMilliseconds * 1.2)));
             var interval = (int)Math.Min(checked(minBackoff.TotalMilliseconds + delta), maxBackoff.TotalMilliseconds);

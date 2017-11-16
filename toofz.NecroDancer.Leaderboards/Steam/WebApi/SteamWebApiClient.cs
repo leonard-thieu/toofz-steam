@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Flurl;
 using log4net;
 using Microsoft.ApplicationInsights;
+using Polly;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
@@ -15,6 +16,33 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
+
+        /// <summary>
+        /// Gets a retry strategy for <see cref="SteamWebApiClient"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamWebApiClient"/>.
+        /// </returns>
+        public static PolicyBuilder GetRetryStrategy()
+        {
+            return Policy
+                .Handle<HttpRequestStatusException>(ex =>
+                {
+                    // https://partner.steamgames.com/doc/webapi_overview/responses#status_codes
+                    switch ((int)ex.StatusCode)
+                    {
+                        case 408:   // Request Timeout
+                        case 429:   // Too Many Requests        You are being rate limited.
+                        case 500:   // Internal Server Error    An unrecoverable error has occurred, please try again.
+                        case 502:   // Bad Gateway
+                        case 503:   // Service Unavailable      Server is temporarily unavailable, or too busy to respond. Please wait and try again later.
+                        case 504:   // Gateway Timeout
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.

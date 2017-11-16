@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Polly;
-using Polly.Retry;
 using SteamKit2;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
@@ -18,8 +16,20 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
-        internal static readonly PolicyBuilder RetryStrategy = Policy
-            .Handle<SteamClientApiException>(ex => ex.InnerException is TaskCanceledException);
+        /// <summary>
+        /// Gets a retry strategy for <see cref="SteamClientApiClient"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamClientApiClient"/>.
+        /// </returns>
+        public static PolicyBuilder GetRetryStrategy()
+        {
+            return Policy
+                .Handle<SteamClientApiException>(ex =>
+                {
+                    return ex.InnerException is TaskCanceledException;
+                });
+        }
 
         private static ISteamClientAdapter CreateSteamClient()
         {
@@ -36,6 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
         /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <param name="policy">The transient fault handling policy used for sending requests.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="userName"/> is null.
         /// </exception>
@@ -51,40 +62,31 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient) : this(userName, password, telemetryClient, CreateSteamClient()) { }
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="policy"/> is null.
+        /// </exception>
+        public SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, Policy policy)
+            : this(userName, password, telemetryClient, CreateSteamClient(), policy) { }
 
-        internal SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, ISteamClientAdapter steamClient)
+        internal SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, ISteamClientAdapter steamClient, Policy policy)
         {
-            if (userName == null)
-                throw new ArgumentNullException(nameof(userName));
             if (userName == "")
                 throw new ArgumentException($"{nameof(userName)} is empty.", nameof(userName));
-            if (password == null)
-                throw new ArgumentNullException(nameof(password));
             if (password == "")
                 throw new ArgumentException($"{nameof(password)} is empty.", nameof(password));
 
-            this.userName = userName;
-            this.password = password;
+            this.userName = userName ?? throw new ArgumentNullException(nameof(userName));
+            this.password = password ?? throw new ArgumentNullException(nameof(password));
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
             this.steamClient = steamClient;
-
-            retryPolicy = RetryStrategy
-                .WaitAndRetryAsync(
-                    10,
-                    retryAttempt => RetryUtil.GetExponentialBackoff(
-                        retryAttempt,
-                        TimeSpan.FromSeconds(1),
-                        TimeSpan.FromSeconds(20),
-                        TimeSpan.FromSeconds(2)),
-                    (Action<Exception, TimeSpan>)OnRetry);
+            this.policy = policy ?? throw new ArgumentNullException(nameof(policy));
         }
 
         private readonly string userName;
         private readonly string password;
         private readonly TelemetryClient telemetryClient;
         private readonly ISteamClientAdapter steamClient;
-        private readonly RetryPolicy retryPolicy;
+        private readonly Policy policy;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -221,7 +223,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 try
                 {
                     if (Log.IsDebugEnabled) { Log.Debug($"Start download {operationName} {requestName}"); }
-                    var response = await retryPolicy
+                    var response = await policy
                         .ExecuteAsync(cancellation => ExecuteRequestCoreAsync(operationName, request, requestName, cancellation), cancellationToken)
                         .ConfigureAwait(false);
                     if (Log.IsDebugEnabled) { Log.Debug($"End download {operationName} {requestName}"); }
@@ -290,12 +292,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             {
                 requestSemaphore.Release();
             }
-        }
-
-        private void OnRetry(Exception ex, TimeSpan duration)
-        {
-            telemetryClient.TrackException(ex);
-            if (Log.IsDebugEnabled) { Log.Debug($"{ex} Retrying in {duration}..."); }
         }
 
         #region IDisposable Implementation
