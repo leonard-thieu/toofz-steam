@@ -1,38 +1,29 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using Microsoft.ApplicationInsights;
-using Polly.Retry;
+using Polly;
 
 namespace toofz.NecroDancer.Leaderboards
 {
     /// <summary>
-    /// Provides the base implementation for transient fault handlers.
+    /// Handles transient faults that occur during requests according to the provided policy.
     /// </summary>
-    public abstract class TransientFaultHandlerBase : DelegatingHandler
+    public sealed class TransientFaultHandler : DelegatingHandler
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(TransientFaultHandlerBase));
-
-        internal const HttpStatusCode HttpStatusCode_TooManyRequests = (HttpStatusCode)429;
-
         /// <summary>
-        /// Initializes an instance of the <see cref="TransientFaultHandlerBase"/> class.
+        /// Initializes an instance of the <see cref="TransientFaultHandler"/> class.
         /// </summary>
-        /// <param name="telemetryClient">The client used for reporting telemetry.</param>
+        /// <param name="policy">The transient fault handling policy used for sending requests.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="telemetryClient"/> is null.
+        /// <paramref name="policy"/> is null.
         /// </exception>
-        protected TransientFaultHandlerBase(TelemetryClient telemetryClient)
+        public TransientFaultHandler(Policy policy)
         {
-            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+            this.policy = policy ?? throw new ArgumentNullException(nameof(policy));
         }
 
-        private readonly TelemetryClient telemetryClient;
-
-        protected abstract RetryPolicy RetryPolicy { get; }
+        private readonly Policy policy;
 
         /// <summary>
         /// Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
@@ -49,7 +40,7 @@ namespace toofz.NecroDancer.Leaderboards
         {
             var isInitialSend = true;
 
-            return RetryPolicy.ExecuteAsync(async cancellation =>
+            return policy.ExecuteAsync(async cancellation =>
             {
                 // When retrying, the request must be cloned as the same request object cannot be sent more than once.
                 if (!isInitialSend)
@@ -70,15 +61,6 @@ namespace toofz.NecroDancer.Leaderboards
 
                 return response;
             }, cancellationToken, continueOnCapturedContext: false);
-        }
-
-        protected void OnRetry(Exception ex, TimeSpan duration)
-        {
-            telemetryClient.TrackException(ex);
-            if (Log.IsDebugEnabled)
-            {
-                Log.Debug($"{ex} Retrying in {duration}...");
-            }
         }
     }
 }

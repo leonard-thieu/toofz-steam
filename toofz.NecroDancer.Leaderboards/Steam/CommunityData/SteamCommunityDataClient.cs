@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Flurl;
 using Microsoft.ApplicationInsights;
+using Polly;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
@@ -12,6 +13,32 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
     {
         private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardsEnvelope) })[0];
         private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardEntriesEnvelope) })[0];
+
+        /// <summary>
+        /// Gets a retry strategy for <see cref="SteamCommunityDataClient"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamCommunityDataClient"/>.
+        /// </returns>
+        public static PolicyBuilder GetRetryStrategy()
+        {
+            return Policy
+                .Handle<HttpRequestStatusException>(ex =>
+                {
+                    switch ((int)ex.StatusCode)
+                    {
+                        case 408:   // Request Timeout
+                        case 429:   // Too Many Requests
+                        case 500:   // Internal Server Error
+                        case 502:   // Bad Gateway
+                        case 503:   // Service Unavailable
+                        case 504:   // Gateway Timeout
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+        }
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler.

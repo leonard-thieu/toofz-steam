@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
+using Polly;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.CommunityData;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
@@ -21,6 +23,69 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         private MockHttpMessageHandler handler = new MockHttpMessageHandler();
         private TelemetryClient telemetryClient = new TelemetryClient();
         private SteamCommunityDataClient steamCommunityDataClient;
+
+        public class GetRetryStrategyMethod
+        {
+            [Fact]
+            public void ReturnsRetryStrategy()
+            {
+                // Arrange -> Act
+                var strategy = SteamCommunityDataClient.GetRetryStrategy();
+
+                // Assert
+                Assert.IsAssignableFrom<PolicyBuilder>(strategy);
+            }
+
+            [Theory]
+            [InlineData(408)]
+            [InlineData(429)]
+            [InlineData(500)]
+            [InlineData(502)]
+            [InlineData(503)]
+            [InlineData(504)]
+            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_HandlesException(int statusCode)
+            {
+                // Arrange
+                Exception ex = null;
+                var policy = SteamCommunityDataClient.GetRetryStrategy().Retry((e, i) =>
+                {
+                    ex = e;
+                });
+
+                // Act -> Assert
+                policy.Execute(() =>
+                {
+                    if (ex == null)
+                    {
+                        throw new HttpRequestStatusException((HttpStatusCode)statusCode, new Uri("http://example.org"));
+                    }
+                });
+            }
+
+            [Fact]
+            public void HttpRequestStatusExceptionAndStatusCodeIsNotTransient_DoesNotHandleException()
+            {
+                // Arrange
+                var statusCode = HttpStatusCode.Forbidden;
+                Exception ex = null;
+                var policy = SteamCommunityDataClient.GetRetryStrategy().Retry((e, i) =>
+                {
+                    ex = e;
+                });
+
+                // Act -> Assert
+                Assert.Throws<HttpRequestStatusException>(() =>
+                {
+                    policy.Execute(() =>
+                    {
+                        if (ex == null)
+                        {
+                            throw new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
+                        }
+                    });
+                });
+            }
+        }
 
         public class Constructor
         {
