@@ -5,7 +5,7 @@ namespace toofz.NecroDancer.Leaderboards
     /// <summary>
     /// An exponential backoff sleep duration provider.
     /// </summary>
-    public static class RetryUtil
+    public static class ExponentialBackoff
     {
         #region https://topaz.codeplex.com/
 
@@ -45,13 +45,13 @@ namespace toofz.NecroDancer.Leaderboards
         /// <returns>
         /// A sleep duration provider that calcuates the duration to sleep until the next retry.
         /// </returns>
-        public static Func<int, TimeSpan> GetExponentialBackoff(TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
+        public static Func<int, TimeSpan> GetSleepDurationProvider(TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
         {
-            return (int currentRetryCount) => GetExponentialBackoff(currentRetryCount, minBackoff, maxBackoff, deltaBackoff, Jitterer);
+            return (int currentRetryCount) => GetSleepDuration(currentRetryCount, minBackoff, maxBackoff, deltaBackoff, Jitterer);
         }
 
         // TODO: Add support for Retry-After header.
-        internal static TimeSpan GetExponentialBackoff(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff, Random jitterer)
+        internal static TimeSpan GetSleepDuration(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff, Random jitterer)
         {
             var jitter = jitterer.Next((int)(deltaBackoff.TotalMilliseconds * 0.8),
                                        (int)(deltaBackoff.TotalMilliseconds * 1.2));
