@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using log4net;
 using Microsoft.ApplicationInsights;
 using Polly;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
@@ -15,8 +14,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SteamWebApiClient));
-
         /// <summary>
         /// Gets a retry strategy for <see cref="SteamWebApiClient"/>.
         /// </summary>

@@ -34,6 +34,8 @@ namespace toofz.NecroDancer.Leaderboards
          * and limitations under the License.
          */
 
+        private static readonly Random Jitterer = new Random();
+
         /// <summary>
         /// Creates a sleep duration provider that calculates the exponential delay between retries with a random jitter.
         /// </summary>
@@ -45,25 +47,15 @@ namespace toofz.NecroDancer.Leaderboards
         /// </returns>
         public static Func<int, TimeSpan> GetExponentialBackoff(TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
         {
-            return (int currentRetryCount) => GetExponentialBackoff(currentRetryCount, minBackoff, maxBackoff, deltaBackoff);
+            return (int currentRetryCount) => GetExponentialBackoff(currentRetryCount, minBackoff, maxBackoff, deltaBackoff, Jitterer);
         }
 
-        private static readonly Random Jitterer = new Random();
-
         // TODO: Add support for Retry-After header.
-        /// <summary>
-        /// Calculates the exponential delay between retries with a random jitter.
-        /// </summary>
-        /// <param name="currentRetryCount">The current retry count.</param>
-        /// <param name="minBackoff">The minimum backoff time.</param>
-        /// <param name="maxBackoff">The maximum backoff time.</param>
-        /// <param name="deltaBackoff">The value that will be used to calculate a random delta in the exponential delay between retries.</param>
-        /// <returns>
-        /// The duration to sleep until the next retry.
-        /// </returns>
-        private static TimeSpan GetExponentialBackoff(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff)
+        internal static TimeSpan GetExponentialBackoff(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff, Random jitterer)
         {
-            var delta = (int)((Math.Pow(2.0, currentRetryCount) - 1.0) * Jitterer.Next((int)(deltaBackoff.TotalMilliseconds * 0.8), (int)(deltaBackoff.TotalMilliseconds * 1.2)));
+            var jitter = jitterer.Next((int)(deltaBackoff.TotalMilliseconds * 0.8),
+                                       (int)(deltaBackoff.TotalMilliseconds * 1.2));
+            var delta = (int)((Math.Pow(2.0, currentRetryCount) - 1.0) * jitter);
             var interval = (int)Math.Min(checked(minBackoff.TotalMilliseconds + delta), maxBackoff.TotalMilliseconds);
 
             return TimeSpan.FromMilliseconds(interval);

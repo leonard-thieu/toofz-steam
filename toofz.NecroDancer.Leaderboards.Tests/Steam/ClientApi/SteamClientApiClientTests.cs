@@ -17,6 +17,62 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         private TelemetryClient telemetryClient = new TelemetryClient();
         private Policy policy = Policy.NoOpAsync();
 
+        public class GetRetryStrategyMethod
+        {
+            [Fact]
+            public void ReturnsRetryStrategy()
+            {
+                // Arrange -> Act
+                var strategy = SteamClientApiClient.GetRetryStrategy();
+
+                // Assert
+                Assert.IsAssignableFrom<PolicyBuilder>(strategy);
+            }
+
+            [Fact]
+            public void SteamClientApiExceptionIsThrownAndInnerExceptionIsTaskCanceledException_HandlesException()
+            {
+                // Arrange
+                Exception ex = null;
+                var policy = SteamClientApiClient.GetRetryStrategy().Retry((e, i) =>
+                {
+                    ex = e;
+                });
+
+                // Act -> Assert
+                policy.Execute(() =>
+                {
+                    if (ex == null)
+                    {
+                        throw new SteamClientApiException(null, new TaskCanceledException());
+                    }
+                });
+            }
+
+            [Fact]
+            public void SteamClientApiExceptionIsThrownAndInnerExceptionIsNotTaskCanceledException_DoesNotHandleException()
+            {
+                // Arrange
+                Exception ex = null;
+                var policy = SteamClientApiClient.GetRetryStrategy().Retry((e, i) =>
+                {
+                    ex = e;
+                });
+
+                // Act -> Assert
+                Assert.Throws<SteamClientApiException>(() =>
+                {
+                    policy.Execute(() =>
+                    {
+                        if (ex == null)
+                        {
+                            throw new SteamClientApiException(null, new Exception());
+                        }
+                    });
+                });
+            }
+        }
+
         public class Constructor : SteamClientApiClientTests
         {
             [Fact]
