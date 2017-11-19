@@ -50,11 +50,20 @@ namespace toofz.NecroDancer.Leaderboards
             return (int currentRetryCount) => GetSleepDuration(currentRetryCount, minBackoff, maxBackoff, deltaBackoff, Jitterer);
         }
 
-        // TODO: Add support for Retry-After header.
+        // This method is marked internal for testing purposes.
         internal static TimeSpan GetSleepDuration(int currentRetryCount, TimeSpan minBackoff, TimeSpan maxBackoff, TimeSpan deltaBackoff, Random jitterer)
         {
-            var jitter = jitterer.Next((int)(deltaBackoff.TotalMilliseconds * 0.8),
-                                       (int)(deltaBackoff.TotalMilliseconds * 1.2));
+            // +/- 20% jitter
+            var minDelta = (int)(deltaBackoff.TotalMilliseconds * 0.8);
+            var maxDelta = (int)(deltaBackoff.TotalMilliseconds * 1.2);
+            int jitter;
+            // Methods on Random are not thread safe: https://msdn.microsoft.com/en-us/library/system.random(v=vs.110).aspx#ThreadSafety
+            // Locking on jitterer should be safe since it should always be either the private instance Jitterer or a Random object passed 
+            // in from tests.
+            lock (jitterer)
+            {
+                jitter = jitterer.Next(minDelta, maxDelta);
+            }
             var delta = (int)((Math.Pow(2.0, currentRetryCount) - 1.0) * jitter);
             var interval = (int)Math.Min(checked(minBackoff.TotalMilliseconds + delta), maxBackoff.TotalMilliseconds);
 
