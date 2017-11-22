@@ -10,7 +10,8 @@
 It includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
 [Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and Steam Client API.
 
-**toofz Leaderboards Core** is a component of [toofz](https://github.com/leonard-thieu/toofz-necrodancer).
+**toofz Leaderboards Core** is a component of **toofz**. 
+Information about other projects that support **toofz** can be found in the [meta-repository](https://github.com/leonard-thieu/toofz-necrodancer).
 
 ### Dependents
 
@@ -26,6 +27,10 @@ It includes clients for [Steam Community Data](https://partner.steamgames.com/do
   * .NET Core 2.0
   * .NET Framework 4.6.1
   * Mono 5.4
+
+## Building and testing
+
+Visual Studio 2017 (version 15.3 or later) can be used to build and run tests.
 
 ## License
 
