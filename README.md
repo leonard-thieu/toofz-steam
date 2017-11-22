@@ -10,6 +10,8 @@
 It includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
 [Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and Steam Client API.
 
+---
+
 **toofz Leaderboards Core** is a component of **toofz**. 
 Information about other projects that support **toofz** can be found in the [meta-repository](https://github.com/leonard-thieu/toofz-necrodancer).
 
