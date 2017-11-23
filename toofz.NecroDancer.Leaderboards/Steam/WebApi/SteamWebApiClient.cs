@@ -49,9 +49,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamWebApiClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
+        public SteamWebApiClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, false, telemetryClient) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SteamWebApiClient"/> class with a specific handler.
+        /// </summary>
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
+        /// </param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        internal SteamWebApiClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("https://api.steampowered.com/") };
+            http = new ProgressReporterHttpClient(handler, disposeHandler, telemetryClient) { BaseAddress = new Uri("https://api.steampowered.com/") };
         }
 
         private readonly ProgressReporterHttpClient http;

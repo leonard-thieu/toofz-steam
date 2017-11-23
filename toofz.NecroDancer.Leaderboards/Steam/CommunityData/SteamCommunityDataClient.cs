@@ -48,9 +48,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
+        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, false, telemetryClient) { }
+
+        /// <summary>
+        /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler and settings.
+        /// </summary>
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
+        /// </param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        internal SteamCommunityDataClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
+            http = new ProgressReporterHttpClient(handler, disposeHandler, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
         }
 
         private readonly ProgressReporterHttpClient http;

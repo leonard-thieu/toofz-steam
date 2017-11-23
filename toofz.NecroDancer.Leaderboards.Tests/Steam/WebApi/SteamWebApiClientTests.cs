@@ -267,7 +267,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public void DisposesHttpClient()
             {
                 // Arrange
-                var client = new SteamWebApiClient(handler, telemetryClient);
+                var client = new SteamWebApiClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -280,7 +280,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
-                var client = new SteamWebApiClient(handler, telemetryClient);
+                var client = new SteamWebApiClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();

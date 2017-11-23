@@ -16,9 +16,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public UgcHttpClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
+        public UgcHttpClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, false, telemetryClient) { }
+
+        /// <summary>
+        /// Initializes an instance of the <see cref="UgcHttpClient"/> class.
+        /// </summary>
+        /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
+        /// </param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        internal UgcHttpClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, true, telemetryClient);
+            http = new ProgressReporterHttpClient(handler, disposeHandler, telemetryClient);
         }
 
         private readonly ProgressReporterHttpClient http;

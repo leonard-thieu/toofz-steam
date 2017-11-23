@@ -223,7 +223,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void DisposesHttpClient()
             {
                 // Arrange
-                var client = new SteamCommunityDataClient(handler, telemetryClient);
+                var client = new SteamCommunityDataClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -236,7 +236,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
-                var client = new SteamCommunityDataClient(handler, telemetryClient);
+                var client = new SteamCommunityDataClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();

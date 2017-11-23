@@ -92,7 +92,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             public void DisposesHttpClient()
             {
                 // Arrange
-                var client = new UgcHttpClient(handler, telemetryClient);
+                var client = new UgcHttpClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -105,7 +105,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange
-                var client = new UgcHttpClient(handler, telemetryClient);
+                var client = new UgcHttpClient(handler, true, telemetryClient);
 
                 // Act
                 client.Dispose();
