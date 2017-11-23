@@ -14,8 +14,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
     {
         private string userName = "myUserName";
         private string password = "myPassword";
-        private TelemetryClient telemetryClient = new TelemetryClient();
         private Policy policy = Policy.NoOpAsync();
+        private TelemetryClient telemetryClient = new TelemetryClient();
 
         public class GetRetryStrategyMethod
         {
@@ -84,7 +84,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -97,7 +97,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -110,7 +110,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -123,7 +123,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -136,7 +136,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -149,7 +149,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
                 {
-                    new SteamClientApiClient(userName, password, telemetryClient, policy);
+                    new SteamClientApiClient(userName, password, policy, telemetryClient);
                 });
             }
 
@@ -157,7 +157,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ReturnsInstance()
             {
                 // Arrange -> Act
-                var client = new SteamClientApiClient(userName, password, telemetryClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, telemetryClient);
 
                 // Assert
                 Assert.IsAssignableFrom<SteamClientApiClient>(client);
@@ -170,7 +170,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, telemetryClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, telemetryClient);
                 client.Dispose();
 
                 // Act -> Assert
@@ -187,7 +187,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() });
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 var progress = client.Progress;
@@ -203,7 +203,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, telemetryClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, telemetryClient);
                 client.Dispose();
 
                 // Act -> Assert
@@ -220,7 +220,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener());
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
                 var progress = Mock.Of<IProgress<long>>();
 
                 // Act
@@ -237,7 +237,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ReturnsDefault()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, telemetryClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, telemetryClient);
 
                 // Act
                 var timeout = client.Timeout;
@@ -250,7 +250,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void GetSetBehavior()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, telemetryClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, telemetryClient);
                 var timeout = TimeSpan.FromSeconds(1);
 
                 // Act
@@ -271,7 +271,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -287,7 +287,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -303,7 +303,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -319,7 +319,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 await client.ConnectAndLogOnAsync();
@@ -337,7 +337,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 client.Disconnect();
@@ -372,7 +372,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
                 var steamClient = mockSteamClient.Object;
 
-                steamClientApiClient = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                steamClientApiClient = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
             }
 
             private Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
@@ -489,7 +489,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
                 var steamClient = mockSteamClient.Object;
 
-                steamClientApiClient = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                steamClientApiClient = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
             }
 
             private Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
@@ -573,7 +573,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 client.Dispose();
@@ -588,7 +588,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 var mockSteamClient = new Mock<ISteamClientAdapter>();
                 var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, telemetryClient, steamClient, policy);
+                var client = new SteamClientApiClient(userName, password, policy, steamClient, telemetryClient);
 
                 // Act
                 client.Dispose();

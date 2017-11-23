@@ -45,8 +45,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
-        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
         /// <param name="policy">The transient fault handling policy used for sending requests.</param>
+        /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="userName"/> is null.
         /// </exception>
@@ -60,15 +60,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <paramref name="password"/> is empty.
         /// </exception>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="telemetryClient"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
         /// <paramref name="policy"/> is null.
         /// </exception>
-        public SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, Policy policy)
-            : this(userName, password, telemetryClient, CreateSteamClient(), policy) { }
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="telemetryClient"/> is null.
+        /// </exception>
+        public SteamClientApiClient(string userName, string password, Policy policy, TelemetryClient telemetryClient)
+            : this(userName, password, policy, CreateSteamClient(), telemetryClient) { }
 
-        internal SteamClientApiClient(string userName, string password, TelemetryClient telemetryClient, ISteamClientAdapter steamClient, Policy policy)
+        internal SteamClientApiClient(string userName, string password, Policy policy, ISteamClientAdapter steamClient, TelemetryClient telemetryClient)
         {
             if (userName == "")
                 throw new ArgumentException($"{nameof(userName)} is empty.", nameof(userName));
@@ -84,9 +84,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private readonly string userName;
         private readonly string password;
-        private readonly TelemetryClient telemetryClient;
-        private readonly ISteamClientAdapter steamClient;
         private readonly Policy policy;
+        private readonly ISteamClientAdapter steamClient;
+        private readonly TelemetryClient telemetryClient;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
