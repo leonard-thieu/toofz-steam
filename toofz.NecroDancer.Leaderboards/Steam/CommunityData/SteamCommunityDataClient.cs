@@ -70,14 +70,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 
         #region GetLeaderboards
 
-        public Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
-            uint appId,
-            IProgress<long> progress = default,
-            CancellationToken cancellationToken = default)
-        {
-            return GetLeaderboardsAsync(appId.ToString(), progress, cancellationToken);
-        }
-
         public async Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             string communityGameName,
             IProgress<long> progress = default,
@@ -108,16 +100,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// The maximum number of leaderboard entries allowed per request.
         /// </summary>
         public const int MaxLeaderboardEntriesPerRequest = 5001;
-
-        public Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
-            uint appId,
-            int leaderboardId,
-            GetLeaderboardEntriesParams @params = default,
-            IProgress<long> progress = default,
-            CancellationToken cancellationToken = default)
-        {
-            return GetLeaderboardEntriesAsync(appId.ToString(), leaderboardId, @params, progress, cancellationToken);
-        }
 
         public async Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
