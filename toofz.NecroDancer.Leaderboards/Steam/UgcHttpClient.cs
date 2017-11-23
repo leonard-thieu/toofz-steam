@@ -18,7 +18,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam
         /// </exception>
         public UgcHttpClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, true, telemetryClient);
+            http = new ProgressReporterHttpClient(handler, telemetryClient);
         }
 
         private readonly ProgressReporterHttpClient http;

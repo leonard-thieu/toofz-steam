@@ -13,7 +13,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
     {
         public ProgressReporterHttpClientTests()
         {
-            httpClient = new ProgressReporterHttpClient(handler, true, telemetryClient);
+            httpClient = new ProgressReporterHttpClient(handler, telemetryClient);
         }
 
         private MockHttpMessageHandler handler = new MockHttpMessageHandler();
