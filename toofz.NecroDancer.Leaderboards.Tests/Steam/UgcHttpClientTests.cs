@@ -82,5 +82,38 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam
                 Assert.IsAssignableFrom<byte[]>(ugcFile);
             }
         }
+
+        public class DisposeMethod
+        {
+            private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
+            private TelemetryClient telemetryClient = new TelemetryClient();
+
+            [Fact]
+            public void DisposesHttpClient()
+            {
+                // Arrange
+                var client = new UgcHttpClient(handler, telemetryClient);
+
+                // Act
+                client.Dispose();
+
+                // Assert
+                Assert.Equal(1, handler.DisposeCount);
+            }
+
+            [Fact]
+            public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
+            {
+                // Arrange
+                var client = new UgcHttpClient(handler, telemetryClient);
+
+                // Act
+                client.Dispose();
+                client.Dispose();
+
+                // Assert
+                Assert.Equal(1, handler.DisposeCount);
+            }
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// </exception>
         public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
+            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
         }
 
         private readonly ProgressReporterHttpClient http;

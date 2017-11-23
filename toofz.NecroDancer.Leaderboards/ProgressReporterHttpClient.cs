@@ -13,11 +13,15 @@ namespace toofz.NecroDancer.Leaderboards
         /// Initializes an instance of the <see cref="ProgressReporterHttpClient"/> class.
         /// </summary>
         /// <param name="handler">The HTTP handler stack to use for sending requests.</param>
+        /// <param name="disposeHandler">
+        /// true if the inner handler should be disposed of by <see cref="Dispose"/>,
+        /// false if you intend to reuse the inner handler.
+        /// </param>
         /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public ProgressReporterHttpClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : base(handler, disposeHandler: false)
+        public ProgressReporterHttpClient(HttpMessageHandler handler, bool disposeHandler, TelemetryClient telemetryClient) : base(handler, disposeHandler)
         {
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }

@@ -51,7 +51,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
         /// </exception>
         public SteamWebApiClient(HttpMessageHandler handler, TelemetryClient telemetryClient)
         {
-            http = new ProgressReporterHttpClient(handler, telemetryClient) { BaseAddress = new Uri("https://api.steampowered.com/") };
+            http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("https://api.steampowered.com/") };
         }
 
         private readonly ProgressReporterHttpClient http;
