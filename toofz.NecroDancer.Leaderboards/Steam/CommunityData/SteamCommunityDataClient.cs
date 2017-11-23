@@ -48,7 +48,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, telemetryClient, new SteamCommunityDataClientSettings()) { }
+        public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient) : this(handler, telemetryClient, default) { }
 
         /// <summary>
         /// Initializes an instance of the <see cref="SteamCommunityDataClient"/> class with a specific handler and settings.
@@ -62,6 +62,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         public SteamCommunityDataClient(HttpMessageHandler handler, TelemetryClient telemetryClient, SteamCommunityDataClientSettings settings)
         {
             http = new ProgressReporterHttpClient(handler, true, telemetryClient) { BaseAddress = new Uri("http://steamcommunity.com/") };
+
+            settings = settings ?? new SteamCommunityDataClientSettings();
             isCacheBustingEnabled = settings.IsCacheBustingEnabled;
         }
 
@@ -112,6 +114,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                 throw new ObjectDisposedException(nameof(SteamCommunityDataClient));
             if (communityGameName == null)
                 throw new ArgumentNullException(nameof(communityGameName));
+
+            @params = @params ?? new GetLeaderboardEntriesParams();
 
             var requestUri = $"stats/{communityGameName}/leaderboards/{leaderboardId}/"
                 .SetQueryParams(new
