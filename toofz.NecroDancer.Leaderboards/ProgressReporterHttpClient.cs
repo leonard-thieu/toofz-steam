@@ -51,9 +51,9 @@ namespace toofz.NecroDancer.Leaderboards
 
                     return response;
                 }
-                catch (Exception)
+                catch (Exception) when (Util.FailTelemetry(operation.Telemetry))
                 {
-                    operation.Telemetry.Success = false;
+                    // Unreachable
                     throw;
                 }
             }

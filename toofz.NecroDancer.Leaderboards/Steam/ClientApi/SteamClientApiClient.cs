@@ -231,9 +231,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                     return response;
                 }
-                catch (Exception)
+                catch (Exception) when (Util.FailTelemetry(operation.Telemetry))
                 {
-                    telemetry.Success = false;
+                    // Unreachable
                     throw;
                 }
             }
@@ -276,9 +276,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     telemetry.Success = false;
                     throw new SteamClientApiException("Request timed out.", ex);
                 }
-                catch (Exception)
+                catch (Exception) when (Util.FailTelemetry(telemetry))
                 {
-                    telemetry.Success = false;
+                    // Unreachable
                     throw;
                 }
                 finally
