@@ -32,22 +32,42 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient));
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
-            MessageLoop = new Thread(() =>
+            MessageLoop = new Thread(RunMessageLoop)
             {
-                while (isRunning)
-                {
-                    this.manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
-                }
-            });
-            MessageLoop.IsBackground = true;
-            MessageLoop.Name = "Steam Client message loop";
+                IsBackground = true,
+                Name = "Steam Client message loop",
+            };
         }
 
         private readonly ISteamClient steamClient;
         private readonly ICallbackManager manager;
+
+        #region Message loop
+
         private bool isRunning;
 
         internal Thread MessageLoop { get; }
+
+        private void RunMessageLoop()
+        {
+            while (isRunning)
+            {
+                manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        private void StartMessageLoop()
+        {
+            isRunning = true;
+            MessageLoop.Start();
+        }
+
+        private void StopMessageLoop()
+        {
+            isRunning = false;
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets a value indicating whether this instance is logged on to the remote CM server.
@@ -194,17 +214,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// Disconnects this client.
         /// </summary>
         public void Disconnect() => steamClient.Disconnect();
-
-        private void StartMessageLoop()
-        {
-            isRunning = true;
-            MessageLoop.Start();
-        }
-
-        private void StopMessageLoop()
-        {
-            isRunning = false;
-        }
 
         #region IDisposable Implementation
 
