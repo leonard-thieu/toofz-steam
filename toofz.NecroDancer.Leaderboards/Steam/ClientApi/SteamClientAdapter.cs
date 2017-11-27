@@ -109,19 +109,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     StopMessageLoop();
                     Log.Info("Disconnected from Steam.");
+
                     onDisconnected.Dispose();
                 });
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                try
-                {
-                    throw new SteamClientApiException("Unable to connect to Steam.");
-                }
-                catch (SteamClientApiException ex)
-                {
-                    tcs.SetException(ex);
-                }
+                var ex = new SteamClientApiException("Unable to connect to Steam.");
+                tcs.SetException(ex);
+
                 onConnected.Dispose();
                 onDisconnected.Dispose();
             });
@@ -161,14 +157,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                         }
                     default:
                         {
-                            try
-                            {
-                                throw new SteamClientApiException("Unable to logon to Steam.", response.Result);
-                            }
-                            catch (SteamClientApiException ex)
-                            {
-                                tcs.SetException(ex);
-                            }
+                            var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
+                            tcs.SetException(ex);
                             break;
                         }
                 }
@@ -178,14 +168,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                try
-                {
-                    throw new SteamClientApiException("Unable to connect to Steam.");
-                }
-                catch (SteamClientApiException ex)
-                {
-                    tcs.SetException(ex);
-                }
+                var ex = new SteamClientApiException("Unable to connect to Steam.");
+                tcs.SetException(ex);
+
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
             });
