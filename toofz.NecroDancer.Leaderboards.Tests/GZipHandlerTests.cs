@@ -31,13 +31,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         {
             public SendAsyncMethod()
             {
-                mockHandler = new MockHttpMessageHandler();
                 var decompressionHandler = new GZipHandler { InnerHandler = mockHandler };
                 handler = new HttpMessageHandlerAdapter(decompressionHandler);
             }
 
-            MockHttpMessageHandler mockHandler;
-            HttpMessageHandlerAdapter handler;
+            private readonly MockHttpMessageHandler mockHandler = new MockHttpMessageHandler();
+            private readonly HttpMessageHandlerAdapter handler;
 
             [Fact]
             public async Task AddsAcceptEncodingGzipToRequest()

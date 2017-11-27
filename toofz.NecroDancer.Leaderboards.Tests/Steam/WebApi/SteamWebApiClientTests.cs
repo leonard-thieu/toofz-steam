@@ -21,9 +21,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             client = new SteamWebApiClient(handler, telemetryClient);
         }
 
-        private MockHttpMessageHandler handler = new MockHttpMessageHandler();
-        private TelemetryClient telemetryClient = new TelemetryClient();
-        private SteamWebApiClient client;
+        private readonly MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private readonly TelemetryClient telemetryClient = new TelemetryClient();
+        private readonly SteamWebApiClient client;
 
         public class GetRetryStrategyMethod
         {
@@ -107,12 +107,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 
         public class GetPlayerSummariesAsync : SteamWebApiClientTests
         {
+            public GetPlayerSummariesAsync()
+            {
+                client.SteamWebApiKey = "mySteamWebApiKey";
+            }
+
             [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
                 client.Dispose();
-                client.SteamWebApiKey = "mySteamWebApiKey";
                 var steamIds = new long[0];
 
                 // Act -> Assert
@@ -140,7 +144,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task SteamIdsIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                client.SteamWebApiKey = "mySteamWebApiKey";
                 long[] steamIds = null;
 
                 // Act -> Assert
@@ -154,7 +157,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task TooManySteamIds_ThrowsArgumentException()
             {
                 // Arrange
-                client.SteamWebApiKey = "mySteamWebApiKey";
                 var steamIds = new long[SteamWebApiClient.MaxPlayerSummariesPerRequest + 1];
 
                 // Act -> Assert
@@ -168,7 +170,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task ReturnsPlayerSummaries()
             {
                 // Arrange
-                client.SteamWebApiKey = "mySteamWebApiKey";
                 var steamIds = new long[] { 76561197960435530 };
                 handler
                     .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002")
@@ -187,7 +188,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task ResponseContainsâ_DoesNotThrowDecoderFallbackException()
             {
                 // Arrange
-                client.SteamWebApiKey = "mySteamWebApiKey";
                 var steamIds = new long[] { 76561197960435530 };
                 handler
                     .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002")
@@ -205,14 +205,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 
         public class GetUgcFileDetailsAsync : SteamWebApiClientTests
         {
+            public GetUgcFileDetailsAsync()
+            {
+                client.SteamWebApiKey = "mySteamWebApiKey";
+            }
+
+            private uint appId = 247080;
+            private long ugcId = 22837952671856412;
+
             [Fact]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
                 client.Dispose();
-                client.SteamWebApiKey = "mySteamWebApiKey";
-                var appId = 247080U;
-                var ugcId = 22837952671856412;
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<ObjectDisposedException>(() =>
@@ -226,8 +231,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             {
                 // Arrange
                 client.SteamWebApiKey = null;
-                var appId = 247080U;
-                var ugcId = 22837952671856412;
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -240,9 +243,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             public async Task ReturnsUgcFileDetails()
             {
                 // Arrange
-                client.SteamWebApiKey = "mySteamWebApiKey";
-                var appId = 247080U;
-                var ugcId = 22837952671856412;
                 handler
                     .When(HttpMethod.Get, "https://api.steampowered.com/ISteamRemoteStorage/GetUGCFileDetails/v1")
                     .WithQueryString("key", client.SteamWebApiKey)
@@ -260,16 +260,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
 
         public class DisposeMethod
         {
-            private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
-            private TelemetryClient telemetryClient = new TelemetryClient();
+            public DisposeMethod()
+            {
+                client = new SteamWebApiClient(handler, true, telemetryClient);
+            }
+
+            private readonly SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
+            private readonly TelemetryClient telemetryClient = new TelemetryClient();
+            private readonly SteamWebApiClient client;
 
             [Fact]
             public void DisposesHttpClient()
             {
-                // Arrange
-                var client = new SteamWebApiClient(handler, true, telemetryClient);
-
-                // Act
+                // Arrange -> Act
                 client.Dispose();
 
                 // Assert
@@ -279,10 +282,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             [Fact]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
-                // Arrange
-                var client = new SteamWebApiClient(handler, true, telemetryClient);
-
-                // Act
+                // Arrange -> Act
                 client.Dispose();
                 client.Dispose();
 

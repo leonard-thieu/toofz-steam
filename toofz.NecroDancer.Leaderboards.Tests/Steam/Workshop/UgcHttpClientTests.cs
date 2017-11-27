@@ -16,9 +16,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.Workshop
             client = new UgcHttpClient(handler, telemetryClient);
         }
 
-        private MockHttpMessageHandler handler = new MockHttpMessageHandler();
-        private TelemetryClient telemetryClient = new TelemetryClient();
-        public UgcHttpClient client { get; set; }
+        private readonly MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private readonly TelemetryClient telemetryClient = new TelemetryClient();
+        private readonly UgcHttpClient client;
 
         public class Constructor
         {
@@ -85,16 +85,19 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.Workshop
 
         public class DisposeMethod
         {
-            private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
-            private TelemetryClient telemetryClient = new TelemetryClient();
+            public DisposeMethod()
+            {
+                client = new UgcHttpClient(handler, true, telemetryClient);
+            }
+
+            private readonly SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
+            private readonly TelemetryClient telemetryClient = new TelemetryClient();
+            private readonly UgcHttpClient client;
 
             [Fact]
             public void DisposesHttpClient()
             {
-                // Arrange
-                var client = new UgcHttpClient(handler, true, telemetryClient);
-
-                // Act
+                // Arrange -> Act
                 client.Dispose();
 
                 // Assert
@@ -104,10 +107,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.Workshop
             [Fact]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
-                // Arrange
-                var client = new UgcHttpClient(handler, true, telemetryClient);
-
-                // Act
+                // Arrange -> Act
                 client.Dispose();
                 client.Dispose();
 

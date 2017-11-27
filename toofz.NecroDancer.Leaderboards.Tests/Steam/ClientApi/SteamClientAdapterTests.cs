@@ -106,15 +106,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class GetSteamUserStatsMethod : SteamClientAdapterTests
+        public class GetSteamUserStatsMethod
         {
             public GetSteamUserStatsMethod()
             {
-                var steamClient = new SteamClient();
                 steamClientAdapter = new SteamClientAdapter(steamClient, mockManager.Object);
             }
 
-            private readonly new SteamClientAdapter steamClientAdapter;
+            private readonly SteamClient steamClient = new SteamClient();
+            private readonly Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+            private readonly SteamClientAdapter steamClientAdapter;
 
             [Fact]
             public void ReturnsSteamUserStats()
