@@ -14,10 +14,17 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
     public class SteamClientApiClientTests
     {
-        private string userName = "myUserName";
-        private string password = "myPassword";
-        private Policy retryPolicy = Policy.NoOpAsync();
-        private TelemetryClient telemetryClient = new TelemetryClient();
+        public SteamClientApiClientTests()
+        {
+            steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, mockSteamClient.Object, telemetryClient);
+        }
+
+        private readonly string userName = "myUserName";
+        private readonly string password = "myPassword";
+        private readonly Policy retryPolicy = Policy.NoOpAsync();
+        private readonly Mock<ISteamClientAdapter> mockSteamClient = new Mock<ISteamClientAdapter>();
+        private readonly TelemetryClient telemetryClient = new TelemetryClient();
+        private readonly SteamClientApiClient steamClientApiClient;
 
         public class GetRetryStrategyMethod
         {
@@ -75,8 +82,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class Constructor : SteamClientApiClientTests
+        public class Constructor
         {
+            private string userName = "myUserName";
+            private string password = "myPassword";
+            private Policy retryPolicy = Policy.NoOpAsync();
+            private TelemetryClient telemetryClient = new TelemetryClient();
+
             [Fact]
             public void UserNameIsNull_ThrowsArgumentNullException()
             {
@@ -159,10 +171,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ReturnsInstance()
             {
                 // Arrange -> Act
-                var client = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
+                var steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
 
                 // Assert
-                Assert.IsAssignableFrom<SteamClientApiClient>(client);
+                Assert.IsAssignableFrom<SteamClientApiClient>(steamClientApiClient);
             }
         }
 
@@ -172,13 +184,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
-                client.Dispose();
+                steamClientApiClient.Dispose();
 
                 // Act -> Assert
                 Assert.Throws<ObjectDisposedException>(() =>
                 {
-                    client.Progress.ToString();
+                    steamClientApiClient.Progress.ToString();
                 });
             }
 
@@ -186,13 +197,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ReturnsProgress()
             {
                 // Arrange
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() });
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
+                var listener = new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() };
+                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(listener);
 
                 // Act
-                var progress = client.Progress;
+                var progress = steamClientApiClient.Progress;
 
                 // Assert
                 Assert.IsAssignableFrom<IProgress<long>>(progress);
@@ -205,13 +214,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
-                client.Dispose();
+                steamClientApiClient.Dispose();
 
                 // Act -> Assert
                 Assert.Throws<ObjectDisposedException>(() =>
                 {
-                    client.Progress = null;
+                    steamClientApiClient.Progress = null;
                 });
             }
 
@@ -219,17 +227,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void SetsProgress()
             {
                 // Arrange
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(new ProgressDebugNetworkListener());
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
+                var listener = new ProgressDebugNetworkListener();
+                mockSteamClient.SetupGet(c => c.ProgressDebugNetworkListener).Returns(listener);
                 var progress = Mock.Of<IProgress<long>>();
 
                 // Act
-                client.Progress = progress;
+                steamClientApiClient.Progress = progress;
 
                 // Assert
-                Assert.IsAssignableFrom<IProgress<long>>(client.Progress);
+                Assert.IsAssignableFrom<IProgress<long>>(steamClientApiClient.Progress);
             }
         }
 
@@ -238,11 +244,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             [Fact]
             public void ReturnsDefault()
             {
-                // Arrange
-                var client = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
-
-                // Act
-                var timeout = client.Timeout;
+                // Arrange -> Act
+                var timeout = steamClientApiClient.Timeout;
 
                 // Assert
                 Assert.Equal(TimeSpan.FromSeconds(10), timeout);
@@ -252,12 +255,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void GetSetBehavior()
             {
                 // Arrange
-                var client = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
                 var timeout = TimeSpan.FromSeconds(1);
 
                 // Act
-                client.Timeout = timeout;
-                var timeout2 = client.Timeout;
+                steamClientApiClient.Timeout = timeout;
+                var timeout2 = steamClientApiClient.Timeout;
 
                 // Assert
                 Assert.Equal(timeout, timeout2);
@@ -266,14 +268,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class ConnectAndLogOnAsyncMethod : SteamClientApiClientTests
         {
-            public ConnectAndLogOnAsyncMethod()
-            {
-                client = new SteamClientApiClient(userName, password, retryPolicy, mockSteamClient.Object, telemetryClient);
-            }
-
-            private readonly Mock<ISteamClientAdapter> mockSteamClient = new Mock<ISteamClientAdapter>();
-            private readonly SteamClientApiClient client;
-
             [Fact]
             public async Task NotConnected_Connects()
             {
@@ -281,7 +275,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
 
                 // Act
-                await client.ConnectAndLogOnAsync();
+                await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
                 mockSteamClient.Verify(c => c.ConnectAsync(), Times.Once);
@@ -293,12 +287,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
                 mockSteamClient.Setup(c => c.ConnectAsync()).Returns(new TaskCompletionSource<SteamClient.ConnectedCallback>().Task);
-                client.Timeout = TimeSpan.Zero;
+                steamClientApiClient.Timeout = TimeSpan.Zero;
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<TimeoutRejectedException>(() =>
                 {
-                    return client.ConnectAndLogOnAsync();
+                    return steamClientApiClient.ConnectAndLogOnAsync();
                 });
             }
 
@@ -309,7 +303,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
 
                 // Act
-                await client.ConnectAndLogOnAsync();
+                await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
                 mockSteamClient.Verify(c => c.ConnectAsync(), Times.Never);
@@ -322,7 +316,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
 
                 // Act
-                await client.ConnectAndLogOnAsync();
+                await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
                 mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<LogOnDetails>()), Times.Once);
@@ -334,12 +328,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
                 mockSteamClient.Setup(c => c.LogOnAsync(It.IsAny<LogOnDetails>())).Returns(new TaskCompletionSource<LoggedOnCallback>().Task);
-                client.Timeout = TimeSpan.Zero;
+                steamClientApiClient.Timeout = TimeSpan.Zero;
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<TimeoutRejectedException>(() =>
                 {
-                    return client.ConnectAndLogOnAsync();
+                    return steamClientApiClient.ConnectAndLogOnAsync();
                 });
             }
 
@@ -350,7 +344,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
 
                 // Act
-                await client.ConnectAndLogOnAsync();
+                await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
                 mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<LogOnDetails>()), Times.Never);
@@ -362,13 +356,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             [Fact]
             public void DisconnectsFromSteam()
             {
-                // Arrange
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
-
-                // Act
-                client.Disconnect();
+                // Arrange -> Act
+                steamClientApiClient.Disconnect();
 
                 // Assert
                 mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
@@ -377,37 +366,24 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class FindLeaderboardAsyncMethod : SteamClientApiClientTests
         {
-            private const uint AppId = 247080;
-            private const string LeaderboardName = "Leaderboard Name";
-
             public FindLeaderboardAsyncMethod()
             {
-                mockLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
-                var leaderboardCallback = mockLeaderboardCallback.Object;
-                mockLeaderboardResponse = new Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>>();
-                mockLeaderboardResponse.Setup(r => r.ToTask()).Returns(Task.FromResult(leaderboardCallback));
-                var leaderboardResponse = mockLeaderboardResponse.Object;
+                mockLeaderboardResponse.Setup(r => r.ToTask()).ReturnsAsync(mockLeaderboardCallback.Object);
 
-                mockSteamUserStats = new Mock<ISteamUserStats>();
                 mockSteamUserStats
                     .Setup(s => s.FindLeaderboard(It.IsAny<uint>(), It.IsAny<string>()))
-                    .Returns(leaderboardResponse);
-                var steamUserStats = mockSteamUserStats.Object;
+                    .Returns(mockLeaderboardResponse.Object);
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
 
-                mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
-                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
-                var steamClient = mockSteamClient.Object;
-
-                steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
             }
 
-            private Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback;
-            private Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>> mockLeaderboardResponse;
-            private Mock<ISteamUserStats> mockSteamUserStats;
-            private Mock<ISteamClientAdapter> mockSteamClient;
-            private SteamClientApiClient steamClientApiClient;
+            private readonly Mock<IFindOrCreateLeaderboardCallback> mockLeaderboardCallback = new Mock<IFindOrCreateLeaderboardCallback>();
+            private readonly Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>> mockLeaderboardResponse = new Mock<IAsyncJob<IFindOrCreateLeaderboardCallback>>();
+            private readonly Mock<ISteamUserStats> mockSteamUserStats = new Mock<ISteamUserStats>();
+            private readonly uint appId = 247080;
+            private readonly string leaderboardName = "Leaderboard Name";
 
             [Fact]
             public async Task NotConnected_ThrowsInvalidOperationException()
@@ -418,7 +394,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
-                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                    return steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
                 });
             }
 
@@ -431,7 +407,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
-                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                    return steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
                 });
             }
 
@@ -444,7 +420,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 var ex = await Assert.ThrowsAsync<SteamClientApiException>(() =>
                 {
-                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                    return steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
                 });
                 Assert.Equal(EResult.Fail, ex.Result);
             }
@@ -459,7 +435,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 await Assert.ThrowsAsync<SteamClientApiException>(() =>
                 {
-                    return steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                    return steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
                 });
             }
 
@@ -471,7 +447,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardCallback.Setup(le => le.ID).Returns(1);
 
                 // Act
-                var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
 
                 // Assert
                 Assert.IsAssignableFrom<IFindOrCreateLeaderboardCallback>(leaderboardEntries);
@@ -485,7 +461,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardCallback.Setup(le => le.ID).Returns(1);
 
                 // Act
-                await steamClientApiClient.FindLeaderboardAsync(AppId, LeaderboardName);
+                await steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
 
                 // Assert
                 mockLeaderboardResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
@@ -494,37 +470,24 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class GetLeaderboardEntriesAsyncMethod : SteamClientApiClientTests
         {
-            private const uint AppId = 247080;
-            private const int LeaderboardId = 739999;
-
             public GetLeaderboardEntriesAsyncMethod()
             {
-                mockLeaderboardEntriesCallback = new Mock<ILeaderboardEntriesCallback>();
-                var leaderboardEntriesCallback = mockLeaderboardEntriesCallback.Object;
-                mockLeaderboardEntriesResponse = new Mock<IAsyncJob<ILeaderboardEntriesCallback>>();
-                mockLeaderboardEntriesResponse.Setup(r => r.ToTask()).Returns(Task.FromResult(leaderboardEntriesCallback));
-                var leaderboardEntriesResponse = mockLeaderboardEntriesResponse.Object;
+                mockLeaderboardEntriesResponse.Setup(r => r.ToTask()).ReturnsAsync(mockLeaderboardEntriesCallback.Object);
 
-                mockSteamUserStats = new Mock<ISteamUserStats>();
                 mockSteamUserStats
                     .Setup(s => s.GetLeaderboardEntries(It.IsAny<uint>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ELeaderboardDataRequest>()))
-                    .Returns(leaderboardEntriesResponse);
-                var steamUserStats = mockSteamUserStats.Object;
+                    .Returns(mockLeaderboardEntriesResponse.Object);
+                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(mockSteamUserStats.Object);
 
-                mockSteamClient = new Mock<ISteamClientAdapter>();
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(true);
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(true);
-                mockSteamClient.Setup(c => c.GetSteamUserStats()).Returns(steamUserStats);
-                var steamClient = mockSteamClient.Object;
-
-                steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
             }
 
-            private Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback;
-            private Mock<IAsyncJob<ILeaderboardEntriesCallback>> mockLeaderboardEntriesResponse;
-            private Mock<ISteamUserStats> mockSteamUserStats;
-            private Mock<ISteamClientAdapter> mockSteamClient;
-            private SteamClientApiClient steamClientApiClient;
+            private readonly Mock<ILeaderboardEntriesCallback> mockLeaderboardEntriesCallback = new Mock<ILeaderboardEntriesCallback>();
+            private readonly Mock<IAsyncJob<ILeaderboardEntriesCallback>> mockLeaderboardEntriesResponse = new Mock<IAsyncJob<ILeaderboardEntriesCallback>>();
+            private readonly Mock<ISteamUserStats> mockSteamUserStats = new Mock<ISteamUserStats>();
+            private readonly uint appId = 247080;
+            private readonly int leaderboardId = 739999;
 
             [Fact]
             public async Task NotConnected_ThrowsInvalidOperationException()
@@ -535,7 +498,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
-                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
                 });
             }
 
@@ -548,7 +511,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 {
-                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
                 });
             }
 
@@ -561,7 +524,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Act -> Assert
                 var ex = await Assert.ThrowsAsync<SteamClientApiException>(() =>
                 {
-                    return steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                    return steamClientApiClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
                 });
                 Assert.Equal(EResult.Fail, ex.Result);
             }
@@ -573,7 +536,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
-                var leaderboardEntries = await steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                var leaderboardEntries = await steamClientApiClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
 
                 // Assert
                 Assert.IsAssignableFrom<ILeaderboardEntriesCallback>(leaderboardEntries);
@@ -586,7 +549,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.OK);
 
                 // Act
-                await steamClientApiClient.GetLeaderboardEntriesAsync(AppId, LeaderboardId);
+                await steamClientApiClient.GetLeaderboardEntriesAsync(appId, leaderboardId);
 
                 // Assert
                 mockLeaderboardEntriesResponse.VerifySet(s => s.Timeout = It.IsAny<TimeSpan>(), Times.Once);
@@ -598,13 +561,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             [Fact]
             public void DisposesSteamClient()
             {
-                // Arrange
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
-
-                // Act
-                client.Dispose();
+                // Arrange -> Act
+                steamClientApiClient.Dispose();
 
                 // Assert
                 mockSteamClient.Verify(s => s.Dispose(), Times.Once);
@@ -613,14 +571,9 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             [Fact]
             public void DisposeMoreThanOnce_DoesNothing()
             {
-                // Arrange
-                var mockSteamClient = new Mock<ISteamClientAdapter>();
-                var steamClient = mockSteamClient.Object;
-                var client = new SteamClientApiClient(userName, password, retryPolicy, steamClient, telemetryClient);
-
-                // Act
-                client.Dispose();
-                client.Dispose();
+                // Arrange -> Act
+                steamClientApiClient.Dispose();
+                steamClientApiClient.Dispose();
 
                 // Assert
                 mockSteamClient.Verify(s => s.Disconnect(), Times.Never);

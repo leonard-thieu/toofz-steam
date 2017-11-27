@@ -28,27 +28,33 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         void Disconnect();
         /// <summary>
-        /// Gets leaderboard entries for the specified AppID and leaderboard ID.
-        /// </summary>
-        /// <exception cref="SteamClientApiException">
-        /// Unable to retrieve entries for leaderboard.
-        /// </exception>
-        Task<IFindOrCreateLeaderboardCallback> FindLeaderboardAsync(
-            uint appId,
-            string name,
-            CancellationToken cancellationToken = default);
-        /// <summary>
         /// Gets the leaderboard for the specified AppID and name.
         /// </summary>
+        /// <param name="appId">The AppID of the leaderboard.</param>
+        /// <param name="name">The name of the leaderboard.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <exception cref="SteamClientApiException">
         /// Unable to find the leaderboard.
         /// </exception>
         /// <exception cref="SteamClientApiException">
         /// Unable to retrieve the leaderboard.
         /// </exception>
+        Task<IFindOrCreateLeaderboardCallback> FindLeaderboardAsync(
+            uint appId,
+            string name,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Gets leaderboard entries for the specified AppID and leaderboard ID.
+        /// </summary>
+        /// <param name="appId">The AppID of the leaderboard.</param>
+        /// <param name="leaderboardId">The leaderboard ID of the leaderboard.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <exception cref="SteamClientApiException">
+        /// Unable to retrieve entries for leaderboard.
+        /// </exception>
         Task<ILeaderboardEntriesCallback> GetLeaderboardEntriesAsync(
             uint appId,
-            int lbid,
+            int leaderboardId,
             CancellationToken cancellationToken = default);
     }
 }

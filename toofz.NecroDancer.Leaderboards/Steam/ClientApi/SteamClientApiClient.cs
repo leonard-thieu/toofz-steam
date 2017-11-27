@@ -170,6 +170,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Gets the leaderboard for the specified AppID and name.
         /// </summary>
+        /// <param name="appId">The AppID of the leaderboard.</param>
+        /// <param name="name">The name of the leaderboard.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <exception cref="SteamClientApiException">
         /// Unable to find the leaderboard.
         /// </exception>
@@ -193,19 +196,22 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Gets leaderboard entries for the specified AppID and leaderboard ID.
         /// </summary>
+        /// <param name="appId">The AppID of the leaderboard.</param>
+        /// <param name="leaderboardId">The leaderboard ID of the leaderboard.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <exception cref="SteamClientApiException">
         /// Unable to retrieve entries for leaderboard.
         /// </exception>
         public async Task<ILeaderboardEntriesCallback> GetLeaderboardEntriesAsync(
             uint appId,
-            int lbid,
+            int leaderboardId,
             CancellationToken cancellationToken = default)
         {
-            var request = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, lbid, 0, int.MaxValue, ELeaderboardDataRequest.Global);
-            var response = await ExecuteRequestAsync("Get leaderboard entries", request, lbid.ToString(), cancellationToken).ConfigureAwait(false);
+            var request = steamClient.GetSteamUserStats().GetLeaderboardEntries(appId, leaderboardId, 0, int.MaxValue, ELeaderboardDataRequest.Global);
+            var response = await ExecuteRequestAsync("Get leaderboard entries", request, leaderboardId.ToString(), cancellationToken).ConfigureAwait(false);
 
             if (response.Result != EResult.OK)
-                throw new SteamClientApiException($"Unable to get leaderboard entries for '{lbid}'.", response.Result);
+                throw new SteamClientApiException($"Unable to get leaderboard entries for '{leaderboardId}'.", response.Result);
 
             return response;
         }

@@ -8,14 +8,25 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
     public class SteamClientAdapterTests
     {
+        public SteamClientAdapterTests()
+        {
+            steamClientAdapter = new SteamClientAdapter(mockSteamClient.Object, mockManager.Object);
+        }
+
+        private readonly Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
+        private readonly Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
+        private readonly SteamClientAdapter steamClientAdapter;
+
         public class Constructor
         {
+            private ISteamClient steamClient = Mock.Of<ISteamClient>();
+            private ICallbackManager manager = Mock.Of<ICallbackManager>();
+
             [Fact]
             public void SteamClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                ISteamClient steamClient = null;
-                var manager = Mock.Of<ICallbackManager>();
+                steamClient = null;
 
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
@@ -28,8 +39,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public void ManagerIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
-                var steamClient = Mock.Of<ISteamClient>();
-                ICallbackManager manager = null;
+                manager = null;
 
                 // Act -> Assert
                 Assert.Throws<ArgumentNullException>(() =>
@@ -41,11 +51,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             [Fact]
             public void ReturnsInstance()
             {
-                // Arrange
-                var steamClient = Mock.Of<ISteamClient>();
-                var manager = Mock.Of<ICallbackManager>();
-
-                // Act
+                // Arrange -> Act
                 var client = new SteamClientAdapter(steamClient, manager);
 
                 // Assert
@@ -53,19 +59,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
         }
 
-        public class IsLoggedOnProperty
+        public class IsLoggedOnProperty : SteamClientAdapterTests
         {
-            public IsLoggedOnProperty()
-            {
-                mockSteamClient = new Mock<ISteamClient>();
-                var steamClient = mockSteamClient.Object;
-                var manager = Mock.Of<ICallbackManager>();
-                client = new SteamClientAdapter(steamClient, manager);
-            }
-
-            private Mock<ISteamClient> mockSteamClient;
-            private SteamClientAdapter client;
-
             [Fact]
             public void SessionIDIsNull_ReturnsFalse()
             {
@@ -73,7 +68,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(s => s.SessionID).Returns((int?)null);
 
                 // Act
-                var isLoggedOn = client.IsLoggedOn;
+                var isLoggedOn = steamClientAdapter.IsLoggedOn;
 
                 // Assert
                 Assert.False(isLoggedOn);
@@ -86,64 +81,54 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(s => s.SessionID).Returns(1);
 
                 // Act
-                var isLoggedOn = client.IsLoggedOn;
+                var isLoggedOn = steamClientAdapter.IsLoggedOn;
 
                 // Assert
                 Assert.True(isLoggedOn);
             }
         }
 
-        public class ProgressDebugNetworkListenerProperty
+        public class ProgressDebugNetworkListenerProperty : SteamClientAdapterTests
         {
             [Fact]
             public void GetSetBehavior()
             {
                 // Arrange
-                var steamClient = Mock.Of<ISteamClient>();
-                var manager = Mock.Of<ICallbackManager>();
-                var client = new SteamClientAdapter(steamClient, manager);
+                mockSteamClient.SetupProperty(s => s.DebugNetworkListener);
                 var listener = new ProgressDebugNetworkListener();
 
                 // Act
-                client.ProgressDebugNetworkListener = listener;
-                var listener2 = client.ProgressDebugNetworkListener;
+                steamClientAdapter.ProgressDebugNetworkListener = listener;
+                var listener2 = steamClientAdapter.ProgressDebugNetworkListener;
 
                 // Assert
                 Assert.Same(listener, listener2);
             }
         }
 
-        public class GetSteamUserStatsMethod
+        public class GetSteamUserStatsMethod : SteamClientAdapterTests
         {
+            public GetSteamUserStatsMethod()
+            {
+                var steamClient = new SteamClient();
+                steamClientAdapter = new SteamClientAdapter(steamClient, mockManager.Object);
+            }
+
+            private readonly new SteamClientAdapter steamClientAdapter;
+
             [Fact]
             public void ReturnsSteamUserStats()
             {
-                // Arrange
-                var steamClient = new SteamClient();
-                var manager = Mock.Of<ICallbackManager>();
-                var client = new SteamClientAdapter(steamClient, manager);
-
-                // Act
-                var steamUserStats = client.GetSteamUserStats();
+                // Arrange -> Act
+                var steamUserStats = steamClientAdapter.GetSteamUserStats();
 
                 // Assert
                 Assert.IsAssignableFrom<ISteamUserStats>(steamUserStats);
             }
         }
 
-        public class IsConnectedProperty
+        public class IsConnectedProperty : SteamClientAdapterTests
         {
-            public IsConnectedProperty()
-            {
-                mockSteamClient = new Mock<ISteamClient>();
-                var steamClient = mockSteamClient.Object;
-                var manager = Mock.Of<ICallbackManager>();
-                client = new SteamClientAdapter(steamClient, manager);
-            }
-
-            private Mock<ISteamClient> mockSteamClient;
-            private SteamClientAdapter client;
-
             [Fact]
             public void IsNotConnected_ReturnsFalse()
             {
@@ -151,7 +136,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(s => s.IsConnected).Returns(false);
 
                 // Act
-                var isConnected = client.IsConnected;
+                var isConnected = steamClientAdapter.IsConnected;
 
                 // Assert
                 Assert.False(isConnected);
@@ -164,26 +149,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 mockSteamClient.SetupGet(s => s.IsConnected).Returns(true);
 
                 // Act
-                var isConnected = client.IsConnected;
+                var isConnected = steamClientAdapter.IsConnected;
 
                 // Assert
                 Assert.True(isConnected);
             }
         }
 
-        public class DisconnectMethod
+        public class DisconnectMethod : SteamClientAdapterTests
         {
             [Fact]
             public void DisconectsFromSteam()
             {
-                // Arrange
-                var mockSteamClient = new Mock<ISteamClient>();
-                var steamClient = mockSteamClient.Object;
-                var manager = Mock.Of<ICallbackManager>();
-                var client = new SteamClientAdapter(steamClient, manager);
-
-                // Act
-                client.Disconnect();
+                // Arrange -> Act
+                steamClientAdapter.Disconnect();
 
                 // Assert
                 mockSteamClient.Verify(c => c.Disconnect(), Times.Once);
