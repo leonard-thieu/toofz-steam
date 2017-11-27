@@ -6,6 +6,7 @@ using log4net;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Polly;
+using Polly.Timeout;
 using SteamKit2;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
@@ -45,7 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <param name="userName">The user name to log on to Steam with.</param>
         /// <param name="password">The password to log on to Steam with.</param>
-        /// <param name="policy">The transient fault handling policy used for sending requests.</param>
+        /// <param name="retryPolicy">The transient fault handling policy used for sending requests.</param>
         /// <param name="telemetryClient">The telemetry client to use for reporting telemetry.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="userName"/> is null.
@@ -60,15 +61,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <paramref name="password"/> is empty.
         /// </exception>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="policy"/> is null.
+        /// <paramref name="retryPolicy"/> is null.
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
-        public SteamClientApiClient(string userName, string password, Policy policy, TelemetryClient telemetryClient)
-            : this(userName, password, policy, CreateSteamClient(), telemetryClient) { }
+        public SteamClientApiClient(string userName, string password, Policy retryPolicy, TelemetryClient telemetryClient)
+            : this(userName, password, retryPolicy, CreateSteamClient(), telemetryClient) { }
 
-        internal SteamClientApiClient(string userName, string password, Policy policy, ISteamClientAdapter steamClient, TelemetryClient telemetryClient)
+        internal SteamClientApiClient(string userName, string password, Policy retryPolicy, ISteamClientAdapter steamClient, TelemetryClient telemetryClient)
         {
             if (userName == "")
                 throw new ArgumentException($"{nameof(userName)} is empty.", nameof(userName));
@@ -77,16 +78,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             this.userName = userName ?? throw new ArgumentNullException(nameof(userName));
             this.password = password ?? throw new ArgumentNullException(nameof(password));
-            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+            this.retryPolicy = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
             this.steamClient = steamClient;
-            this.policy = policy ?? throw new ArgumentNullException(nameof(policy));
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+
+            timeoutPolicy = Policy.TimeoutAsync(() => Timeout, TimeoutStrategy.Pessimistic);
         }
 
         private readonly string userName;
         private readonly string password;
-        private readonly Policy policy;
+        private readonly Policy retryPolicy;
         private readonly ISteamClientAdapter steamClient;
         private readonly TelemetryClient telemetryClient;
+        private readonly TimeoutPolicy timeoutPolicy;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -127,20 +131,23 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             if (!steamClient.IsConnected)
             {
-                await steamClient
-                    .ConnectAsync()
-                    .TimeoutAfter(Timeout)
+                await timeoutPolicy
+                    .ExecuteAsync(steamClient.ConnectAsync, continueOnCapturedContext: false)
                     .ConfigureAwait(false);
             }
             if (!steamClient.IsLoggedOn)
             {
-                await steamClient
-                    .LogOnAsync(new LogOnDetails
-                    {
-                        Username = userName,
-                        Password = password,
-                    })
-                    .TimeoutAfter(Timeout)
+                await timeoutPolicy
+                    .ExecuteAsync(
+                        () =>
+                        {
+                            return steamClient.LogOnAsync(new LogOnDetails
+                            {
+                                Username = userName,
+                                Password = password,
+                            });
+                        },
+                        continueOnCapturedContext: false)
                     .ConfigureAwait(false);
             }
         }
@@ -223,7 +230,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 try
                 {
                     if (Log.IsDebugEnabled) { Log.Debug($"Start download {operationName} {requestName}"); }
-                    var response = await policy
+                    var response = await retryPolicy
                         .ExecuteAsync(cancellation => ExecuteRequestCoreAsync(operationName, request, requestName, cancellation), cancellationToken)
                         .ConfigureAwait(false);
                     if (Log.IsDebugEnabled) { Log.Debug($"End download {operationName} {requestName}"); }
@@ -262,9 +269,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     request.Timeout = Timeout;
 
-                    var response = await request
-                        .ToTask()
-                        .TimeoutAfter(Timeout) // Used in case SteamKit deadlocks
+                    // A fallback timeout is used in case SteamKit deadlocks.
+                    var response = await timeoutPolicy
+                        .ExecuteAsync(request.ToTask, continueOnCapturedContext: false)
                         .ConfigureAwait(false);
 
                     telemetry.Success = true;
