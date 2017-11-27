@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace toofz.NecroDancer.Leaderboards.Steam
+namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
 {
     public interface IUgcHttpClient : IDisposable
     {

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 
-namespace toofz.NecroDancer.Leaderboards.Steam
+namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
 {
     public sealed class UgcHttpClient : IUgcHttpClient
     {

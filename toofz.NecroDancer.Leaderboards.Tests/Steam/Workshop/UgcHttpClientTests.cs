@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using RichardSzalay.MockHttp;
-using toofz.NecroDancer.Leaderboards.Steam;
+using toofz.NecroDancer.Leaderboards.Steam.Workshop;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
 using Xunit;
 
-namespace toofz.NecroDancer.Leaderboards.Tests.Steam
+namespace toofz.NecroDancer.Leaderboards.Tests.Steam.Workshop
 {
     public class UgcHttpClientTests
     {
