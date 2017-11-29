@@ -84,6 +84,24 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             }
         }
 
+        public class ReplayProperty
+        {
+            [Fact]
+            public void GetSetBehavior()
+            {
+                // Arrange
+                var replay = new Replay();
+                var entry = new Entry();
+
+                // Act
+                entry.Replay = replay;
+                var replay2 = entry.Replay;
+
+                // Assert
+                Assert.Same(replay, replay2);
+            }
+        }
+
         public class ScoreProperty
         {
             [Fact]

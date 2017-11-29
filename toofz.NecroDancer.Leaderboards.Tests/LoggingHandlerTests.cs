@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using log4net;
@@ -10,6 +11,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 {
     public class LoggingHandlerTests
     {
+        public LoggingHandlerTests()
+        {
+            var loggingHandler = new LoggingHandler(mockLog.Object) { InnerHandler = mockHandler };
+            handler = new HttpMessageHandlerAdapter(loggingHandler);
+        }
+
+        private readonly MockHttpMessageHandler mockHandler = new MockHttpMessageHandler();
+        private readonly Mock<ILog> mockLog = new Mock<ILog>();
+        private readonly HttpMessageHandlerAdapter handler;
+
         public class Constructor
         {
             [Fact]
@@ -23,24 +34,31 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             }
         }
 
-        public class SendAsync
+        public class SendAsync : LoggingHandlerTests
         {
+            [Fact]
+            public async Task RequsetIsNull_ThrowsArgumentNullException()
+            {
+                // Arrange
+                HttpRequestMessage request = null;
+
+                // Act -> Assert
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                {
+                    return handler.PublicSendAsync(request);
+                });
+            }
+
             [Fact]
             public async Task LogsDebugStartDownload()
             {
                 // Arrange
-                var mockLog = new Mock<ILog>();
                 mockLog.Setup(l => l.IsDebugEnabled).Returns(true);
-                var log = mockLog.Object;
-                var mockHandler = new MockHttpMessageHandler();
-                mockHandler
-                    .When("*")
-                    .Respond(HttpStatusCode.OK);
-                var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(loggingHandler);
+                mockHandler.When("*").Respond(HttpStatusCode.OK);
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/");
 
                 // Act
-                await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
+                await handler.PublicSendAsync(request);
 
                 // Assert
                 mockLog.Verify(l => l.Debug("Start download http://fake.uri/"), Times.Once);
@@ -50,18 +68,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task LogsDebugEndDownload()
             {
                 // Arrange
-                var mockLog = new Mock<ILog>();
                 mockLog.Setup(l => l.IsDebugEnabled).Returns(true);
-                var log = mockLog.Object;
-                var mockHandler = new MockHttpMessageHandler();
-                mockHandler
-                    .When("*")
-                    .Respond(HttpStatusCode.OK);
-                var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(loggingHandler);
+                mockHandler.When("*").Respond(HttpStatusCode.OK);
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/");
 
                 // Act
-                await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
+                await handler.PublicSendAsync(request);
 
                 // Assert
                 mockLog.Verify(l => l.Debug("End download http://fake.uri/"), Times.Once);
@@ -71,21 +83,14 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ReturnsResponse()
             {
                 // Arrange
-                var mockLog = new Mock<ILog>();
-                var log = mockLog.Object;
-                var mockHandler = new MockHttpMessageHandler();
-                mockHandler
-                    .When("*")
-                    .Respond(new StringContent("myContent"));
-                var loggingHandler = new LoggingHandler(log) { InnerHandler = mockHandler };
-                var handler = new HttpMessageHandlerAdapter(loggingHandler);
+                mockHandler.When("*").Respond(HttpStatusCode.OK);
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/");
 
                 // Act
-                var response = await handler.PublicSendAsync(new HttpRequestMessage(HttpMethod.Get, "http://fake.uri/"));
-                var content = await response.Content.ReadAsStringAsync();
+                var response = await handler.PublicSendAsync(request);
 
                 // Assert
-                Assert.Equal("myContent", content);
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
     }

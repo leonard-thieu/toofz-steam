@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -418,6 +419,22 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 Assert.True(isConnected);
+            }
+        }
+
+        public class RemoteIPProperty : SteamClientAdapterTests
+        {
+            [Fact]
+            public void ReturnsRemoteIP()
+            {
+                // Arrange
+                mockSteamClient.Setup(s => s.RemoteIP).Returns(new IPAddress(new byte[] { 127, 0, 0, 1 }));
+
+                // Act
+                var remoteIP = steamClientAdapter.RemoteIP;
+
+                // Assert
+                Assert.IsAssignableFrom<IPAddress>(remoteIP);
             }
         }
 

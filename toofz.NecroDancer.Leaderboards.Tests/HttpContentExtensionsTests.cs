@@ -20,7 +20,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 HttpContent httpContent = null;
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(httpContent);
+                var clone = await httpContent.CloneAsync();
 
                 // Assert
                 Assert.Null(clone);
@@ -30,10 +30,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ClonesContent()
             {
                 // Arrange
-                var content = new StringContent("0123456789");
+                var httpContent = new StringContent("0123456789");
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(content);
+                var clone = await httpContent.CloneAsync();
 
                 // Assert
                 var cloneContent = await clone.ReadAsStringAsync();
@@ -44,10 +44,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ClonesHeaders()
             {
                 // Arrange
-                var content = new StringContent("0123456789", Encoding.UTF8);
+                var httpContent = new StringContent("0123456789", Encoding.UTF8);
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(content);
+                var clone = await httpContent.CloneAsync();
 
                 // Assert
                 Assert.Equal("utf-8", clone.Headers.ContentType.CharSet);
@@ -65,7 +65,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var cancellationToken = CancellationToken.None;
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(httpContent, stream, cancellationToken);
+                var clone = await httpContent.CloneAsync(stream, cancellationToken);
 
                 // Assert
                 Assert.Null(clone);
@@ -75,12 +75,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ClonesContent()
             {
                 // Arrange
-                var content = new StringContent("");
+                var httpContent = new StringContent("");
                 var stream = new MemoryStream(Encoding.UTF8.GetBytes("0123456789"));
                 var cancellationToken = CancellationToken.None;
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(content, stream, cancellationToken);
+                var clone = await httpContent.CloneAsync(stream, cancellationToken);
 
                 // Assert
                 var cloneContent = await clone.ReadAsStringAsync();
@@ -91,12 +91,12 @@ namespace toofz.NecroDancer.Leaderboards.Tests
             public async Task ClonesHeaders()
             {
                 // Arrange
-                var content = new StringContent("0123456789", Encoding.UTF8);
+                var httpContent = new StringContent("0123456789", Encoding.UTF8);
                 var stream = Stream.Null;
                 var cancellationToken = CancellationToken.None;
 
                 // Act
-                var clone = await HttpContentExtensions.CloneAsync(content, stream, cancellationToken);
+                var clone = await httpContent.CloneAsync(stream, cancellationToken);
 
                 // Assert
                 Assert.Equal("utf-8", clone.Headers.ContentType.CharSet);
@@ -114,7 +114,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 // Act -> Assert
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 {
-                    return HttpContentExtensions.ReadAsAsync<object>(httpContent);
+                    return httpContent.ReadAsAsync<object>();
                 });
             }
 
@@ -141,8 +141,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests
                 var content = await httpContent.ReadAsAsync<TestDto>();
 
                 // Assert
-                Assert.IsAssignableFrom<TestDto>(content);
                 Assert.Equal("MyValue", content.MyProperty);
+            }
+
+            [Fact]
+            public async Task DeserializationError_ReturnsDefault()
+            {
+                // Arrange
+                var httpContent = new StringContent("{\"NotMyProperty\":\"MyValue\"}");
+
+                // Act
+                var content = await httpContent.ReadAsAsync<TestDto>();
+
+                // Assert
+                Assert.Null(content);
             }
 
             [DataContract]
