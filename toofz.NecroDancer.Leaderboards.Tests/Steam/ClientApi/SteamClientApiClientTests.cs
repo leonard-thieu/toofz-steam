@@ -7,6 +7,7 @@ using Polly.Timeout;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
+using static SteamKit2.SteamClient;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
 
@@ -286,7 +287,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             {
                 // Arrange
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
-                mockSteamClient.Setup(c => c.ConnectAsync()).Returns(new TaskCompletionSource<SteamClient.ConnectedCallback>().Task);
+                mockSteamClient.Setup(c => c.ConnectAsync()).Returns(new TaskCompletionSource<IConnectedCallback>().Task);
                 steamClientApiClient.Timeout = TimeSpan.Zero;
 
                 // Act -> Assert
@@ -323,11 +324,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [Fact]
-            public async Task LoggingOnimesOut_ThrowsTimeoutRejectedException()
+            public async Task LoggingOnTimesOut_ThrowsTimeoutRejectedException()
             {
                 // Arrange
                 mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
-                mockSteamClient.Setup(c => c.LogOnAsync(It.IsAny<LogOnDetails>())).Returns(new TaskCompletionSource<LoggedOnCallback>().Task);
+                mockSteamClient.Setup(c => c.LogOnAsync(It.IsAny<LogOnDetails>())).Returns(new TaskCompletionSource<ILoggedOnCallback>().Task);
                 steamClientApiClient.Timeout = TimeSpan.Zero;
 
                 // Act -> Assert

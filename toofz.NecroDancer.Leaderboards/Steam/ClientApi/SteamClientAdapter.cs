@@ -67,10 +67,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             MessageLoop.Start();
         }
 
-        // TODO: Does this need a join?
         private void StopMessageLoop()
         {
             isRunning = false;
+
+            if (MessageLoop.IsAlive)
+            {
+                MessageLoop.Join();
+            }
         }
 
         #endregion
@@ -92,41 +96,41 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Connects this client to a Steam3 server. This begins the process of connecting
         /// and encrypting the data channel between the client and the server. Results are
-        /// returned asynchronously in a <see cref="ConnectedCallback"/>. If the
-        /// server that SteamKit attempts to connect to is down, a <see cref="DisconnectedCallback"/>
+        /// returned asynchronously in a <see cref="IConnectedCallback"/>. If the
+        /// server that SteamKit attempts to connect to is down, a <see cref="IDisconnectedCallback"/>
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
-        public Task<ConnectedCallback> ConnectAsync()
+        public Task<IConnectedCallback> ConnectAsync()
         {
-            var tcs = new TaskCompletionSource<ConnectedCallback>();
+            var tcs = new TaskCompletionSource<IConnectedCallback>();
 
             IDisposable onConnected = null;
             IDisposable onDisconnected = null;
-            onConnected = manager.Subscribe<ConnectedCallback>(response =>
+            onConnected = manager.Subscribe<IConnectedCallback>(response =>
             {
+                onConnected.Dispose();
+                onDisconnected.Dispose();
+
                 log.Info("Connected to Steam.");
                 tcs.SetResult(response);
 
-                onConnected.Dispose();
-                onDisconnected.Dispose();
-
                 IDisposable onDisconnectedWhenConnected = null;
-                onDisconnectedWhenConnected = manager.Subscribe<DisconnectedCallback>(_ =>
+                onDisconnectedWhenConnected = manager.Subscribe<IDisconnectedCallback>(_ =>
                 {
+                    onDisconnectedWhenConnected.Dispose();
+
                     StopMessageLoop();
                     log.Info("Disconnected from Steam.");
-
-                    onDisconnectedWhenConnected.Dispose();
                 });
             });
-            onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
+            onDisconnected = manager.Subscribe<IDisconnectedCallback>(response =>
             {
-                var ex = new SteamClientApiException("Unable to connect to Steam.");
-                tcs.SetException(ex);
-
                 onConnected.Dispose();
                 onDisconnected.Dispose();
+
+                var ex = new SteamClientApiException("Unable to connect to Steam.");
+                tcs.SetException(ex);
             });
 
             StartMessageLoop();
@@ -137,7 +141,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
-        /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.
+        /// connected at this point. Results are returned in a <see cref="ILoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
         /// <exception cref="ArgumentNullException">
@@ -146,14 +150,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
-        public Task<LoggedOnCallback> LogOnAsync(LogOnDetails details)
+        public Task<ILoggedOnCallback> LogOnAsync(LogOnDetails details)
         {
-            var tcs = new TaskCompletionSource<LoggedOnCallback>();
+            var tcs = new TaskCompletionSource<ILoggedOnCallback>();
 
             IDisposable onLoggedOn = null;
             IDisposable onDisconnected = null;
-            onLoggedOn = manager.Subscribe<LoggedOnCallback>(response =>
+            onLoggedOn = manager.Subscribe<ILoggedOnCallback>(response =>
             {
+                onLoggedOn.Dispose();
+                onDisconnected.Dispose();
+
                 switch (response.Result)
                 {
                     case EResult.OK:
@@ -169,20 +176,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                             break;
                         }
                 }
-
+            });
+            onDisconnected = manager.Subscribe<IDisconnectedCallback>(response =>
+            {
                 onLoggedOn.Dispose();
                 onDisconnected.Dispose();
-            });
-            onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
-            {
+
                 var ex = new SteamClientApiException("Unable to log on to Steam.");
                 tcs.SetException(ex);
-
-                onLoggedOn.Dispose();
-                onDisconnected.Dispose();
             });
 
-            steamClient.GetHandler<SteamUser>().LogOn(details);
+            steamClient.GetHandler<ISteamUser>().LogOn(details);
 
             return tcs.Task;
         }

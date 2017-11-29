@@ -21,15 +21,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Connects this client to a Steam3 server. This begins the process of connecting
         /// and encrypting the data channel between the client and the server. Results are
-        /// returned asynchronously in a <see cref="ConnectedCallback"/>. If the
-        /// server that SteamKit attempts to connect to is down, a <see cref="DisconnectedCallback"/>
+        /// returned asynchronously in a <see cref="IConnectedCallback"/>. If the
+        /// server that SteamKit attempts to connect to is down, a <see cref="IDisconnectedCallback"/>
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
-        Task<ConnectedCallback> ConnectAsync();
+        Task<IConnectedCallback> ConnectAsync();
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
-        /// connected at this point. Results are returned in a <see cref="LoggedOnCallback"/>.
+        /// connected at this point. Results are returned in a <see cref="ILoggedOnCallback"/>.
         /// </summary>
         /// <param name="details">The details to use for logging on.</param>
         /// <exception cref="ArgumentNullException">
@@ -38,7 +38,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentException">
         /// Username or password are not set within details.
         /// </exception>
-        Task<LoggedOnCallback> LogOnAsync(LogOnDetails details);
+        Task<ILoggedOnCallback> LogOnAsync(LogOnDetails details);
         /// <summary>
         /// Returns a registered handler for <see cref="SteamUserStats"/>.
         /// </summary>

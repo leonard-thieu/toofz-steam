@@ -6,6 +6,7 @@ using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
 using static SteamKit2.SteamClient;
+using static SteamKit2.SteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
@@ -124,43 +125,40 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             public ConnectAsyncMethod()
             {
                 mockManager
-                    .Setup(m => m.Subscribe(It.Is<Action<ConnectedCallback>>(cb => SetOnConnected(cb))))
+                    .Setup(m => m.Subscribe(It.Is<Action<IConnectedCallback>>(cb => SetOnConnected(cb))))
                     .Returns(mockUnsubscribeOnConnected.Object);
+
                 mockManager
-                    .SetupSequence(m => m.Subscribe(It.Is<Action<DisconnectedCallback>>(cb => SetOnDisconnected(cb))))
+                    .SetupSequence(m => m.Subscribe(It.Is<Action<IDisconnectedCallback>>(cb => SetOnDisconnected(cb))))
                     .Returns(mockUnsubscribeOnDisconnected.Object)
                     .Returns(mockUnsubscribeOnDisconnectedWhenConnected.Object);
-
-                responseTask = steamClientAdapter.ConnectAsync();
-                onConnected(null);
             }
 
             private readonly Mock<IDisposable> mockUnsubscribeOnConnected = new Mock<IDisposable>();
             private readonly Mock<IDisposable> mockUnsubscribeOnDisconnected = new Mock<IDisposable>();
             private readonly Mock<IDisposable> mockUnsubscribeOnDisconnectedWhenConnected = new Mock<IDisposable>();
 
-            private readonly Task<ConnectedCallback> responseTask;
+            private Action<IConnectedCallback> onConnected;
+            private Action<IDisconnectedCallback> onDisconnected;
+            private Action<IDisconnectedCallback> onDisconnectedWhenConnected;
 
-            private Action<ConnectedCallback> onConnected;
-            private Action<DisconnectedCallback> onDisconnected;
-            private Action<DisconnectedCallback> onDisconnectedWhenConnected;
-
-            private bool SetOnConnected(Action<ConnectedCallback> cb)
+            private bool SetOnConnected(Action<IConnectedCallback> cb)
             {
                 onConnected = cb;
 
                 return true;
             }
 
-            private bool SetOnDisconnected(Action<DisconnectedCallback> cb)
+            private bool SetOnDisconnected(Action<IDisconnectedCallback> callback)
             {
                 if (onDisconnected == null)
                 {
-                    onDisconnected = cb;
+                    onDisconnected = callback;
                 }
-                else
+                else if (callback != onDisconnected &&
+                         onDisconnectedWhenConnected == null)
                 {
-                    onDisconnectedWhenConnected = cb;
+                    onDisconnectedWhenConnected = callback;
                 }
 
                 return true;
@@ -168,20 +166,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
             public class Connects : ConnectAsyncMethod
             {
-                [Fact]
-                public async Task ReturnsResponse()
-                {
-                    // Arrange -> Act
-                    var response = await responseTask;
-
-                    // Assert
-                    Assert.Null(response);
-                }
+                private readonly Mock<IConnectedCallback> mockConnectedCallback = new Mock<IConnectedCallback>();
 
                 [Fact]
                 public async Task DisposesOnConnected()
                 {
-                    // Arrange -> Act
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync();
+                    onConnected(mockConnectedCallback.Object);
+
+                    // Act
                     var response = await responseTask;
 
                     // Assert
@@ -191,7 +185,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 [Fact]
                 public async Task DisposesOnDisconnected()
                 {
-                    // Arrange -> Act
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync();
+                    onConnected(mockConnectedCallback.Object);
+
+                    // Act
                     var response = await responseTask;
 
                     // Assert
@@ -199,10 +197,28 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 }
 
                 [Fact]
+                public async Task ReturnsResponse()
+                {
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync();
+                    onConnected(mockConnectedCallback.Object);
+
+                    // Act
+                    var response = await responseTask;
+
+                    // Assert
+                    Assert.IsAssignableFrom<IConnectedCallback>(response);
+                }
+
+                [Fact]
                 public async Task SetsOnDisconnectedWhenConnected()
                 {
-                    // Arrange -> Act
-                    var response = await responseTask;
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync();
+                    onConnected(mockConnectedCallback.Object);
+
+                    // Act
+                    await responseTask;
 
                     // Assert
                     Assert.NotNull(onDisconnectedWhenConnected);
@@ -210,30 +226,146 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 public class ThenDisconnects : Connects
                 {
-                    public ThenDisconnects()
-                    {
-                        onDisconnectedWhenConnected(null);
-                    }
-
-                    [Fact]
-                    public async Task StopsMessageLoop()
-                    {
-                        // Arrange -> Act
-                        await responseTask;
-
-                        // Assert
-                        Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
-                    }
+                    private readonly Mock<IDisconnectedCallback> mockDisconnectedCallback = new Mock<IDisconnectedCallback>();
 
                     [Fact]
                     public async Task DisposesOnDisconnectedWhenConnected()
                     {
-                        // Arrange -> Act
+                        // Arrange
+                        var responseTask = steamClientAdapter.ConnectAsync();
+                        onConnected(mockConnectedCallback.Object);
+                        onDisconnectedWhenConnected(mockDisconnectedCallback.Object);
+
+                        // Act
                         await responseTask;
 
                         // Assert
                         mockUnsubscribeOnDisconnectedWhenConnected.Verify(d => d.Dispose(), Times.Once);
                     }
+
+                    [Fact]
+                    public async Task StopsMessageLoop()
+                    {
+                        // Arrange
+                        var responseTask = steamClientAdapter.ConnectAsync();
+                        onConnected(mockConnectedCallback.Object);
+                        onDisconnectedWhenConnected(mockDisconnectedCallback.Object);
+
+                        // Act
+                        await responseTask;
+
+                        // Assert
+                        Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                    }
+                }
+            }
+        }
+
+        public class LogOnAsyncMethod : SteamClientAdapterTests
+        {
+            public LogOnAsyncMethod()
+            {
+                mockSteamClient.Setup(c => c.GetHandler<ISteamUser>()).Returns(mockSteamUser.Object);
+
+                mockManager
+                    .Setup(m => m.Subscribe(It.Is<Action<ILoggedOnCallback>>(cb => SetOnLoggedOn(cb))))
+                    .Returns(mockUnsubscribeOnLoggedOn.Object);
+
+                mockManager
+                    .Setup(m => m.Subscribe(It.Is<Action<IDisconnectedCallback>>(cb => SetOnDisconnected(cb))))
+                    .Returns(mockUnsubscribeOnDisconnected.Object);
+
+                responseTask = steamClientAdapter.LogOnAsync(new LogOnDetails());
+            }
+
+            private readonly Mock<IDisposable> mockUnsubscribeOnLoggedOn = new Mock<IDisposable>();
+            private readonly Mock<IDisposable> mockUnsubscribeOnDisconnected = new Mock<IDisposable>();
+            private readonly Mock<ISteamUser> mockSteamUser = new Mock<ISteamUser>();
+
+            private readonly Task<ILoggedOnCallback> responseTask;
+
+            private Action<ILoggedOnCallback> onLoggedOn;
+            private Action<IDisconnectedCallback> onDisconnected;
+
+            private bool SetOnLoggedOn(Action<ILoggedOnCallback> cb)
+            {
+                onLoggedOn = cb;
+
+                return true;
+            }
+
+            private bool SetOnDisconnected(Action<IDisconnectedCallback> cb)
+            {
+                onDisconnected = cb;
+
+                return true;
+            }
+
+            [Fact]
+            public void ReturnsTask()
+            {
+                // Arrange -> Act -> Assert
+                Assert.IsAssignableFrom<Task<ILoggedOnCallback>>(responseTask);
+            }
+
+            public class LogsOn : LogOnAsyncMethod
+            {
+                private readonly Mock<ILoggedOnCallback> mockLoggedOnCallback = new Mock<ILoggedOnCallback>();
+
+                [Fact]
+                public async Task DisposesOnLoggedOn()
+                {
+                    // Arrange
+                    mockLoggedOnCallback.Setup(r => r.Result).Returns(EResult.OK);
+                    onLoggedOn(mockLoggedOnCallback.Object);
+
+                    // Act
+                    await responseTask;
+
+                    // Assert
+                    mockUnsubscribeOnLoggedOn.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public async Task DisposesOnDisconnected()
+                {
+                    // Arrange
+                    mockLoggedOnCallback.Setup(r => r.Result).Returns(EResult.OK);
+                    onLoggedOn(mockLoggedOnCallback.Object);
+
+                    // Act
+                    await responseTask;
+
+                    // Assert
+                    mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public async Task ResultIsOK_ReturnsResponse()
+                {
+                    // Arrange
+                    mockLoggedOnCallback.Setup(r => r.Result).Returns(EResult.OK);
+                    onLoggedOn(mockLoggedOnCallback.Object);
+
+                    // Act
+                    var response = await responseTask;
+
+                    // Assert
+                    Assert.IsAssignableFrom<ILoggedOnCallback>(response);
+                }
+
+                [Fact]
+                public async Task ResultIsNotOK_ThrowsSteamClientApiException()
+                {
+                    // Arrange
+                    mockLoggedOnCallback.Setup(r => r.Result).Returns(EResult.AccessDenied);
+                    onLoggedOn(mockLoggedOnCallback.Object);
+
+                    // Act -> Assert
+                    await Assert.ThrowsAsync<SteamClientApiException>(() =>
+                    {
+                        return responseTask;
+                    });
                 }
             }
         }
