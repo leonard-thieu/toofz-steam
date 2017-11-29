@@ -3,7 +3,7 @@ using SteamKit2;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
-    public sealed class ProgressDebugNetworkListener : IDebugNetworkListener
+    internal sealed class ProgressDebugNetworkListener : IDebugNetworkListener
     {
         public IProgress<long> Progress { get; set; }
 
