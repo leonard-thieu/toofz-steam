@@ -28,10 +28,14 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <exception cref="ArgumentNullException">
         /// <paramref name="manager"/> is null.
         /// </exception>
-        public SteamClientAdapter(ISteamClient steamClient, ICallbackManager manager)
+        public SteamClientAdapter(ISteamClient steamClient, ICallbackManager manager) : this(steamClient, manager, null) { }
+
+        internal SteamClientAdapter(ISteamClient steamClient, ICallbackManager manager, ILog log)
         {
             this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient));
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            this.log = log ?? Log;
+
             MessageLoop = new Thread(RunMessageLoop)
             {
                 IsBackground = true,
@@ -41,6 +45,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private readonly ISteamClient steamClient;
         private readonly ICallbackManager manager;
+        private readonly ILog log;
 
         #region Message loop
 
@@ -62,6 +67,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             MessageLoop.Start();
         }
 
+        // TODO: Does this need a join?
         private void StopMessageLoop()
         {
             isRunning = false;
@@ -99,18 +105,19 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             IDisposable onDisconnected = null;
             onConnected = manager.Subscribe<ConnectedCallback>(response =>
             {
-                Log.Info("Connected to Steam.");
+                log.Info("Connected to Steam.");
                 tcs.SetResult(response);
 
                 onConnected.Dispose();
                 onDisconnected.Dispose();
 
-                onDisconnected = manager.Subscribe<DisconnectedCallback>(_ =>
+                IDisposable onDisconnectedWhenConnected = null;
+                onDisconnectedWhenConnected = manager.Subscribe<DisconnectedCallback>(_ =>
                 {
                     StopMessageLoop();
-                    Log.Info("Disconnected from Steam.");
+                    log.Info("Disconnected from Steam.");
 
-                    onDisconnected.Dispose();
+                    onDisconnectedWhenConnected.Dispose();
                 });
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
@@ -151,13 +158,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 {
                     case EResult.OK:
                         {
-                            Log.Info("Logged on to Steam.");
+                            log.Info("Logged on to Steam.");
                             tcs.SetResult(response);
                             break;
                         }
                     default:
                         {
-                            var ex = new SteamClientApiException("Unable to logon to Steam.", response.Result);
+                            var ex = new SteamClientApiException("Unable to log on to Steam.", response.Result);
                             tcs.SetException(ex);
                             break;
                         }
@@ -168,7 +175,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             });
             onDisconnected = manager.Subscribe<DisconnectedCallback>(response =>
             {
-                var ex = new SteamClientApiException("Unable to connect to Steam.");
+                var ex = new SteamClientApiException("Unable to log on to Steam.");
                 tcs.SetException(ex);
 
                 onLoggedOn.Dispose();

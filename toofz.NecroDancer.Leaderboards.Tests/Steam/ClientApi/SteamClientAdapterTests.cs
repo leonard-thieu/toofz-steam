@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
+using static SteamKit2.SteamClient;
 
 namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 {
-    public class SteamClientAdapterTests
+    public class SteamClientAdapterTests : IDisposable
     {
         public SteamClientAdapterTests()
         {
@@ -16,6 +19,16 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         private readonly Mock<ISteamClient> mockSteamClient = new Mock<ISteamClient>();
         private readonly Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
         private readonly SteamClientAdapter steamClientAdapter;
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            steamClientAdapter.Dispose();
+        }
 
         public class Constructor
         {
@@ -103,6 +116,125 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 Assert.Same(listener, listener2);
+            }
+        }
+
+        public class ConnectAsyncMethod : SteamClientAdapterTests
+        {
+            public ConnectAsyncMethod()
+            {
+                mockManager
+                    .Setup(m => m.Subscribe(It.Is<Action<ConnectedCallback>>(cb => SetOnConnected(cb))))
+                    .Returns(mockUnsubscribeOnConnected.Object);
+                mockManager
+                    .SetupSequence(m => m.Subscribe(It.Is<Action<DisconnectedCallback>>(cb => SetOnDisconnected(cb))))
+                    .Returns(mockUnsubscribeOnDisconnected.Object)
+                    .Returns(mockUnsubscribeOnDisconnectedWhenConnected.Object);
+
+                responseTask = steamClientAdapter.ConnectAsync();
+                onConnected(null);
+            }
+
+            private readonly Mock<IDisposable> mockUnsubscribeOnConnected = new Mock<IDisposable>();
+            private readonly Mock<IDisposable> mockUnsubscribeOnDisconnected = new Mock<IDisposable>();
+            private readonly Mock<IDisposable> mockUnsubscribeOnDisconnectedWhenConnected = new Mock<IDisposable>();
+
+            private readonly Task<ConnectedCallback> responseTask;
+
+            private Action<ConnectedCallback> onConnected;
+            private Action<DisconnectedCallback> onDisconnected;
+            private Action<DisconnectedCallback> onDisconnectedWhenConnected;
+
+            private bool SetOnConnected(Action<ConnectedCallback> cb)
+            {
+                onConnected = cb;
+
+                return true;
+            }
+
+            private bool SetOnDisconnected(Action<DisconnectedCallback> cb)
+            {
+                if (onDisconnected == null)
+                {
+                    onDisconnected = cb;
+                }
+                else
+                {
+                    onDisconnectedWhenConnected = cb;
+                }
+
+                return true;
+            }
+
+            public class Connects : ConnectAsyncMethod
+            {
+                [Fact]
+                public async Task ReturnsResponse()
+                {
+                    // Arrange -> Act
+                    var response = await responseTask;
+
+                    // Assert
+                    Assert.Null(response);
+                }
+
+                [Fact]
+                public async Task DisposesOnConnected()
+                {
+                    // Arrange -> Act
+                    var response = await responseTask;
+
+                    // Assert
+                    mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public async Task DisposesOnDisconnected()
+                {
+                    // Arrange -> Act
+                    var response = await responseTask;
+
+                    // Assert
+                    mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public async Task SetsOnDisconnectedWhenConnected()
+                {
+                    // Arrange -> Act
+                    var response = await responseTask;
+
+                    // Assert
+                    Assert.NotNull(onDisconnectedWhenConnected);
+                }
+
+                public class ThenDisconnects : Connects
+                {
+                    public ThenDisconnects()
+                    {
+                        onDisconnectedWhenConnected(null);
+                    }
+
+                    [Fact]
+                    public async Task StopsMessageLoop()
+                    {
+                        // Arrange -> Act
+                        await responseTask;
+
+                        // Assert
+                        Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                    }
+
+                    [Fact]
+                    public async Task DisposesOnDisconnectedWhenConnected()
+                    {
+                        // Arrange -> Act
+                        await responseTask;
+
+                        // Assert
+                        mockUnsubscribeOnDisconnectedWhenConnected.Verify(d => d.Dispose(), Times.Once);
+                    }
+                }
             }
         }
 
