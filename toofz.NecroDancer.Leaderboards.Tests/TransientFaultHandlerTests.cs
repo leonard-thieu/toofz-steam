@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Polly;
 using RichardSzalay.MockHttp;
-using toofz.TestsShared;
 using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests

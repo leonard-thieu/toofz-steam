@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using log4net;
 using Moq;
 using RichardSzalay.MockHttp;
-using toofz.TestsShared;
 using Xunit;
 
 namespace toofz.NecroDancer.Leaderboards.Tests
