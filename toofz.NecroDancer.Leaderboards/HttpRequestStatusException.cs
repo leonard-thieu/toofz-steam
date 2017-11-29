@@ -42,11 +42,8 @@ namespace toofz.NecroDancer.Leaderboards
         public HttpRequestStatusException(string message, HttpStatusCode statusCode, Uri requestUri, string responseContent)
             : base(message)
         {
-            if (requestUri == null)
-                throw new ArgumentNullException(nameof(requestUri));
-
             StatusCode = statusCode;
-            RequestUri = requestUri;
+            RequestUri = requestUri ?? throw new ArgumentNullException(nameof(requestUri));
             ResponseContent = responseContent;
         }
 

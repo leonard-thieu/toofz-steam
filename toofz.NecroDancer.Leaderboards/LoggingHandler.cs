@@ -13,11 +13,11 @@ namespace toofz.NecroDancer.Leaderboards
         /// <summary>
         /// Initializes an instance of the <see cref="LoggingHandler"/> class.
         /// </summary>
-        public LoggingHandler() : this(Log) { }
+        public LoggingHandler() : this(null) { }
 
         internal LoggingHandler(ILog log)
         {
-            this.log = log;
+            this.log = log ?? Log;
         }
 
         private readonly ILog log;

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    // TODO: Should this even be a handler?
+    // Make be a better design to just include it in ProgressReporterHttpClient.
+    // This could also potentially avoid the LoadIntoBufferAsync call which should reduce memory usage.
     public sealed class HttpErrorHandler : DelegatingHandler
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
