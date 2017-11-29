@@ -46,6 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private readonly ISteamClient steamClient;
         private readonly ICallbackManager manager;
         private readonly ILog log;
+        private readonly TimeSpan runWaitCallbacksTimeout = TimeSpan.FromSeconds(1);
 
         #region Message loop
 
@@ -57,7 +58,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             while (isRunning)
             {
-                manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+                manager.RunWaitCallbacks(runWaitCallbacksTimeout);
             }
         }
 
@@ -73,7 +74,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
             if (MessageLoop.IsAlive)
             {
-                MessageLoop.Join();
+                MessageLoop.Join((int)(3 * runWaitCallbacksTimeout.TotalMilliseconds));
             }
         }
 
