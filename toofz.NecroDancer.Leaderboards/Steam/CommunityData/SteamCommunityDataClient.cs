@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -37,6 +39,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                         default:
                             return false;
                     }
+                })
+                .Or<IOException>(ex =>
+                {
+                    return (ex.InnerException is SocketException se) &&
+                           (se.SocketErrorCode == SocketError.ConnectionReset);
                 });
         }
 
