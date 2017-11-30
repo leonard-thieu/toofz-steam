@@ -7,6 +7,8 @@ using Microsoft.ApplicationInsights.DataContracts;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    using static Util;
+
     internal sealed class ProgressReporterHttpClient : HttpClient
     {
         /// <summary>
@@ -51,7 +53,7 @@ namespace toofz.NecroDancer.Leaderboards
 
                     return response;
                 }
-                catch (Exception) when (Util.FailTelemetry(operation.Telemetry))
+                catch (Exception) when (FailTelemetry(operation.Telemetry))
                 {
                     // Unreachable
                     throw;

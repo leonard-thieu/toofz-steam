@@ -13,6 +13,8 @@ using static SteamKit2.SteamUserStats;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 {
+    using static Util;
+
     public sealed class SteamClientApiClient : ISteamClientApiClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
@@ -244,7 +246,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
                     return response;
                 }
-                catch (Exception) when (Util.FailTelemetry(operation.Telemetry))
+                catch (Exception) when (FailTelemetry(operation.Telemetry))
                 {
                     // Unreachable
                     throw;
@@ -289,7 +291,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                     telemetry.Success = false;
                     throw new SteamClientApiException("Request timed out.", ex);
                 }
-                catch (Exception) when (Util.FailTelemetry(telemetry))
+                catch (Exception) when (FailTelemetry(telemetry))
                 {
                     // Unreachable
                     throw;
