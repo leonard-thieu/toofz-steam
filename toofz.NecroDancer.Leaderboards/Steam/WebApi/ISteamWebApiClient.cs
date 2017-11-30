@@ -7,6 +7,9 @@ using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
+    /// <summary>
+    /// HTTP client used for interacting with Steam Web API.
+    /// </summary>
     public interface ISteamWebApiClient : IDisposable
     {
         /// <summary>

@@ -11,6 +11,9 @@ using Polly;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
+    /// <summary>
+    /// HTTP client used for interacting with Steam Community Data.
+    /// </summary>
     public sealed class SteamCommunityDataClient : ISteamCommunityDataClient
     {
         private static readonly XmlSerializer LeaderboardsEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardsEnvelope) })[0];

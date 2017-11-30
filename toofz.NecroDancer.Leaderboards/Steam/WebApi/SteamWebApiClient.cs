@@ -12,6 +12,9 @@ using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 {
+    /// <summary>
+    /// HTTP client used for interacting with Steam Web API.
+    /// </summary>
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
         /// <summary>
@@ -175,6 +178,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
 
         private bool disposed;
 
+        /// <summary>
+        /// Disposes of resources used by <see cref="SteamWebApiClient"/>.
+        /// </summary>
         public void Dispose()
         {
             if (disposed) { return; }

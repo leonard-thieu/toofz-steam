@@ -216,6 +216,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private bool disposed;
 
+        /// <summary>
+        /// Disposes of resources used by <see cref="SteamClientAdapter"/>.
+        /// </summary>
         public void Dispose()
         {
             if (disposed) { return; }

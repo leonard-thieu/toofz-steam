@@ -312,7 +312,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private bool disposed;
 
         /// <summary>
-        /// Disconnects from Steam.
+        /// Disposes of resources used by <see cref="SteamClientApiClient"/>.
         /// </summary>
         public void Dispose()
         {

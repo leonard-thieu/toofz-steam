@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
+    /// <summary>
+    /// Contains extension methods for <see cref="ISteamCommunityDataClient"/>.
+    /// </summary>
     public static class ISteamCommunityDataClientExtensions
     {
         public static Task<LeaderboardsEnvelope> GetLeaderboardsAsync(

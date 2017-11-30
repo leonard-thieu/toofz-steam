@@ -33,6 +33,18 @@ namespace toofz.NecroDancer.Leaderboards
             return clone;
         }
 
+        /// <summary>
+        /// Deserializes a JSON response into <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize into.</typeparam>
+        /// <param name="httpContent">The content to deserialize.</param>
+        /// <returns>
+        /// An instance of <typeparamref name="T"/> representing the content, if deserialization succeeded; 
+        /// otherwise, returns the default value of <typeparamref name="T"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="httpContent"/> is null.
+        /// </exception>
         public static async Task<T> ReadAsAsync<T>(this HttpContent httpContent)
         {
             if (httpContent == null)

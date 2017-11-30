@@ -40,7 +40,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </exception>
         Task<ILoggedOnCallback> LogOnAsync(LogOnDetails details);
         /// <summary>
-        /// Returns a registered handler for <see cref="SteamUserStats"/>.
+        /// Returns a registered handler for <see cref="ISteamUserStats"/>.
         /// </summary>
         /// <returns>A registered handler on success, or null if the handler could not be found.</returns>
         ISteamUserStats GetSteamUserStats();

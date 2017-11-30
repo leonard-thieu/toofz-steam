@@ -6,6 +6,12 @@ using log4net;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    /// <summary>
+    /// Logs the start and end of an HTTP request.
+    /// </summary>
+    /// <remarks>
+    /// Log level must be set to at least Debug in order for logging to occur.
+    /// </remarks>
     public sealed class LoggingHandler : DelegatingHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoggingHandler));
