@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -41,7 +42,11 @@ namespace toofz.NecroDancer.Leaderboards
                 var content = await httpContent.ReadAsStreamAsync().ConfigureAwait(false);
                 using (var gzip = new GZipStream(content, CompressionMode.Decompress, leaveOpen: true))
                 {
-                    response.Content = await httpContent.CloneAsync(gzip, cancellationToken).ConfigureAwait(false);
+                    var ms = new MemoryStream();
+                    await gzip.CopyToAsync(ms, 81920, cancellationToken).ConfigureAwait(false);
+                    ms.Position = 0;
+
+                    response.Content = httpContent.Clone(ms);
                 }
                 httpContent.Dispose();
             }
