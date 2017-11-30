@@ -6,6 +6,9 @@ using Microsoft.ApplicationInsights;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
 {
+    /// <summary>
+    /// HTTP client used for downloading user-generated content (UGC) from Steam Workshop.
+    /// </summary>
     public sealed class UgcHttpClient : IUgcHttpClient
     {
         /// <summary>
@@ -39,6 +42,18 @@ namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
 
         #region GetUgcFile
 
+        /// <summary>
+        /// Gets a UGC file as binary data.
+        /// </summary>
+        /// <param name="requestUri">The URI to download the UGC file from.</param>
+        /// <param name="progress">An optional <see cref="IProgress{T}"/> object used to report download size.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>
+        /// The UGC file as binary data.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="requestUri"/> is null.
+        /// </exception>
         public async Task<byte[]> GetUgcFileAsync(
             string requestUri,
             IProgress<long> progress = default,
@@ -55,6 +70,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
 
         private bool disposed;
 
+        /// <summary>
+        /// Disposes of the resources used by <see cref="UgcHttpClient"/>.
+        /// </summary>
         public void Dispose()
         {
             if (disposed) { return; }
