@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests
         private TelemetryClient telemetryClient = new TelemetryClient();
         private ProgressReporterHttpClient httpClient;
 
-        public class GetAsyncMethod : ProgressReporterHttpClientTests
+        public class GetAsyncMethod_String : ProgressReporterHttpClientTests
         {
             [Fact]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
@@ -78,39 +77,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests
 
                 // Act
                 var response = await httpClient.GetAsync(operationName, requestUri, progress, cancellationToken);
-
-                // Assert
-                Assert.IsAssignableFrom<HttpResponseMessage>(response);
-            }
-        }
-
-        public class SendAsyncMethod : ProgressReporterHttpClientTests
-        {
-            private readonly CancellationToken cancellationToken = CancellationToken.None;
-
-            [Fact]
-            public async Task RequestIsNotSuccessful_ThrowsHttpRequestStatusException()
-            {
-                // Arrange
-                handler.When("*").Respond(HttpStatusCode.BadRequest, new StringContent("myContent"));
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
-
-                // Act -> Assert
-                await Assert.ThrowsAsync<HttpRequestStatusException>(() =>
-                {
-                    return httpClient.SendAsync(request, cancellationToken);
-                });
-            }
-
-            [Fact]
-            public async Task ReturnsResponse()
-            {
-                // Arrange
-                handler.When("*").Respond(HttpStatusCode.OK);
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/");
-
-                // Act
-                var response = await httpClient.SendAsync(request, cancellationToken);
 
                 // Assert
                 Assert.IsAssignableFrom<HttpResponseMessage>(response);
