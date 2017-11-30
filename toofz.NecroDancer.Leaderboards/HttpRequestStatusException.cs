@@ -4,7 +4,10 @@ using System.Net.Http;
 
 namespace toofz.NecroDancer.Leaderboards
 {
-    public class HttpRequestStatusException : HttpRequestException
+    /// <summary>
+    /// Exception thrown by HTTP clients that use <see cref="TransientFaultHandler"/>.
+    /// </summary>
+    public sealed class HttpRequestStatusException : HttpRequestException
     {
         /// <summary>
         /// Initializes an instance of the <see cref="HttpRequestStatusException"/> class.
@@ -14,37 +17,10 @@ namespace toofz.NecroDancer.Leaderboards
         /// <exception cref="ArgumentNullException">
         /// <paramref name="requestUri"/> is null.
         /// </exception>
-        public HttpRequestStatusException(HttpStatusCode statusCode, Uri requestUri) : this(null, statusCode, requestUri) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequestStatusException"/> class 
-        /// with a specific message that describes the current exception.
-        /// </summary>
-        /// <param name="message">A message that describes the current exception.</param>
-        /// <param name="statusCode">The status code returned by the server for the request.</param>
-        /// <param name="requestUri">The URI of the request that caused the exception.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="requestUri"/> is null.
-        /// </exception>
-        public HttpRequestStatusException(string message, HttpStatusCode statusCode, Uri requestUri) : this(message, statusCode, requestUri, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequestStatusException"/> class 
-        /// with a specific message that describes the current exception.
-        /// </summary>
-        /// <param name="message">A message that describes the current exception.</param>
-        /// <param name="statusCode">The status code returned by the server for the request.</param>
-        /// <param name="requestUri">The URI of the request that caused the exception.</param>
-        /// <param name="responseContent">The content of the response.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="requestUri"/> is null.
-        /// </exception>
-        public HttpRequestStatusException(string message, HttpStatusCode statusCode, Uri requestUri, string responseContent)
-            : base(message)
+        public HttpRequestStatusException(HttpStatusCode statusCode, Uri requestUri)
         {
             StatusCode = statusCode;
             RequestUri = requestUri ?? throw new ArgumentNullException(nameof(requestUri));
-            ResponseContent = responseContent;
         }
 
         /// <summary>
@@ -55,9 +31,5 @@ namespace toofz.NecroDancer.Leaderboards
         /// The URI of the request that caused the exception.
         /// </summary>
         public Uri RequestUri { get; }
-        /// <summary>
-        /// The content of the response.
-        /// </summary>
-        public string ResponseContent { get; }
     }
 }
