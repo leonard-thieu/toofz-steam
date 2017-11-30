@@ -22,7 +22,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
         /// <paramref name="requestUri"/> is null.
         /// </exception>
         Task<byte[]> GetUgcFileAsync(
-            string url,
+            string requestUri,
             IProgress<long> progress = default,
             CancellationToken cancellationToken = default);
     }
