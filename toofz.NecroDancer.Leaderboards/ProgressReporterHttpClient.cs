@@ -7,6 +7,8 @@ using Microsoft.ApplicationInsights.DataContracts;
 
 namespace toofz.NecroDancer.Leaderboards
 {
+    using static Util;
+
     internal sealed class ProgressReporterHttpClient : HttpClient
     {
         /// <summary>
@@ -51,12 +53,31 @@ namespace toofz.NecroDancer.Leaderboards
 
                     return response;
                 }
-                catch (Exception) when (Util.FailTelemetry(operation.Telemetry))
+                catch (Exception) when (FailTelemetry(operation.Telemetry))
                 {
                     // Unreachable
                     throw;
                 }
             }
+        }
+
+        public override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var message = $"Response status code does not indicate success: {(int)response.StatusCode} ({response.ReasonPhrase}).";
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                throw new HttpRequestStatusException(
+                    message,
+                    response.StatusCode,
+                    response.RequestMessage.RequestUri,
+                    responseContent);
+            }
+
+            return response;
         }
     }
 }
