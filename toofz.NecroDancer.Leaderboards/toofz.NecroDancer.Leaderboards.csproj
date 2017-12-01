@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Polly" Version="5.5.0" />
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" Condition="'$(Configuration)'!='Coverage'" />
+    <!--<PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />-->
     <PackageReference Include="toofz.SteamKit2" Version="4.3.1" />
   </ItemGroup>
 
