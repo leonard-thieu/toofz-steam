@@ -20,18 +20,20 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
         /// <summary>
-        /// Gets a retry strategy for <see cref="SteamClientApiClient"/>.
+        /// Indicates if an exception is a transient fault for <see cref="SteamClientApiClient"/>.
         /// </summary>
+        /// <param name="ex">The exception to check.</param>
         /// <returns>
-        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamClientApiClient"/>.
+        /// true, if the exception is a transient fault for <see cref="SteamClientApiClient"/>; otherwise, false.
         /// </returns>
-        public static PolicyBuilder GetRetryStrategy()
+        public static bool IsTransient(Exception ex)
         {
-            return Policy
-                .Handle<SteamClientApiException>(ex =>
-                {
-                    return ex.InnerException is TaskCanceledException;
-                });
+            if (ex is SteamClientApiException scae)
+            {
+                return scae.InnerException is TaskCanceledException;
+            }
+
+            return false;
         }
 
         private static ISteamClientAdapter CreateSteamClient()

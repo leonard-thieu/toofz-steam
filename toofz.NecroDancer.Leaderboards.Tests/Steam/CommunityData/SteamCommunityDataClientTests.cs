@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
-using Polly;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.CommunityData;
 using toofz.NecroDancer.Leaderboards.Tests.Properties;
@@ -24,18 +25,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
         private TelemetryClient telemetryClient = new TelemetryClient();
         private SteamCommunityDataClient steamCommunityDataClient;
 
-        public class GetRetryStrategyMethod
+        public class IsTransientMethod
         {
-            [Fact]
-            public void ReturnsRetryStrategy()
-            {
-                // Arrange -> Act
-                var strategy = SteamCommunityDataClient.GetRetryStrategy();
-
-                // Assert
-                Assert.IsAssignableFrom<PolicyBuilder>(strategy);
-            }
-
             [Theory]
             [InlineData(408)]
             [InlineData(429)]
@@ -43,47 +34,83 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             [InlineData(502)]
             [InlineData(503)]
             [InlineData(504)]
-            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_HandlesException(int statusCode)
+            public void ExIsHttpRequestStatusExceptionAndStatusCodeIsTransient_ReturnsTrue(HttpStatusCode statusCode)
             {
                 // Arrange
-                Exception ex = null;
-                var policy = SteamCommunityDataClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
 
-                // Act -> Assert
-                policy.Execute(() =>
-                {
-                    if (ex == null)
-                    {
-                        throw new HttpRequestStatusException((HttpStatusCode)statusCode, new Uri("http://example.org"));
-                    }
-                });
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
             }
 
-            [Fact]
-            public void HttpRequestStatusExceptionAndStatusCodeIsNotTransient_DoesNotHandleException()
+            public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
                 var statusCode = HttpStatusCode.Forbidden;
-                Exception ex = null;
-                var policy = SteamCommunityDataClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
 
-                // Act -> Assert
-                Assert.Throws<HttpRequestStatusException>(() =>
-                {
-                    policy.Execute(() =>
-                    {
-                        if (ex == null)
-                        {
-                            throw new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
-                        }
-                    });
-                });
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsConnectionReset_ReturnsTrue()
+            {
+                // Arrange
+                var innerException = new SocketException((int)SocketError.ConnectionReset);
+                var ex = new IOException(null, innerException);
+
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
+            }
+
+            [Fact]
+            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsNotConnectionReset_ReturnsFalse()
+            {
+                // Arrange
+                var innerException = new SocketException((int)SocketError.SocketNotSupported);
+                var ex = new IOException(null, innerException);
+
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ExIsIOExceptionAndInnerExceptionIsNotSocketException_ReturnsFalse()
+            {
+                // Arrange
+                var ex = new IOException(null);
+
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ReturnsFalse()
+            {
+                // Arrange
+                var ex = new Exception();
+
+                // Act
+                var isTransient = SteamCommunityDataClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
             }
         }
 

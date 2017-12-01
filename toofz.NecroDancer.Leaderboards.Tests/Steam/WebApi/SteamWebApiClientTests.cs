@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
-using Polly;
 using RichardSzalay.MockHttp;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
@@ -25,18 +24,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
         private readonly TelemetryClient telemetryClient = new TelemetryClient();
         private readonly SteamWebApiClient client;
 
-        public class GetRetryStrategyMethod
+        public class IsTransientMethod
         {
-            [Fact]
-            public void ReturnsRetryStrategy()
-            {
-                // Arrange -> Act
-                var strategy = SteamWebApiClient.GetRetryStrategy();
-
-                // Assert
-                Assert.IsAssignableFrom<PolicyBuilder>(strategy);
-            }
-
             [Theory]
             [InlineData(408)]
             [InlineData(429)]
@@ -44,47 +33,42 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
             [InlineData(502)]
             [InlineData(503)]
             [InlineData(504)]
-            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_HandlesException(int statusCode)
+            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_HandlesException(HttpStatusCode statusCode)
             {
                 // Arrange
-                Exception ex = null;
-                var policy = SteamWebApiClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
 
-                // Act -> Assert
-                policy.Execute(() =>
-                {
-                    if (ex == null)
-                    {
-                        throw new HttpRequestStatusException((HttpStatusCode)statusCode, new Uri("http://example.org"));
-                    }
-                });
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
             }
 
-            [Fact]
-            public void HttpRequestStatusExceptionAndStatusCodeIsNotTransient_DoesNotHandleException()
+            public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
                 var statusCode = HttpStatusCode.Forbidden;
-                Exception ex = null;
-                var policy = SteamWebApiClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
 
-                // Act -> Assert
-                Assert.Throws<HttpRequestStatusException>(() =>
-                {
-                    policy.Execute(() =>
-                    {
-                        if (ex == null)
-                        {
-                            throw new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
-                        }
-                    });
-                });
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ReturnsFalse()
+            {
+                // Arrange
+                var ex = new Exception();
+
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
             }
         }
 

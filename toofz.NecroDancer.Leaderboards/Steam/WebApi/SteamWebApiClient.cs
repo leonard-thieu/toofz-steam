@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.ApplicationInsights;
-using Polly;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamRemoteStorage;
 using toofz.NecroDancer.Leaderboards.Steam.WebApi.ISteamUser;
 
@@ -18,30 +17,32 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
     public sealed class SteamWebApiClient : ISteamWebApiClient
     {
         /// <summary>
-        /// Gets a retry strategy for <see cref="SteamWebApiClient"/>.
+        /// Indicates if an exception is a transient fault for <see cref="SteamWebApiClient"/>.
         /// </summary>
+        /// <param name="ex">The exception to check.</param>
         /// <returns>
-        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamWebApiClient"/>.
+        /// true, if the exception is a transient fault for <see cref="SteamWebApiClient"/>; otherwise, false.
         /// </returns>
-        public static PolicyBuilder GetRetryStrategy()
+        public static bool IsTransient(Exception ex)
         {
-            return Policy
-                .Handle<HttpRequestStatusException>(ex =>
+            if (ex is HttpRequestStatusException hrse)
+            {
+                // https://partner.steamgames.com/doc/webapi_overview/responses#status_codes
+                switch ((int)hrse.StatusCode)
                 {
-                    // https://partner.steamgames.com/doc/webapi_overview/responses#status_codes
-                    switch ((int)ex.StatusCode)
-                    {
-                        case 408:   // Request Timeout
-                        case 429:   // Too Many Requests        You are being rate limited.
-                        case 500:   // Internal Server Error    An unrecoverable error has occurred, please try again.
-                        case 502:   // Bad Gateway
-                        case 503:   // Service Unavailable      Server is temporarily unavailable, or too busy to respond. Please wait and try again later.
-                        case 504:   // Gateway Timeout
-                            return true;
-                        default:
-                            return false;
-                    }
-                });
+                    case 408:   // Request Timeout
+                    case 429:   // Too Many Requests        You are being rate limited.
+                    case 500:   // Internal Server Error    An unrecoverable error has occurred, please try again.
+                    case 502:   // Bad Gateway
+                    case 503:   // Service Unavailable      Server is temporarily unavailable, or too busy to respond. Please wait and try again later.
+                    case 504:   // Gateway Timeout
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

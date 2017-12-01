@@ -27,59 +27,45 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         private readonly TelemetryClient telemetryClient = new TelemetryClient();
         private readonly SteamClientApiClient steamClientApiClient;
 
-        public class GetRetryStrategyMethod
+        public class IsTransientMethod
         {
             [Fact]
-            public void ReturnsRetryStrategy()
+            public void ExIsSteamClientApiExceptionAndInnerExceptionIsTaskCanceledException_ReturnsTrue()
             {
-                // Arrange -> Act
-                var strategy = SteamClientApiClient.GetRetryStrategy();
+                // Arrange
+                var ex = new SteamClientApiException(null, new TaskCanceledException());
+
+                // Act
+                var isTransient = SteamClientApiClient.IsTransient(ex);
 
                 // Assert
-                Assert.IsAssignableFrom<PolicyBuilder>(strategy);
+                Assert.True(isTransient);
             }
 
             [Fact]
-            public void SteamClientApiExceptionIsThrownAndInnerExceptionIsTaskCanceledException_HandlesException()
+            public void ExIsSteamClientApiExceptionAndInnerExceptionIsNotTaskCanceledException_ReturnsFalse()
             {
                 // Arrange
-                Exception ex = null;
-                var policy = SteamClientApiClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new SteamClientApiException(null);
 
-                // Act -> Assert
-                policy.Execute(() =>
-                {
-                    if (ex == null)
-                    {
-                        throw new SteamClientApiException(null, new TaskCanceledException());
-                    }
-                });
+                // Act
+                var isTransient = SteamClientApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
             }
 
             [Fact]
-            public void SteamClientApiExceptionIsThrownAndInnerExceptionIsNotTaskCanceledException_DoesNotHandleException()
+            public void ExIsNotSteamClientApiException_ReturnsFalse()
             {
                 // Arrange
-                Exception ex = null;
-                var policy = SteamClientApiClient.GetRetryStrategy().Retry((e, i) =>
-                {
-                    ex = e;
-                });
+                var ex = new TaskCanceledException();
 
-                // Act -> Assert
-                Assert.Throws<SteamClientApiException>(() =>
-                {
-                    policy.Execute(() =>
-                    {
-                        if (ex == null)
-                        {
-                            throw new SteamClientApiException(null, new Exception());
-                        }
-                    });
-                });
+                // Act
+                var isTransient = SteamClientApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
             }
         }
 

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Flurl;
 using Microsoft.ApplicationInsights;
-using Polly;
 
 namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
 {
@@ -20,34 +19,36 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
         private static readonly XmlSerializer LeaderboardEntriesEnvelopeSerializer = XmlSerializer.FromTypes(new[] { typeof(LeaderboardEntriesEnvelope) })[0];
 
         /// <summary>
-        /// Gets a retry strategy for <see cref="SteamCommunityDataClient"/>.
+        /// Indicates if an exception is a transient fault for <see cref="SteamCommunityDataClient"/>.
         /// </summary>
+        /// <param name="ex">The exception to check.</param>
         /// <returns>
-        /// A <see cref="PolicyBuilder"/> configured with a retry strategy appropriate for <see cref="SteamCommunityDataClient"/>.
+        /// true, if the exception is a transient fault for <see cref="SteamCommunityDataClient"/>; otherwise, false.
         /// </returns>
-        public static PolicyBuilder GetRetryStrategy()
+        public static bool IsTransient(Exception ex)
         {
-            return Policy
-                .Handle<HttpRequestStatusException>(ex =>
+            if (ex is HttpRequestStatusException hrse)
+            {
+                switch ((int)hrse.StatusCode)
                 {
-                    switch ((int)ex.StatusCode)
-                    {
-                        case 408:   // Request Timeout
-                        case 429:   // Too Many Requests
-                        case 500:   // Internal Server Error
-                        case 502:   // Bad Gateway
-                        case 503:   // Service Unavailable
-                        case 504:   // Gateway Timeout
-                            return true;
-                        default:
-                            return false;
-                    }
-                })
-                .Or<IOException>(ex =>
-                {
-                    return (ex.InnerException is SocketException se) &&
-                           (se.SocketErrorCode == SocketError.ConnectionReset);
-                });
+                    case 408:   // Request Timeout
+                    case 429:   // Too Many Requests
+                    case 500:   // Internal Server Error
+                    case 502:   // Bad Gateway
+                    case 503:   // Service Unavailable
+                    case 504:   // Gateway Timeout
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            else if (ex is IOException ioe)
+            {
+                return (ioe.InnerException is SocketException se) &&
+                       (se.SocketErrorCode == SocketError.ConnectionReset);
+            }
+
+            return false;
         }
 
         /// <summary>
