@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace toofz.NecroDancer.Leaderboards
 {
     /// <summary>
-    /// Represents a Steam user.
+    /// Represents a Crypt of the NecroDancer player.
     /// </summary>
     public sealed class Player
     {

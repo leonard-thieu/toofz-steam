@@ -1,5 +1,8 @@
 ﻿namespace toofz.NecroDancer.Leaderboards
 {
+    /// <summary>
+    /// Represents a Crypt of the NecroDancer daily leaderboard entry.
+    /// </summary>
     public sealed class DailyEntry
     {
         /// <summary>
