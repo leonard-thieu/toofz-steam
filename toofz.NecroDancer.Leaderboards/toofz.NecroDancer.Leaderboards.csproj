@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
+    <Configurations>Debug;Release;Coverage</Configurations>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <PackageVersion>23.0.1</PackageVersion>
@@ -21,9 +22,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\toofz.NecroDancer.Leaderboards.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DocumentationFile>bin\Release\netstandard2.0\toofz.NecroDancer.Leaderboards.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +36,10 @@
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Polly" Version="5.5.0" />
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.6.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.6.0" />
     <PackageReference Include="toofz.SteamKit2" Version="4.3.1" />
   </ItemGroup>
 
