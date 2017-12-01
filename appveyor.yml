@@ -5,6 +5,7 @@ branches:
   only:
     - master
 configuration:
+  - Coverage
   - Release
 environment:
   PROJECT: toofz.NecroDancer.Leaderboards
@@ -34,11 +35,17 @@ build:
 
 test_script:
   - ps: |
-      $solutionPath = Resolve-Path "$env:PROJECT.sln"
-      msbuild $solutionPath /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /property:Configuration=Coverage
-      .\Scripts\Test-Project.ps1 -Configuration Coverage
+      if ($env:CONFIGURATION -eq 'Coverage') {
+        .\Scripts\Test-Project.ps1
+      }
 after_test:
-  - ps: .\Scripts\Submit-CodeCoverageResults.ps1
+  - ps: |
+      if ($env:CONFIGURATION -eq 'Coverage') {
+        .\Scripts\Submit-CodeCoverageResults.ps1
+      }
 
 deploy_script:
-  - ps: .\Scripts\Deploy-NuGetPackage.ps1
+  - ps: |
+      if ($env:CONFIGURATION -eq 'Release') {
+        .\Scripts\Deploy-NuGetPackage.ps1
+      }
