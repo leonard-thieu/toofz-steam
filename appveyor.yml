@@ -1,4 +1,4 @@
-version: 24.0.1.{build}
+version: 24.0.2.{build}
 image: Visual Studio 2017
 
 branches:
@@ -22,7 +22,6 @@ assembly_info:
 
 init:
   - git config --global core.autocrlf input
-
 install:
   - nuget update -Self
   - git clone https://github.com/leonard-thieu/toofz-build.git Scripts
