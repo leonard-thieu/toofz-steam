@@ -17,6 +17,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
+        // NOTE: This currently doesn't flag TimeoutRejectionExceptions as transient since they may be indicative of deadlocks.
+        //       However, the duration of the timeout policy is set equal to the timeout used by SteamKit, so there's a possibility
+        //       of false positives. Note that it has not been confirmed if timing issues exist in that scenario of if it's
+        //       entirely deterministic (and so a properly functioning SteamKit would always timeout before the timeout policy 
+        //       does).
         /// <summary>
         /// Indicates if an exception is a transient fault for <see cref="SteamClientApiClient"/>.
         /// </summary>
@@ -28,7 +33,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         {
             if (ex is SteamClientApiException scae)
             {
-                return scae.InnerException is TaskCanceledException;
+                return scae.Result == null;
             }
 
             return false;
@@ -69,9 +74,9 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <paramref name="telemetryClient"/> is null.
         /// </exception>
         public SteamClientApiClient(string userName, string password, Policy retryPolicy, TelemetryClient telemetryClient)
-            : this(userName, password, retryPolicy, CreateSteamClient(), telemetryClient) { }
+            : this(userName, password, retryPolicy, telemetryClient, steamClient: null) { }
 
-        internal SteamClientApiClient(string userName, string password, Policy retryPolicy, ISteamClientAdapter steamClient, TelemetryClient telemetryClient)
+        internal SteamClientApiClient(string userName, string password, Policy retryPolicy, TelemetryClient telemetryClient, ISteamClientAdapter steamClient)
         {
             if (userName == "")
                 throw new ArgumentException($"{nameof(userName)} is empty.", nameof(userName));
@@ -81,8 +86,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.userName = userName ?? throw new ArgumentNullException(nameof(userName));
             this.password = password ?? throw new ArgumentNullException(nameof(password));
             this.retryPolicy = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
-            this.steamClient = steamClient;
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+            this.steamClient = steamClient ?? CreateSteamClient();
 
             timeoutPolicy = Policy.TimeoutAsync(() => Timeout, TimeoutStrategy.Pessimistic);
         }
@@ -90,9 +95,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         private readonly string userName;
         private readonly string password;
         private readonly Policy retryPolicy;
-        private readonly ISteamClientAdapter steamClient;
         private readonly TelemetryClient telemetryClient;
-        private readonly TimeoutPolicy timeoutPolicy;
+        private readonly ISteamClientAdapter steamClient;
+
+        private readonly Policy timeoutPolicy;
 
         /// <summary>
         /// Gets or sets an instance of <see cref="IProgress{T}"/> that is used to report total bytes downloaded.
@@ -129,14 +135,30 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <returns>
         /// The task representing connecting and logging on to Steam.
         /// </returns>
-        public async Task ConnectAndLogOnAsync()
+        public Task ConnectAndLogOnAsync()
+        {
+            return ConnectAndLogOnAsync(1, a => TimeSpan.FromSeconds(5), steamClient.ConnectionTimeout);
+        }
+
+        internal async Task ConnectAndLogOnAsync(
+            int retryAttempts,
+            Func<int, TimeSpan> sleepDurationProvider,
+            TimeSpan connectionTimeout)
         {
             if (!steamClient.IsConnected)
             {
-                await timeoutPolicy
+                var connectionRetryPolicy = Policy
+                    .Handle<Exception>(IsTransient)
+                    .WaitAndRetryAsync(retryAttempts, sleepDurationProvider);
+                var connectionTimeoutPolicy = Policy
+                    .TimeoutAsync(connectionTimeout, TimeoutStrategy.Pessimistic);
+                var connectionPolicy = Policy.WrapAsync(connectionRetryPolicy, connectionTimeoutPolicy);
+
+                await connectionPolicy
                     .ExecuteAsync(steamClient.ConnectAsync, continueOnCapturedContext: false)
                     .ConfigureAwait(false);
             }
+
             if (!steamClient.IsLoggedOn)
             {
                 await timeoutPolicy

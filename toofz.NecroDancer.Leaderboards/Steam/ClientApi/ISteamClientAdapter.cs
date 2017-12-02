@@ -46,6 +46,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         ISteamUserStats GetSteamUserStats();
 
         /// <summary>
+        /// Gets the connection timeout used when connecting to the Steam server.
+        /// </summary>
+        TimeSpan ConnectionTimeout { get; }
+        /// <summary>
         /// Gets a value indicating whether this instance is connected to the remote CM server.
         /// </summary>
         bool IsConnected { get; }

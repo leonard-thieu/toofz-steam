@@ -17,7 +17,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
     {
         public SteamClientApiClientTests()
         {
-            steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, mockSteamClient.Object, telemetryClient);
+            steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient, mockSteamClient.Object);
         }
 
         private readonly string userName = "myUserName";
@@ -30,7 +30,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
         public class IsTransientMethod
         {
             [Fact]
-            public void ExIsSteamClientApiExceptionAndInnerExceptionIsTaskCanceledException_ReturnsTrue()
+            public void ExIsSteamClientApiExceptionAndResultIsNull_ReturnsTrue()
             {
                 // Arrange
                 var ex = new SteamClientApiException(null, new TaskCanceledException());
@@ -43,10 +43,10 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [Fact]
-            public void ExIsSteamClientApiExceptionAndInnerExceptionIsNotTaskCanceledException_ReturnsFalse()
+            public void ExIsSteamClientApiExceptionAndResultIsNotNull_ReturnsFalse()
             {
                 // Arrange
-                var ex = new SteamClientApiException(null);
+                var ex = new SteamClientApiException(null, EResult.AccessDenied);
 
                 // Act
                 var isTransient = SteamClientApiClient.IsTransient(ex);
@@ -255,6 +255,11 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class ConnectAndLogOnAsyncMethod : SteamClientApiClientTests
         {
+            public ConnectAndLogOnAsyncMethod()
+            {
+                mockSteamClient.Setup(s => s.ConnectionTimeout).Returns(TimeSpan.FromTicks(1));
+            }
+
             [Fact]
             public async Task NotConnected_Connects()
             {
@@ -274,12 +279,15 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 // Arrange
                 mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
                 mockSteamClient.Setup(c => c.ConnectAsync()).Returns(new TaskCompletionSource<IConnectedCallback>().Task);
-                steamClientApiClient.Timeout = TimeSpan.Zero;
+
+                var retryAttempts = 0;
+                Func<int, TimeSpan> sleepDurationProvider = (int attempt) => TimeSpan.Zero;
+                var connectionTimeout = TimeSpan.FromTicks(1);
 
                 // Act -> Assert
                 await Assert.ThrowsAsync<TimeoutRejectedException>(() =>
                 {
-                    return steamClientApiClient.ConnectAndLogOnAsync();
+                    return steamClientApiClient.ConnectAndLogOnAsync(retryAttempts, sleepDurationProvider, connectionTimeout);
                 });
             }
 

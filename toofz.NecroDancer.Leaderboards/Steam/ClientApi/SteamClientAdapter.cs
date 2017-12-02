@@ -197,7 +197,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// </summary>
         /// <returns>A registered handler on success, or null if the handler could not be found.</returns>
         public ISteamUserStats GetSteamUserStats() => steamClient.GetHandler<SteamUserStats>();
-
+        
+        /// <summary>
+        /// Gets the connection timeout used when connecting to the Steam server.
+        /// </summary>
+        public TimeSpan ConnectionTimeout => steamClient.ConnectionTimeout;
         /// <summary>
         /// Gets a value indicating whether this instance is connected to the remote CM server.
         /// </summary>
