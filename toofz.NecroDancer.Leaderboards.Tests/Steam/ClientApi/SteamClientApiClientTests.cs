@@ -56,7 +56,20 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             }
 
             [Fact]
-            public void ExIsNotSteamClientApiException_ReturnsFalse()
+            public void ExIsTimeoutRejectedException_ReturnsTrue()
+            {
+                // Arrange
+                var ex = new TimeoutRejectedException();
+
+                // Act
+                var isTransient = SteamClientApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
+            }
+
+            [Fact]
+            public void ReturnsFalse()
             {
                 // Arrange
                 var ex = new TaskCanceledException();

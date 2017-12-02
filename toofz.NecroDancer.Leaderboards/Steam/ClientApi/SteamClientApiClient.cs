@@ -17,11 +17,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
-        // NOTE: This currently doesn't flag TimeoutRejectionExceptions as transient since they may be indicative of deadlocks.
-        //       However, the duration of the timeout policy is set equal to the timeout used by SteamKit, so there's a possibility
-        //       of false positives. Note that it has not been confirmed if timing issues exist in that scenario of if it's
-        //       entirely deterministic (and so a properly functioning SteamKit would always timeout before the timeout policy 
-        //       does).
         /// <summary>
         /// Indicates if an exception is a transient fault for <see cref="SteamClientApiClient"/>.
         /// </summary>
@@ -36,7 +31,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
                 return scae.Result == null;
             }
 
-            return false;
+            return ex is TimeoutRejectedException;
         }
 
         private static ISteamClientAdapter CreateSteamClient()
