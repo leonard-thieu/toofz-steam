@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PackageVersion>24.0.4</PackageVersion>
+    <PackageVersion>24.0.5</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Leaderboards Core</Title>
     <Description>Provides types for working with Crypt of the NecroDancer leaderboards.</Description>
