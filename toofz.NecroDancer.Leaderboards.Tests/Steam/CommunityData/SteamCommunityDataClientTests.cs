@@ -46,6 +46,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 Assert.True(isTransient);
             }
 
+            [Fact]
             public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
