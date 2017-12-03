@@ -19,10 +19,11 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Connects and logs on to Steam.
         /// </summary>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task representing connecting and logging on to Steam.
         /// </returns>
-        Task ConnectAndLogOnAsync();
+        Task ConnectAndLogOnAsync(CancellationToken cancellationToken = default);
         /// <summary>
         /// Disconnects from Steam.
         /// </summary>

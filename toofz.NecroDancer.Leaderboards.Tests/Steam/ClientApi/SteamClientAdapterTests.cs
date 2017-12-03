@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using Polly;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
@@ -138,6 +139,8 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
             private readonly Mock<IDisposable> mockUnsubscribeOnConnected = new Mock<IDisposable>();
             private readonly Mock<IDisposable> mockUnsubscribeOnDisconnected = new Mock<IDisposable>();
             private readonly Mock<IDisposable> mockUnsubscribeOnDisconnectedWhenConnected = new Mock<IDisposable>();
+            private readonly Policy connectPolicy = Policy.NoOpAsync();
+            private CancellationToken cancellationToken;
 
             private Action<IConnectedCallback> onConnected;
             private Action<IDisconnectedCallback> onDisconnected;
@@ -165,7 +168,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 return true;
             }
 
-            public class Connects : ConnectAsyncMethod
+            public class OnConnectedTests : ConnectAsyncMethod
             {
                 private readonly Mock<IConnectedCallback> mockConnectedCallback = new Mock<IConnectedCallback>();
 
@@ -173,7 +176,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 public async Task DisposesOnConnected()
                 {
                     // Arrange
-                    var responseTask = steamClientAdapter.ConnectAsync();
+                    var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                     onConnected(mockConnectedCallback.Object);
 
                     // Act
@@ -187,7 +190,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 public async Task DisposesOnDisconnected()
                 {
                     // Arrange
-                    var responseTask = steamClientAdapter.ConnectAsync();
+                    var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                     onConnected(mockConnectedCallback.Object);
 
                     // Act
@@ -201,7 +204,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 public async Task ReturnsResponse()
                 {
                     // Arrange
-                    var responseTask = steamClientAdapter.ConnectAsync();
+                    var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                     onConnected(mockConnectedCallback.Object);
 
                     // Act
@@ -215,7 +218,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 public async Task SetsOnDisconnectedWhenConnected()
                 {
                     // Arrange
-                    var responseTask = steamClientAdapter.ConnectAsync();
+                    var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                     onConnected(mockConnectedCallback.Object);
 
                     // Act
@@ -225,7 +228,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     Assert.NotNull(onDisconnectedWhenConnected);
                 }
 
-                public class ThenDisconnects : Connects
+                public class OnDisconnectedWhenConnectedTests : OnConnectedTests
                 {
                     private readonly Mock<IDisconnectedCallback> mockDisconnectedCallback = new Mock<IDisconnectedCallback>();
 
@@ -233,7 +236,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     public async Task DisposesOnDisconnectedWhenConnected()
                     {
                         // Arrange
-                        var responseTask = steamClientAdapter.ConnectAsync();
+                        var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                         onConnected(mockConnectedCallback.Object);
                         onDisconnectedWhenConnected(mockDisconnectedCallback.Object);
 
@@ -248,7 +251,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     public async Task StopsMessageLoop()
                     {
                         // Arrange
-                        var responseTask = steamClientAdapter.ConnectAsync();
+                        var responseTask = steamClientAdapter.ConnectAsync(cancellationToken);
                         onConnected(mockConnectedCallback.Object);
                         onDisconnectedWhenConnected(mockDisconnectedCallback.Object);
 
@@ -258,6 +261,142 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                         // Assert
                         Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
                     }
+                }
+            }
+
+            public class OnDisconnectedTests : ConnectAsyncMethod
+            {
+                private readonly Mock<IDisconnectedCallback> mockOnDisconnected = new Mock<IDisconnectedCallback>();
+
+                [Fact]
+                public void DisposesOnConnected()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    onDisconnected(mockOnDisconnected.Object);
+
+                    // Assert
+                    mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public void DisposesOnDisconnected()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    onDisconnected(mockOnDisconnected.Object);
+
+                    // Assert
+                    mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public void StopsMessageLoop()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    onDisconnected(mockOnDisconnected.Object);
+
+                    // Assert
+                    Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                }
+
+                [Fact]
+                public async Task ThrowsSteamClientApiException()
+                {
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+                    onDisconnected(mockOnDisconnected.Object);
+
+                    // Act -> Assert
+                    await Assert.ThrowsAsync<SteamClientApiException>(() =>
+                    {
+                        return responseTask;
+                    });
+                }
+            }
+
+            public class OnCancelledTests : ConnectAsyncMethod
+            {
+                public OnCancelledTests()
+                {
+                    cancellationToken = cts.Token;
+                }
+
+                private readonly CancellationTokenSource cts = new CancellationTokenSource();
+
+                [Fact]
+                public void DisposesOnConnected()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    cts.Cancel();
+
+                    // Assert
+                    mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public void DisposesOnDisconnected()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    cts.Cancel();
+
+                    // Assert
+                    mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
+                }
+
+                [Fact]
+                public void Disconnects()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    cts.Cancel();
+
+                    // Assert
+                    mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
+                }
+
+                [Fact]
+                public void StopsMessageLoop()
+                {
+                    // Arrange
+                    steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    cts.Cancel();
+
+                    // Assert
+                    Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                }
+
+                [Fact]
+                public async Task ThrowsTaskCancelledException()
+                {
+                    // Arrange
+                    var responseTask = steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
+
+                    // Act
+                    cts.Cancel();
+
+                    // Assert
+                    await Assert.ThrowsAsync<TaskCanceledException>(() =>
+                    {
+                        return responseTask;
+                    });
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Moq;
@@ -7,7 +8,6 @@ using Polly.Timeout;
 using SteamKit2;
 using toofz.NecroDancer.Leaderboards.Steam.ClientApi;
 using Xunit;
-using static SteamKit2.SteamClient;
 using static SteamKit2.SteamUser;
 using static SteamKit2.SteamUserStats;
 
@@ -268,10 +268,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
         public class ConnectAndLogOnAsyncMethod : SteamClientApiClientTests
         {
-            public ConnectAndLogOnAsyncMethod()
-            {
-                mockSteamClient.Setup(s => s.ConnectionTimeout).Returns(TimeSpan.FromTicks(1));
-            }
+            private readonly CancellationToken cancellationToken = CancellationToken.None;
 
             [Fact]
             public async Task NotConnected_Connects()
@@ -283,25 +280,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
-                mockSteamClient.Verify(c => c.ConnectAsync(), Times.Once);
-            }
-
-            [Fact]
-            public async Task ConnectingAndTimesOut_ThrowsTimeoutRejectedException()
-            {
-                // Arrange
-                mockSteamClient.SetupGet(c => c.IsConnected).Returns(false);
-                mockSteamClient.Setup(c => c.ConnectAsync()).Returns(new TaskCompletionSource<IConnectedCallback>().Task);
-
-                var retryAttempts = 0;
-                Func<int, TimeSpan> sleepDurationProvider = (int attempt) => TimeSpan.Zero;
-                var connectionTimeout = TimeSpan.FromTicks(1);
-
-                // Act -> Assert
-                await Assert.ThrowsAsync<TimeoutRejectedException>(() =>
-                {
-                    return steamClientApiClient.ConnectAndLogOnAsync(retryAttempts, sleepDurationProvider, connectionTimeout);
-                });
+                mockSteamClient.Verify(c => c.ConnectAsync(cancellationToken), Times.Once);
             }
 
             [Fact]
@@ -314,7 +293,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 await steamClientApiClient.ConnectAndLogOnAsync();
 
                 // Assert
-                mockSteamClient.Verify(c => c.ConnectAsync(), Times.Never);
+                mockSteamClient.Verify(c => c.ConnectAsync(cancellationToken), Times.Never);
             }
 
             [Fact]
@@ -328,21 +307,6 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
 
                 // Assert
                 mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<LogOnDetails>()), Times.Once);
-            }
-
-            [Fact]
-            public async Task LoggingOnTimesOut_ThrowsTimeoutRejectedException()
-            {
-                // Arrange
-                mockSteamClient.SetupGet(c => c.IsLoggedOn).Returns(false);
-                mockSteamClient.Setup(c => c.LogOnAsync(It.IsAny<LogOnDetails>())).Returns(new TaskCompletionSource<ILoggedOnCallback>().Task);
-                steamClientApiClient.Timeout = TimeSpan.Zero;
-
-                // Act -> Assert
-                await Assert.ThrowsAsync<TimeoutRejectedException>(() =>
-                {
-                    return steamClientApiClient.ConnectAndLogOnAsync();
-                });
             }
 
             [Fact]

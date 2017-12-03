@@ -17,14 +17,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));
 
-        // The fallback timeout is set equal to the timeout used for the request.
-        // This can cause a race condition where both timeouts expire at the same time but the
-        // fallback timeout "wins". This could make it appear that SteamKit is running into a 
-        // deadlock issue even though it would've timed out on its own. Adding padding to the 
-        // fallback timeout's duration is an attempt at avoiding the scenario but doesn't 
-        // guarantee it. The selection of the duration of the padding is arbritrary.
-        private static readonly TimeSpan FallbackTimeoutPadding = TimeSpan.FromSeconds(1);
-
         /// <summary>
         /// Indicates if an exception is a transient fault for <see cref="SteamClientApiClient"/>.
         /// </summary>
@@ -92,7 +84,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
             this.steamClient = steamClient ?? CreateSteamClient();
 
-            timeoutPolicy = Policy.TimeoutAsync(() => Timeout + FallbackTimeoutPadding, TimeoutStrategy.Pessimistic);
+            timeoutPolicy = Policy.TimeoutAsync(() => Timeout + SteamClientAdapter.FallbackTimeoutPadding, TimeoutStrategy.Pessimistic);
         }
 
         private readonly string userName;
@@ -135,51 +127,37 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <summary>
         /// Connects and logs on to Steam.
         /// </summary>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task representing connecting and logging on to Steam.
         /// </returns>
-        public Task ConnectAndLogOnAsync()
+        public Task ConnectAndLogOnAsync(CancellationToken cancellationToken = default)
         {
-            var retryAttempts = 1;
-            Func<int, TimeSpan> sleepDurationProvider = a => TimeSpan.FromSeconds(5);
-            var connectionTimeout = steamClient.ConnectionTimeout + FallbackTimeoutPadding;
+            var connectPolicy = Policy
+                .Handle<Exception>(IsTransient)
+                .WaitAndRetryAsync(new[] { TimeSpan.FromSeconds(5) });
 
-            return ConnectAndLogOnAsync(retryAttempts, sleepDurationProvider, connectionTimeout);
+            return ConnectAndLogOnAsync(connectPolicy, cancellationToken);
         }
 
         internal async Task ConnectAndLogOnAsync(
-            int retryAttempts,
-            Func<int, TimeSpan> sleepDurationProvider,
-            TimeSpan connectionTimeout)
+            Policy connectPolicy,
+            CancellationToken cancellationToken = default)
         {
             if (!steamClient.IsConnected)
             {
-                var connectionRetryPolicy = Policy
-                    .Handle<Exception>(IsTransient)
-                    .WaitAndRetryAsync(retryAttempts, sleepDurationProvider);
-                var connectionTimeoutPolicy = Policy
-                    .TimeoutAsync(connectionTimeout, TimeoutStrategy.Pessimistic);
-                var connectionPolicy = Policy.WrapAsync(connectionRetryPolicy, connectionTimeoutPolicy);
-
-                await connectionPolicy
-                    .ExecuteAsync(steamClient.ConnectAsync, continueOnCapturedContext: false)
+                await connectPolicy
+                    .ExecuteAsync(steamClient.ConnectAsync, cancellationToken, continueOnCapturedContext: false)
                     .ConfigureAwait(false);
             }
 
             if (!steamClient.IsLoggedOn)
             {
-                await timeoutPolicy
-                    .ExecuteAsync(
-                        () =>
-                        {
-                            return steamClient.LogOnAsync(new LogOnDetails
-                            {
-                                Username = userName,
-                                Password = password,
-                            });
-                        },
-                        continueOnCapturedContext: false)
-                    .ConfigureAwait(false);
+                await steamClient.LogOnAsync(new LogOnDetails
+                {
+                    Username = userName,
+                    Password = password,
+                }).ConfigureAwait(false);
             }
         }
 

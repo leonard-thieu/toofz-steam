@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using SteamKit2;
 using static SteamKit2.SteamClient;
@@ -26,7 +27,8 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// will be posted instead. SteamKit will not attempt to reconnect to Steam, you
         /// must handle this callback and call Connect again preferrably after a short delay.
         /// </summary>
-        Task<IConnectedCallback> ConnectAsync();
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        Task<IConnectedCallback> ConnectAsync(CancellationToken cancellationToken);
         /// <summary>
         /// Logs the client into the Steam3 network. The client should already have been
         /// connected at this point. Results are returned in a <see cref="ILoggedOnCallback"/>.
@@ -45,10 +47,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
         /// <returns>A registered handler on success, or null if the handler could not be found.</returns>
         ISteamUserStats GetSteamUserStats();
 
-        /// <summary>
-        /// Gets the connection timeout used when connecting to the Steam server.
-        /// </summary>
-        TimeSpan ConnectionTimeout { get; }
         /// <summary>
         /// Gets a value indicating whether this instance is connected to the remote CM server.
         /// </summary>
