@@ -59,11 +59,13 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Fact]
-            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsConnectionReset_ReturnsTrue()
+            [Theory]
+            [InlineData(SocketError.ConnectionReset)]
+            [InlineData(SocketError.TimedOut)]
+            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsTransient_ReturnsTrue(int errorCode)
             {
                 // Arrange
-                var innerException = new SocketException((int)SocketError.ConnectionReset);
+                var innerException = new SocketException(errorCode);
                 var ex = new IOException(null, innerException);
 
                 // Act
@@ -74,7 +76,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.CommunityData
             }
 
             [Fact]
-            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsNotConnectionReset_ReturnsFalse()
+            public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
                 var innerException = new SocketException((int)SocketError.SocketNotSupported);

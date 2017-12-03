@@ -44,8 +44,15 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
             }
             else if (ex is IOException ioe)
             {
-                return (ioe.InnerException is SocketException se) &&
-                       (se.SocketErrorCode == SocketError.ConnectionReset);
+                if (ioe.InnerException is SocketException se)
+                {
+                    switch (se.SocketErrorCode)
+                    {
+                        case SocketError.ConnectionReset:
+                        case SocketError.TimedOut:
+                            return true;
+                    }
+                }
             }
 
             return false;
