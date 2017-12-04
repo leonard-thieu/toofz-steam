@@ -16,19 +16,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "toofz.NecroDancer.Leaderboa
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Coverage|Any CPU = Coverage|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
-		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{372E12B4-48B6-42A0-8F80-1E21BAA995DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B516250-A4D1-4AA9-8E6E-B496E3A09020}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
-		{3B516250-A4D1-4AA9-8E6E-B496E3A09020}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{3B516250-A4D1-4AA9-8E6E-B496E3A09020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B516250-A4D1-4AA9-8E6E-B496E3A09020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B516250-A4D1-4AA9-8E6E-B496E3A09020}.Release|Any CPU.ActiveCfg = Release|Any CPU
