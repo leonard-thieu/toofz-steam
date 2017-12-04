@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Polly;
-using Polly.Timeout;
 using SteamKit2;
 using static SteamKit2.SteamClient;
 using static SteamKit2.SteamUser;
@@ -46,13 +46,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             this.steamClient = steamClient ?? throw new ArgumentNullException(nameof(steamClient));
             this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
             this.log = log ?? Log;
-
-            // TODO: Consider delaying creation of MessageLoop until Connect is called.
-            MessageLoop = new Thread(RunMessageLoop)
-            {
-                IsBackground = true,
-                Name = "Steam Client message loop",
-            };
         }
 
         private readonly ISteamClient steamClient;
@@ -63,12 +56,21 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private bool isRunning;
 
-        internal Thread MessageLoop { get; }
+        internal Thread MessageLoop { get; private set; }
+        private readonly object messageLoopLock = new object();
 
         private void StartMessageLoop()
         {
-            isRunning = true;
-            MessageLoop.Start();
+            lock (messageLoopLock)
+            {
+                isRunning = true;
+                MessageLoop = new Thread(RunMessageLoop)
+                {
+                    IsBackground = true,
+                    Name = "Steam Client message loop",
+                };
+                MessageLoop.Start();
+            }
         }
 
         private void RunMessageLoop()
@@ -81,11 +83,17 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private void StopMessageLoop()
         {
-            isRunning = false;
-
-            if (MessageLoop.IsAlive)
+            lock (messageLoopLock)
             {
-                MessageLoop.Join((int)(3 * RunWaitCallbacksTimeout.TotalMilliseconds));
+                if (MessageLoop == null) { return; }
+
+                isRunning = false;
+                if (MessageLoop.IsAlive)
+                {
+                    MessageLoop.Join((int)(3 * RunWaitCallbacksTimeout.TotalMilliseconds));
+                }
+
+                MessageLoop = null;
             }
         }
 
@@ -124,22 +132,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             try
             {
                 var connectionTimeout = steamClient.ConnectionTimeout + FallbackTimeoutPadding;
-                var connectionTimeoutPolicy = Policy.TimeoutAsync(connectionTimeout, TimeoutStrategy.Pessimistic, OnTimeoutAsync);
+                var connectionTimeoutPolicy = Policy.TimeoutAsync(connectionTimeout);
 
                 return await ConnectAsync(connectionTimeoutPolicy, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
                 connectSemaphore.Release();
-            }
-
-            // TODO: Consider logging a warning if this delegate runs. It should not run unless SteamKit is 
-            //       failing to honor its timeout.
-            Task OnTimeoutAsync(Context context, TimeSpan duration, Task task)
-            {
-                StopMessageLoop();
-
-                return Task.CompletedTask;
             }
         }
 
@@ -152,49 +151,68 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
 
         private Task<IConnectedCallback> ConnectAsyncImpl(CancellationToken cancellationToken)
         {
-            // TODO: Consider logging a warning if Try* methods fails.
             var tcs = new TaskCompletionSource<IConnectedCallback>();
 
+            // Ensures that only one of the callbacks will ever run per connection attempt.
+            var connectLock = new object();
             IDisposable onConnected = null;
             IDisposable onDisconnected = null;
             CancellationTokenRegistration onCancelled;
             onConnected = manager.Subscribe<IConnectedCallback>(connected =>
             {
-                DisposeCallbacks();
-
-                IDisposable onDisconnectedWhenConnected = null;
-                onDisconnectedWhenConnected = manager.Subscribe<IDisconnectedCallback>(disconnected =>
+                lock (connectLock)
                 {
-                    onDisconnectedWhenConnected.Dispose();
+                    if (onConnected == null) { return; }
 
-                    StopMessageLoop();
-                    log.Info("Disconnected from Steam.");
-                });
+                    DisposeCallbacks();
 
-                log.Info("Connected to Steam.");
-                tcs.TrySetResult(connected);
+                    IDisposable onDisconnectedWhenConnected = null;
+                    onDisconnectedWhenConnected = manager.Subscribe<IDisconnectedCallback>(disconnected =>
+                    {
+                        onDisconnectedWhenConnected.Dispose();
+
+                        StopMessageLoop();
+                        log.Info("Disconnected from Steam.");
+                    });
+
+                    log.Info("Connected to Steam.");
+                    tcs.SetResult(connected);
+                }
             });
             onDisconnected = manager.Subscribe<IDisconnectedCallback>(disconnected =>
             {
-                DisposeCallbacks();
+                lock (connectLock)
+                {
+                    if (onDisconnected == null) { return; }
 
-                StopMessageLoop();
+                    DisposeCallbacks();
 
-                var ex = new SteamClientApiException("Unable to connect to Steam.");
-                tcs.TrySetException(ex);
+                    StopMessageLoop();
+
+                    var ex = new SteamClientApiException("Unable to connect to Steam.");
+                    tcs.SetException(ex);
+                }
             });
 
             StartMessageLoop();
 
+            // This CancellationToken represents both user-initiated cancellation and cancellation from the 
+            // fallback timeout expiring.
             onCancelled = cancellationToken.Register(() =>
             {
-                DisposeCallbacks();
+                lock (connectLock)
+                {
+                    if (onCancelled == default) { return; }
 
-                Disconnect();
-                StopMessageLoop();
+                    DisposeCallbacks();
 
-                tcs.TrySetCanceled();
-            });
+                    // Cancel a connection in progress
+                    Disconnect();
+                    StopMessageLoop();
+
+                    tcs.SetCanceled();
+                }
+            }, useSynchronizationContext: false);
 
             steamClient.Connect();
 
@@ -203,8 +221,13 @@ namespace toofz.NecroDancer.Leaderboards.Steam.ClientApi
             void DisposeCallbacks()
             {
                 onConnected.Dispose();
+                onConnected = null;
+
                 onDisconnected.Dispose();
+                onDisconnected = null;
+
                 onCancelled.Dispose();
+                onCancelled = default;
             }
         }
 

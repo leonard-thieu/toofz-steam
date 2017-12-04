@@ -168,6 +168,39 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                 return true;
             }
 
+            [Fact]
+            public async Task FallbackTimeoutExpires_CanReconnect()
+            {
+                // Arrange
+                var retryCount = 0;
+                var policy = Policy
+                    .Handle<Exception>(SteamClientApiClient.IsTransient)
+                    .WaitAndRetryAsync(
+                        new[] { TimeSpan.FromTicks(1) },
+                        (e, d, r, c) =>
+                        {
+                            retryCount = r;
+                        });
+
+                Func<CancellationToken, Task<IConnectedCallback>> connect = ct =>
+                {
+                    var connectTask = steamClientAdapter.ConnectAsync(ct);
+                    if (retryCount == 1)
+                    {
+                        onConnected(Mock.Of<IConnectedCallback>());
+                    }
+
+                    return connectTask;
+                };
+
+                // Act
+                await policy.ExecuteAsync(connect, cancellationToken, continueOnCapturedContext: false);
+
+                // Assert
+                Assert.Equal(1, retryCount);
+                Assert.NotNull(steamClientAdapter.MessageLoop);
+            }
+
             public class OnConnectedTests : ConnectAsyncMethod
             {
                 private readonly Mock<IConnectedCallback> mockConnectedCallback = new Mock<IConnectedCallback>();
@@ -259,7 +292,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                         await responseTask;
 
                         // Assert
-                        Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                        Assert.Null(steamClientAdapter.MessageLoop);
                     }
                 }
             }
@@ -304,7 +337,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     onDisconnected(mockOnDisconnected.Object);
 
                     // Assert
-                    Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                    Assert.Null(steamClientAdapter.MessageLoop);
                 }
 
                 [Fact]
@@ -380,7 +413,7 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.ClientApi
                     cts.Cancel();
 
                     // Assert
-                    Assert.Equal(ThreadState.Stopped, steamClientAdapter.MessageLoop.ThreadState);
+                    Assert.Null(steamClientAdapter.MessageLoop);
                 }
 
                 [Fact]
