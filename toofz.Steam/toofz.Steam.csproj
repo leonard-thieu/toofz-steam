@@ -11,7 +11,7 @@
     <PackageVersion>26.0.0</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Steam</Title>
-    <Description>Clients for interacting with Steam's APIs.</Description>
+    <Description>.NET library designed for retrieving leaderboards, players, and user-generated content from Steam.</Description>
     <Copyright>Copyright © Leonard Thieu 2017</Copyright>
     <PackageLicenseUrl>https://github.com/leonard-thieu/toofz-steam/blob/643c694ba40a3ce88bd9e09d46224cac60fd9cb4/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/leonard-thieu/toofz-steam</PackageProjectUrl>
