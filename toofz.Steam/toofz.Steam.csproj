@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PackageVersion>25.0.0</PackageVersion>
+    <PackageVersion>26.0.0</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Steam</Title>
     <Description>Clients for interacting with Steam's APIs.</Description>
