@@ -1,27 +1,25 @@
-# toofz Leaderboards Core
+# toofz Steam
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fhfu870220jgfm3l/branch/master?svg=true)](https://ci.appveyor.com/project/leonard-thieu/toofz-necrodancer-leaderboards/branch/master)
-[![codecov](https://codecov.io/gh/leonard-thieu/toofz-leaderboards-core/branch/master/graph/badge.svg)](https://codecov.io/gh/leonard-thieu/toofz-leaderboards-core)
-[![MyGet](https://img.shields.io/myget/toofz/v/toofz.NecroDancer.Leaderboards.svg)](https://www.myget.org/feed/toofz/package/nuget/toofz.NecroDancer.Leaderboards)
+[![codecov](https://codecov.io/gh/leonard-thieu/toofz-steam/branch/master/graph/badge.svg)](https://codecov.io/gh/leonard-thieu/toofz-steam)
+[![MyGet](https://img.shields.io/myget/toofz/v/toofz.Steam.svg)](https://www.myget.org/feed/toofz/package/nuget/toofz.Steam)
 
 ## Overview
 
-**toofz Leaderboards Core** is a .NET library designed for retrieving leaderboards, players, and user-generated content from [Steam](http://store.steampowered.com/about/). 
+**toofz Steam** is a .NET library designed for retrieving leaderboards, players, and user-generated content from [Steam](http://store.steampowered.com/about/). 
 It includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
 [Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and Steam Client API.
 
 ---
 
-**toofz Leaderboards Core** is a component of **toofz**. 
+**toofz Steam** is a component of **toofz**. 
 Information about other projects that support **toofz** can be found in the [meta-repository](https://github.com/leonard-thieu/toofz-necrodancer).
 
 ### Dependents
 
-* [toofz Leaderboards Core (Data)](https://github.com/leonard-thieu/toofz-leaderboards-core-data)
 * [toofz Leaderboards Service](https://github.com/leonard-thieu/leaderboards-service)
 * [toofz Players Service](https://github.com/leonard-thieu/players-service)
 * [toofz Replays Service](https://github.com/leonard-thieu/replays-service)
-* [toofz API](https://github.com/leonard-thieu/api.toofz.com)
 
 ## Requirements
 
@@ -36,4 +34,4 @@ Visual Studio 2017 (version 15.3 or later) can be used to build and run tests.
 
 ## License
 
-**toofz Leaderboards Core** is released under the [MIT License](LICENSE).
+**toofz Steam** is released under the [MIT License](LICENSE).
