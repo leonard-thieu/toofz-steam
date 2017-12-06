@@ -58,6 +58,56 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.WebApi
                 Assert.False(isTransient);
             }
 
+            [Theory]
+            [InlineData(WebExceptionStatus.ConnectFailure)]
+            [InlineData(WebExceptionStatus.SendFailure)]
+            [InlineData(WebExceptionStatus.PipelineFailure)]
+            [InlineData(WebExceptionStatus.RequestCanceled)]
+            [InlineData(WebExceptionStatus.ConnectionClosed)]
+            [InlineData(WebExceptionStatus.KeepAliveFailure)]
+            [InlineData(WebExceptionStatus.UnknownError)]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsTransient_ReturnsTrue(WebExceptionStatus status)
+            {
+                // Arrange
+                var inner = new WebException(null, status);
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
+            }
+
+            [Fact]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
+            {
+                // Arrange
+                var status = WebExceptionStatus.NameResolutionFailure;
+                var inner = new WebException(null, status);
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
+            {
+                // Arrange
+                var inner = new Exception();
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = SteamWebApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
             [Fact]
             public void ReturnsFalse()
             {

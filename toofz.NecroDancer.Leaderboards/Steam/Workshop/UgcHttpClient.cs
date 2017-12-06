@@ -12,6 +12,18 @@ namespace toofz.NecroDancer.Leaderboards.Steam.Workshop
     public sealed class UgcHttpClient : IUgcHttpClient
     {
         /// <summary>
+        /// Indicates if an exception is a transient fault for <see cref="UgcHttpClient"/>.
+        /// </summary>
+        /// <param name="ex">The exception to check.</param>
+        /// <returns>
+        /// true, if the exception is a transient fault for <see cref="UgcHttpClient"/>; otherwise, false.
+        /// </returns>
+        public static bool IsTransient(Exception ex)
+        {
+            return ProgressReporterHttpClient.IsTransient(ex);
+        }
+
+        /// <summary>
         /// Initializes an instance of the <see cref="UgcHttpClient"/> class.
         /// </summary>
         /// <param name="handler">The HTTP handler stack to use for sending requests.</param>

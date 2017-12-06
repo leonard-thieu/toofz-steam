@@ -37,12 +37,10 @@ namespace toofz.NecroDancer.Leaderboards.Steam.WebApi
                     case 503:   // Service Unavailable      Server is temporarily unavailable, or too busy to respond. Please wait and try again later.
                     case 504:   // Gateway Timeout
                         return true;
-                    default:
-                        return false;
                 }
             }
 
-            return false;
+            return ProgressReporterHttpClient.IsTransient(ex);
         }
 
         /// <summary>

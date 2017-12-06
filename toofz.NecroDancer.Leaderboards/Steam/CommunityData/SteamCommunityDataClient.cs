@@ -38,8 +38,6 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                     case 503:   // Service Unavailable
                     case 504:   // Gateway Timeout
                         return true;
-                    default:
-                        return false;
                 }
             }
             else if (ex is IOException ioe)
@@ -55,7 +53,7 @@ namespace toofz.NecroDancer.Leaderboards.Steam.CommunityData
                 }
             }
 
-            return false;
+            return ProgressReporterHttpClient.IsTransient(ex);
         }
 
         /// <summary>

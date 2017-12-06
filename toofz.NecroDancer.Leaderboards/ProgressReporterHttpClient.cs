@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,41 @@ namespace toofz.NecroDancer.Leaderboards
 {
     internal sealed class ProgressReporterHttpClient : HttpClient
     {
+        /// <summary>
+        /// Indicates if an exception is a transient fault for <see cref="ProgressReporterHttpClient"/>.
+        /// </summary>
+        /// <param name="ex">The exception to check.</param>
+        /// <returns>
+        /// true, if the exception is a transient fault for <see cref="ProgressReporterHttpClient"/>; otherwise, false.
+        /// </returns>
+        /// <remarks>
+        /// This checks exceptions that occur during an HTTP request (before the response is received). All clients that 
+        /// use <see cref="ProgressReporterHttpClient"/> should include this check in their transient fault check.
+        /// </remarks>
+        public static bool IsTransient(Exception ex)
+        {
+            if (ex is HttpRequestException hre)
+            {
+                if (hre.InnerException is WebException we)
+                {
+                    // https://blogs.msdn.microsoft.com/jpsanders/2009/01/07/you-receive-one-or-more-error-messages-when-you-try-to-make-an-http-request-in-an-application-that-is-built-on-the-net-framework-2-0/
+                    switch (we.Status)
+                    {
+                        case WebExceptionStatus.ConnectFailure:
+                        case WebExceptionStatus.SendFailure:
+                        case WebExceptionStatus.PipelineFailure:
+                        case WebExceptionStatus.RequestCanceled:
+                        case WebExceptionStatus.ConnectionClosed:
+                        case WebExceptionStatus.KeepAliveFailure:
+                        case WebExceptionStatus.UnknownError:
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Initializes an instance of the <see cref="ProgressReporterHttpClient"/> class.
         /// </summary>

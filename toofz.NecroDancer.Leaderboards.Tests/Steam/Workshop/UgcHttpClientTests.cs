@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
@@ -19,6 +20,59 @@ namespace toofz.NecroDancer.Leaderboards.Tests.Steam.Workshop
         private readonly MockHttpMessageHandler handler = new MockHttpMessageHandler();
         private readonly TelemetryClient telemetryClient = new TelemetryClient();
         private readonly UgcHttpClient client;
+
+        public class IsTransientMethod
+        {
+            [Theory]
+            [InlineData(WebExceptionStatus.ConnectFailure)]
+            [InlineData(WebExceptionStatus.SendFailure)]
+            [InlineData(WebExceptionStatus.PipelineFailure)]
+            [InlineData(WebExceptionStatus.RequestCanceled)]
+            [InlineData(WebExceptionStatus.ConnectionClosed)]
+            [InlineData(WebExceptionStatus.KeepAliveFailure)]
+            [InlineData(WebExceptionStatus.UnknownError)]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsTransient_ReturnsTrue(WebExceptionStatus status)
+            {
+                // Arrange
+                var inner = new WebException(null, status);
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = UgcHttpClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
+            }
+
+            [Fact]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
+            {
+                // Arrange
+                var status = WebExceptionStatus.NameResolutionFailure;
+                var inner = new WebException(null, status);
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = UgcHttpClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+
+            [Fact]
+            public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
+            {
+                // Arrange
+                var inner = new Exception();
+                var ex = new HttpRequestException(null, inner);
+
+                // Act
+                var isTransient = UgcHttpClient.IsTransient(ex);
+
+                // Assert
+                Assert.False(isTransient);
+            }
+        }
 
         public class Constructor
         {
