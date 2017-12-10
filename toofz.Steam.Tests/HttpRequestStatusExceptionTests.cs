@@ -8,7 +8,7 @@ namespace toofz.Steam.Tests
     {
         public class Constructor
         {
-            [Fact]
+            [DisplayFact("RequestUri", nameof(ArgumentNullException))]
             public void RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestStatusException.StatusCode))]
             public void SetsStatusCode()
             {
                 // Arrange
@@ -36,7 +36,7 @@ namespace toofz.Steam.Tests
                 Assert.Equal(statusCode, ex.StatusCode);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestStatusException.RequestUri))]
             public void SetsRequestUri()
             {
                 // Arrange
@@ -50,8 +50,8 @@ namespace toofz.Steam.Tests
                 Assert.Equal(requestUri, ex.RequestUri);
             }
 
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(HttpRequestStatusException))]
+            public void ReturnsHttpRequestStatusException()
             {
                 // Arrange
                 var statusCode = HttpStatusCode.BadGateway;

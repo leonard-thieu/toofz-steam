@@ -7,7 +7,7 @@ namespace toofz.Steam.Tests
     {
         public class GetSleepDurationProviderMethod
         {
-            [Fact]
+            [DisplayFact]
             public void ReturnsSleepDurationProvider()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests
                 Assert.IsAssignableFrom<Func<int, TimeSpan>>(backoff);
             }
 
-            [Fact]
+            [DisplayFact]
             public void SleepDurationProvider_ReturnsSleepDuration()
             {
                 // Arrange
@@ -42,7 +42,7 @@ namespace toofz.Steam.Tests
 
         public class GetSleepDurationMethod
         {
-            [Fact]
+            [DisplayFact]
             public void ReturnsSleepDuration()
             {
                 // Arrange

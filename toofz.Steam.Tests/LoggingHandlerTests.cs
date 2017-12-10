@@ -23,8 +23,8 @@ namespace toofz.Steam.Tests
 
         public class Constructor
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(LoggingHandler))]
+            public void ReturnsLoggingHandler()
             {
                 // Arrange -> Act
                 var handler = new LoggingHandler();
@@ -36,7 +36,7 @@ namespace toofz.Steam.Tests
 
         public class SendAsync : LoggingHandlerTests
         {
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public async Task RequsetIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -49,7 +49,7 @@ namespace toofz.Steam.Tests
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task LogsDebugStartDownload()
             {
                 // Arrange
@@ -64,7 +64,7 @@ namespace toofz.Steam.Tests
                 mockLog.Verify(l => l.Debug("Start download http://fake.uri/"), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task LogsDebugEndDownload()
             {
                 // Arrange
@@ -79,7 +79,7 @@ namespace toofz.Steam.Tests
                 mockLog.Verify(l => l.Debug("End download http://fake.uri/"), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsResponse()
             {
                 // Arrange

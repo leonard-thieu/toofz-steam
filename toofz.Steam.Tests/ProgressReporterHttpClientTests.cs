@@ -23,7 +23,7 @@ namespace toofz.Steam.Tests
 
         public class IsTransientMethod
         {
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             [InlineData(WebExceptionStatus.ConnectFailure)]
             [InlineData(WebExceptionStatus.SendFailure)]
             [InlineData(WebExceptionStatus.PipelineFailure)]
@@ -44,7 +44,7 @@ namespace toofz.Steam.Tests
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -59,7 +59,7 @@ namespace toofz.Steam.Tests
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
             {
                 // Arrange
@@ -73,7 +73,7 @@ namespace toofz.Steam.Tests
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ReturnsFalse()
             {
                 // Arrange
@@ -89,7 +89,7 @@ namespace toofz.Steam.Tests
 
         public class GetAsyncMethod_String : ProgressReporterHttpClientTests
         {
-            [Fact]
+            [DisplayFact("RequestUri", nameof(ArgumentNullException))]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -105,7 +105,7 @@ namespace toofz.Steam.Tests
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReportsContentLength()
             {
                 // Arrange
@@ -133,7 +133,7 @@ namespace toofz.Steam.Tests
                 mockProgress.Verify(p => p.Report(24), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsResponse()
             {
                 // Arrange

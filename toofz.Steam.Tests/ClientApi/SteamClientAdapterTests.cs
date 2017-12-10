@@ -38,7 +38,7 @@ namespace toofz.Steam.Tests.ClientApi
             private ISteamClient steamClient = Mock.Of<ISteamClient>();
             private ICallbackManager manager = Mock.Of<ICallbackManager>();
 
-            [Fact]
+            [DisplayFact(nameof(SteamClient), nameof(ArgumentNullException))]
             public void SteamClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -51,7 +51,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void ManagerIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -64,8 +64,8 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamClientAdapter))]
+            public void ReturnsSteamClientAdapter()
             {
                 // Arrange -> Act
                 var client = new SteamClientAdapter(steamClient, manager);
@@ -77,7 +77,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class IsLoggedOnProperty : SteamClientAdapterTests
         {
-            [Fact]
+            [DisplayFact(nameof(SteamClient.SessionID))]
             public void SessionIDIsNull_ReturnsFalse()
             {
                 // Arrange
@@ -90,7 +90,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.False(isLoggedOn);
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamClient.SessionID))]
             public void SessionIDIsNotNull_ReturnsTrue()
             {
                 // Arrange
@@ -106,8 +106,8 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class ProgressDebugNetworkListenerProperty : SteamClientAdapterTests
         {
-            [Fact]
-            public void GetSetBehavior()
+            [DisplayFact(nameof(SteamClientAdapter.ProgressDebugNetworkListener))]
+            public void GetsAndSetsProgressDebugNetworkListener()
             {
                 // Arrange
                 mockSteamClient.SetupProperty(s => s.DebugNetworkListener);
@@ -168,7 +168,7 @@ namespace toofz.Steam.Tests.ClientApi
                 return true;
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task FallbackTimeoutExpires_CanReconnect()
             {
                 // Arrange
@@ -205,7 +205,7 @@ namespace toofz.Steam.Tests.ClientApi
             {
                 private readonly Mock<IConnectedCallback> mockConnectedCallback = new Mock<IConnectedCallback>();
 
-                [Fact]
+                [DisplayFact("OnConnected")]
                 public async Task DisposesOnConnected()
                 {
                     // Arrange
@@ -219,7 +219,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnected")]
                 public async Task DisposesOnDisconnected()
                 {
                     // Arrange
@@ -233,7 +233,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact]
                 public async Task ReturnsResponse()
                 {
                     // Arrange
@@ -247,7 +247,7 @@ namespace toofz.Steam.Tests.ClientApi
                     Assert.IsAssignableFrom<IConnectedCallback>(response);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnectedWhenConnected")]
                 public async Task SetsOnDisconnectedWhenConnected()
                 {
                     // Arrange
@@ -265,7 +265,7 @@ namespace toofz.Steam.Tests.ClientApi
                 {
                     private readonly Mock<IDisconnectedCallback> mockDisconnectedCallback = new Mock<IDisconnectedCallback>();
 
-                    [Fact]
+                    [DisplayFact("OnDisconnectedWhenConnected")]
                     public async Task DisposesOnDisconnectedWhenConnected()
                     {
                         // Arrange
@@ -280,7 +280,7 @@ namespace toofz.Steam.Tests.ClientApi
                         mockUnsubscribeOnDisconnectedWhenConnected.Verify(d => d.Dispose(), Times.Once);
                     }
 
-                    [Fact]
+                    [DisplayFact]
                     public async Task StopsMessageLoop()
                     {
                         // Arrange
@@ -301,7 +301,7 @@ namespace toofz.Steam.Tests.ClientApi
             {
                 private readonly Mock<IDisconnectedCallback> mockOnDisconnected = new Mock<IDisconnectedCallback>();
 
-                [Fact]
+                [DisplayFact("OnConnected")]
                 public void DisposesOnConnected()
                 {
                     // Arrange
@@ -314,7 +314,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnected")]
                 public void DisposesOnDisconnected()
                 {
                     // Arrange
@@ -327,7 +327,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact]
                 public void StopsMessageLoop()
                 {
                     // Arrange
@@ -340,7 +340,7 @@ namespace toofz.Steam.Tests.ClientApi
                     Assert.Null(steamClientAdapter.MessageLoop);
                 }
 
-                [Fact]
+                [DisplayFact(nameof(SteamClientApiException))]
                 public async Task ThrowsSteamClientApiException()
                 {
                     // Arrange
@@ -364,7 +364,7 @@ namespace toofz.Steam.Tests.ClientApi
 
                 private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-                [Fact]
+                [DisplayFact("OnConnected")]
                 public void DisposesOnConnected()
                 {
                     // Arrange
@@ -377,7 +377,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnConnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnected")]
                 public void DisposesOnDisconnected()
                 {
                     // Arrange
@@ -390,7 +390,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact]
                 public void Disconnects()
                 {
                     // Arrange
@@ -403,7 +403,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockSteamClient.Verify(s => s.Disconnect(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact]
                 public void StopsMessageLoop()
                 {
                     // Arrange
@@ -416,8 +416,8 @@ namespace toofz.Steam.Tests.ClientApi
                     Assert.Null(steamClientAdapter.MessageLoop);
                 }
 
-                [Fact]
-                public async Task ThrowsTaskCancelledException()
+                [DisplayFact(nameof(TaskCanceledException))]
+                public async Task ThrowsTaskCanceledException()
                 {
                     // Arrange
                     var responseTask = steamClientAdapter.ConnectAsync(connectPolicy, cancellationToken);
@@ -470,7 +470,7 @@ namespace toofz.Steam.Tests.ClientApi
                 return true;
             }
 
-            [Fact]
+            [DisplayFact(nameof(Task))]
             public void ReturnsTask()
             {
                 // Arrange -> Act
@@ -484,7 +484,7 @@ namespace toofz.Steam.Tests.ClientApi
             {
                 private readonly Mock<ILoggedOnCallback> mockLoggedOnCallback = new Mock<ILoggedOnCallback>();
 
-                [Fact]
+                [DisplayFact("OnLoggedOn")]
                 public async Task DisposesOnLoggedOn()
                 {
                     // Arrange
@@ -499,7 +499,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnLoggedOn.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnected")]
                 public async Task DisposesOnDisconnected()
                 {
                     // Arrange
@@ -514,7 +514,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact(nameof(EResult.OK))]
                 public async Task ResultIsOK_ReturnsResponse()
                 {
                     // Arrange
@@ -529,7 +529,7 @@ namespace toofz.Steam.Tests.ClientApi
                     Assert.IsAssignableFrom<ILoggedOnCallback>(response);
                 }
 
-                [Fact]
+                [DisplayFact(nameof(EResult.OK), nameof(SteamClientApiException))]
                 public async Task ResultIsNotOK_ThrowsSteamClientApiException()
                 {
                     // Arrange
@@ -549,7 +549,7 @@ namespace toofz.Steam.Tests.ClientApi
             {
                 private readonly Mock<IDisconnectedCallback> mockOnDisconnected = new Mock<IDisconnectedCallback>();
 
-                [Fact]
+                [DisplayFact("OnLoggedOn")]
                 public void DisposesOnLoggedOn()
                 {
                     // Arrange
@@ -562,7 +562,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnLoggedOn.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact("OnDisconnected")]
                 public void DisposesOnDisconnected()
                 {
                     // Arrange
@@ -575,7 +575,7 @@ namespace toofz.Steam.Tests.ClientApi
                     mockUnsubscribeOnDisconnected.Verify(d => d.Dispose(), Times.Once);
                 }
 
-                [Fact]
+                [DisplayFact(nameof(SteamClientApiException))]
                 public async Task ThrowsSteamClientApiException()
                 {
                     // Arrange
@@ -602,7 +602,7 @@ namespace toofz.Steam.Tests.ClientApi
             private readonly Mock<ICallbackManager> mockManager = new Mock<ICallbackManager>();
             private readonly SteamClientAdapter steamClientAdapter;
 
-            [Fact]
+            [DisplayFact(nameof(SteamUserStats))]
             public void ReturnsSteamUserStats()
             {
                 // Arrange -> Act
@@ -615,7 +615,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class IsConnectedProperty : SteamClientAdapterTests
         {
-            [Fact]
+            [DisplayFact]
             public void IsNotConnected_ReturnsFalse()
             {
                 // Arrange
@@ -628,7 +628,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.False(isConnected);
             }
 
-            [Fact]
+            [DisplayFact]
             public void IsConnected_ReturnsTrue()
             {
                 // Arrange
@@ -644,7 +644,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class RemoteIPProperty : SteamClientAdapterTests
         {
-            [Fact]
+            [DisplayFact(nameof(SteamClientAdapter.RemoteIP))]
             public void ReturnsRemoteIP()
             {
                 // Arrange
@@ -660,7 +660,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class DisconnectMethod : SteamClientAdapterTests
         {
-            [Fact]
+            [DisplayFact("Steam")]
             public void DisconectsFromSteam()
             {
                 // Arrange -> Act

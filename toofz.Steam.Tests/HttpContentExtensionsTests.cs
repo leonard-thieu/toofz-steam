@@ -15,7 +15,7 @@ namespace toofz.Steam.Tests
             private HttpContent httpContent = new StringContent("", Encoding.UTF8);
             private Stream stream = Stream.Null;
 
-            [Fact]
+            [DisplayFact(nameof(HttpContent))]
             public void HttpContentIsNull_ReturnsNull()
             {
                 // Arrange
@@ -28,8 +28,8 @@ namespace toofz.Steam.Tests
                 Assert.Null(clone);
             }
 
-            [Fact]
-            public async Task ClonesContent()
+            [DisplayFact(nameof(HttpContent))]
+            public async Task ClonesHttpContent()
             {
                 // Arrange
                 stream = new MemoryStream(Encoding.UTF8.GetBytes("0123456789"));
@@ -42,7 +42,7 @@ namespace toofz.Steam.Tests
                 Assert.Equal("0123456789", cloneContent);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpContent.Headers))]
             public void ClonesHeaders()
             {
                 // Arrange -> Act
@@ -55,7 +55,7 @@ namespace toofz.Steam.Tests
 
         public class ReadAsAsyncMethod
         {
-            [Fact]
+            [DisplayFact(nameof(HttpContent), nameof(ArgumentNullException))]
             public async Task HttpContentIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -68,7 +68,7 @@ namespace toofz.Steam.Tests
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ResponseFailsDeserialization_ReturnsDefaultOfType()
             {
                 // Arrange
@@ -81,7 +81,7 @@ namespace toofz.Steam.Tests
                 Assert.Null(content);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsDeserializedObject()
             {
                 // Arrange
@@ -94,7 +94,7 @@ namespace toofz.Steam.Tests
                 Assert.Equal("MyValue", content.MyProperty);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task DeserializationError_ReturnsDefault()
             {
                 // Arrange

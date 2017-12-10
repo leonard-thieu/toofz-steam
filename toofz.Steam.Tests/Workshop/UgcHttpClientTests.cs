@@ -23,7 +23,7 @@ namespace toofz.Steam.Tests.Workshop
 
         public class IsTransientMethod
         {
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             [InlineData(WebExceptionStatus.ConnectFailure)]
             [InlineData(WebExceptionStatus.SendFailure)]
             [InlineData(WebExceptionStatus.PipelineFailure)]
@@ -44,7 +44,7 @@ namespace toofz.Steam.Tests.Workshop
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -59,7 +59,7 @@ namespace toofz.Steam.Tests.Workshop
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
             {
                 // Arrange
@@ -76,8 +76,8 @@ namespace toofz.Steam.Tests.Workshop
 
         public class Constructor
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(UgcHttpClient))]
+            public void ReturnsUgcHttpClient()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
@@ -93,7 +93,7 @@ namespace toofz.Steam.Tests.Workshop
 
         public class GetUgcFileAsync : UgcHttpClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -107,7 +107,7 @@ namespace toofz.Steam.Tests.Workshop
                 });
             }
 
-            [Fact]
+            [DisplayFact("RequestUri", nameof(ArgumentNullException))]
             public async Task RequestUriIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -120,7 +120,7 @@ namespace toofz.Steam.Tests.Workshop
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsUgcFile()
             {
                 // Arrange
@@ -148,7 +148,7 @@ namespace toofz.Steam.Tests.Workshop
             private readonly TelemetryClient telemetryClient = new TelemetryClient();
             private readonly UgcHttpClient client;
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposesHttpClient()
             {
                 // Arrange -> Act
@@ -158,7 +158,7 @@ namespace toofz.Steam.Tests.Workshop
                 Assert.Equal(1, handler.DisposeCount);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange -> Act

@@ -10,7 +10,7 @@ namespace toofz.Steam.Tests.ClientApi
     {
         public class OnIncomingNetworkMessage
         {
-            [Fact]
+            [DisplayFact(nameof(NullReferenceException))]
             public void ProgressIsNull_DoesNotThrowNullReferenceException()
             {
                 // Arrange
@@ -20,7 +20,7 @@ namespace toofz.Steam.Tests.ClientApi
                 listener.OnIncomingNetworkMessage(EMsg.AdminCmd, new byte[0]);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ProgressIsNotNull_ReportsDataLength()
             {
                 // Arrange

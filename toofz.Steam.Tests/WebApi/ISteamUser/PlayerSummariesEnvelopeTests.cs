@@ -9,7 +9,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
     {
         public class Serialization
         {
-            [Fact]
+            [DisplayFact(nameof(PlayerSummariesEnvelope.Response))]
             public void WithoutResponse_DoesNotDeserialize()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public void Deserializes()
             {
                 // Arrange

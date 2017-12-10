@@ -29,7 +29,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class IsTransientMethod
         {
-            [Fact]
+            [DisplayFact(nameof(SteamClientApiException), nameof(SteamClientApiException.Result))]
             public void ExIsSteamClientApiExceptionAndResultIsNull_ReturnsTrue()
             {
                 // Arrange
@@ -42,7 +42,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamClientApiException), nameof(SteamClientApiException.Result))]
             public void ExIsSteamClientApiExceptionAndResultIsNotNull_ReturnsFalse()
             {
                 // Arrange
@@ -55,7 +55,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(TimeoutRejectedException))]
             public void ExIsTimeoutRejectedException_ReturnsTrue()
             {
                 // Arrange
@@ -68,7 +68,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ReturnsFalse()
             {
                 // Arrange
@@ -89,7 +89,7 @@ namespace toofz.Steam.Tests.ClientApi
             private Policy retryPolicy = Policy.NoOpAsync();
             private TelemetryClient telemetryClient = new TelemetryClient();
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void UserNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -102,7 +102,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentException))]
             public void UserNameIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
@@ -115,7 +115,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void PasswordIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -128,7 +128,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentException))]
             public void PasswordIsEmpty_ThrowsArgumentException()
             {
                 // Arrange
@@ -141,7 +141,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(TelemetryClient), nameof(ArgumentNullException))]
             public void TelemetryClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -154,7 +154,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void PolicyIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -167,8 +167,8 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamClientApiClient))]
+            public void ReturnsSteamClientApiClient()
             {
                 // Arrange -> Act
                 var steamClientApiClient = new SteamClientApiClient(userName, password, retryPolicy, telemetryClient);
@@ -180,7 +180,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class ProgressGetter : SteamClientApiClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -193,8 +193,8 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
-            public void ReturnsProgress()
+            [DisplayFact(nameof(SteamClientApiClient.Progress))]
+            public void GetsProgress()
             {
                 // Arrange
                 var listener = new ProgressDebugNetworkListener { Progress = Mock.Of<IProgress<long>>() };
@@ -210,7 +210,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class ProgressSetter : SteamClientApiClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public void IsDisposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -223,7 +223,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamClientApiClient.Progress))]
             public void SetsProgress()
             {
                 // Arrange
@@ -241,8 +241,8 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class TimeoutProperty : SteamClientApiClientTests
         {
-            [Fact]
-            public void ReturnsDefault()
+            [DisplayFact]
+            public void NotSet_ReturnsDefault()
             {
                 // Arrange -> Act
                 var timeout = steamClientApiClient.Timeout;
@@ -251,8 +251,8 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.Equal(TimeSpan.FromSeconds(10), timeout);
             }
 
-            [Fact]
-            public void GetSetBehavior()
+            [DisplayFact(nameof(SteamClientApiClient.Timeout))]
+            public void GetsAndSetsTimeout()
             {
                 // Arrange
                 var timeout = TimeSpan.FromSeconds(1);
@@ -270,7 +270,7 @@ namespace toofz.Steam.Tests.ClientApi
         {
             private readonly CancellationToken cancellationToken = CancellationToken.None;
 
-            [Fact]
+            [DisplayFact]
             public async Task NotConnected_Connects()
             {
                 // Arrange
@@ -283,7 +283,7 @@ namespace toofz.Steam.Tests.ClientApi
                 mockSteamClient.Verify(c => c.ConnectAsync(cancellationToken), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task Connected_DoesNotConnect()
             {
                 // Arrange
@@ -296,7 +296,7 @@ namespace toofz.Steam.Tests.ClientApi
                 mockSteamClient.Verify(c => c.ConnectAsync(cancellationToken), Times.Never);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task NotLoggedOn_LogsOn()
             {
                 // Arrange
@@ -309,7 +309,7 @@ namespace toofz.Steam.Tests.ClientApi
                 mockSteamClient.Verify(c => c.LogOnAsync(It.IsAny<LogOnDetails>()), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task LoggedOn_DoesNotLogOn()
             {
                 // Arrange
@@ -325,7 +325,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class DisconnectMethod : SteamClientApiClientTests
         {
-            [Fact]
+            [DisplayFact("Steam")]
             public void DisconnectsFromSteam()
             {
                 // Arrange -> Act
@@ -357,7 +357,7 @@ namespace toofz.Steam.Tests.ClientApi
             private readonly uint appId = 247080;
             private readonly string leaderboardName = "Leaderboard Name";
 
-            [Fact]
+            [DisplayFact(nameof(InvalidOperationException))]
             public async Task NotConnected_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -370,7 +370,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(InvalidOperationException))]
             public async Task NotLoggedOn_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -383,7 +383,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(EResult.OK), nameof(SteamClientApiException))]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
@@ -397,7 +397,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.Equal(EResult.Fail, ex.Result);
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamClientApiException))]
             public async Task IDIsZero_ThrowsSteamClientApiException()
             {
                 // Arrange
@@ -411,21 +411,21 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
-            public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
+            [DisplayFact(nameof(EResult.OK))]
+            public async Task ResultIsOK_ReturnsLeaderboard()
             {
                 // Arrange
                 mockLeaderboardCallback.Setup(le => le.Result).Returns(EResult.OK);
                 mockLeaderboardCallback.Setup(le => le.ID).Returns(1);
 
                 // Act
-                var leaderboardEntries = await steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
+                var leaderboard = await steamClientApiClient.FindLeaderboardAsync(appId, leaderboardName);
 
                 // Assert
-                Assert.IsAssignableFrom<IFindOrCreateLeaderboardCallback>(leaderboardEntries);
+                Assert.IsAssignableFrom<IFindOrCreateLeaderboardCallback>(leaderboard);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task SetsTimeout()
             {
                 // Arrange
@@ -461,7 +461,7 @@ namespace toofz.Steam.Tests.ClientApi
             private readonly uint appId = 247080;
             private readonly int leaderboardId = 739999;
 
-            [Fact]
+            [DisplayFact(nameof(InvalidOperationException))]
             public async Task NotConnected_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -474,7 +474,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(InvalidOperationException))]
             public async Task NotLoggedOn_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -487,7 +487,7 @@ namespace toofz.Steam.Tests.ClientApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(EResult.OK), nameof(SteamClientApiException))]
             public async Task ResultIsNotOK_ThrowsSteamClientApiException()
             {
                 // Arrange
@@ -501,8 +501,8 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.Equal(EResult.Fail, ex.Result);
             }
 
-            [Fact]
-            public async Task ResultIsOK_ReturnsLeaderboardEntriesCallback()
+            [DisplayFact(nameof(EResult.OK))]
+            public async Task ResultIsOK_ReturnsLeaderboardEntries()
             {
                 // Arrange
                 mockLeaderboardEntriesCallback.Setup(le => le.Result).Returns(EResult.OK);
@@ -514,7 +514,7 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.IsAssignableFrom<ILeaderboardEntriesCallback>(leaderboardEntries);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task SetsTimeout()
             {
                 // Arrange
@@ -530,7 +530,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class DisposeMethod : SteamClientApiClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(SteamClient))]
             public void DisposesSteamClient()
             {
                 // Arrange -> Act
@@ -540,7 +540,7 @@ namespace toofz.Steam.Tests.ClientApi
                 mockSteamClient.Verify(s => s.Dispose(), Times.Once);
             }
 
-            [Fact]
+            [DisplayFact]
             public void DisposeMoreThanOnce_DoesNothing()
             {
                 // Arrange -> Act

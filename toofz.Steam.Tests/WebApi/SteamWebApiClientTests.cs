@@ -26,14 +26,14 @@ namespace toofz.Steam.Tests.WebApi
 
         public class IsTransientMethod
         {
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestStatusException), nameof(HttpRequestStatusException.StatusCode))]
             [InlineData(408)]
             [InlineData(429)]
             [InlineData(500)]
             [InlineData(502)]
             [InlineData(503)]
             [InlineData(504)]
-            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_HandlesException(HttpStatusCode statusCode)
+            public void HttpRequestStatusExceptionAndStatusCodeIsTransient_ReturnsTrue(HttpStatusCode statusCode)
             {
                 // Arrange
                 var ex = new HttpRequestStatusException(statusCode, new Uri("http://example.org"));
@@ -45,6 +45,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.True(isTransient);
             }
 
+            [DisplayFact(nameof(HttpRequestStatusException), nameof(HttpRequestStatusException.StatusCode))]
             public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -58,7 +59,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.False(isTransient);
             }
 
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             [InlineData(WebExceptionStatus.ConnectFailure)]
             [InlineData(WebExceptionStatus.SendFailure)]
             [InlineData(WebExceptionStatus.PipelineFailure)]
@@ -79,7 +80,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -94,7 +95,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
             {
                 // Arrange
@@ -108,7 +109,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ReturnsFalse()
             {
                 // Arrange
@@ -124,8 +125,8 @@ namespace toofz.Steam.Tests.WebApi
 
         public class Constructor
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamWebApiClient))]
+            public void ReturnsSteamWebApiClient()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
@@ -146,7 +147,7 @@ namespace toofz.Steam.Tests.WebApi
                 client.SteamWebApiKey = "mySteamWebApiKey";
             }
 
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -160,7 +161,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamWebApiClient.SteamWebApiKey), nameof(InvalidOperationException))]
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -174,7 +175,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact("SteamIds", nameof(ArgumentNullException))]
             public async Task SteamIdsIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -187,7 +188,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact("SteamIds", nameof(ArgumentException))]
             public async Task TooManySteamIds_ThrowsArgumentException()
             {
                 // Arrange
@@ -200,7 +201,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsPlayerSummaries()
             {
                 // Arrange
@@ -218,7 +219,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
             }
 
-            [Fact]
+            [Fact(DisplayName = "Response contains â, Does not throw " + nameof(DecoderFallbackException))]
             public async Task ResponseContainsâ_DoesNotThrowDecoderFallbackException()
             {
                 // Arrange
@@ -247,7 +248,7 @@ namespace toofz.Steam.Tests.WebApi
             private uint appId = 247080;
             private long ugcId = 22837952671856412;
 
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -260,7 +261,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(SteamWebApiClient.SteamWebApiKey), nameof(InvalidOperationException))]
             public async Task SteamWebApiKeyIsNull_ThrowsInvalidOperationException()
             {
                 // Arrange
@@ -273,7 +274,7 @@ namespace toofz.Steam.Tests.WebApi
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsUgcFileDetails()
             {
                 // Arrange
@@ -303,7 +304,7 @@ namespace toofz.Steam.Tests.WebApi
             private readonly TelemetryClient telemetryClient = new TelemetryClient();
             private readonly SteamWebApiClient client;
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposesHttpClient()
             {
                 // Arrange -> Act
@@ -313,7 +314,7 @@ namespace toofz.Steam.Tests.WebApi
                 Assert.Equal(1, handler.DisposeCount);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange -> Act

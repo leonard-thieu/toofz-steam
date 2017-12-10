@@ -27,7 +27,7 @@ namespace toofz.Steam.Tests.CommunityData
 
         public class IsTransientMethod
         {
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestStatusException), nameof(HttpRequestStatusException.StatusCode))]
             [InlineData(408)]
             [InlineData(429)]
             [InlineData(500)]
@@ -46,7 +46,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestStatusException), nameof(HttpRequestStatusException.StatusCode))]
             public void ExIsHttpRequestStatusExceptionAndStatusCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -60,7 +60,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Theory]
+            [DisplayTheory(nameof(IOException), nameof(IOException.InnerException), nameof(SocketException), nameof(SocketException.SocketErrorCode))]
             [InlineData(SocketError.ConnectionReset)]
             [InlineData(SocketError.TimedOut)]
             public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsTransient_ReturnsTrue(int errorCode)
@@ -76,7 +76,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(IOException), nameof(IOException.InnerException), nameof(SocketException), nameof(SocketException.SocketErrorCode))]
             public void ExIsIOExceptionAndInnerExceptionIsSocketExceptionAndSocketErrorCodeIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -90,7 +90,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(IOException), nameof(IOException.InnerException), nameof(SocketException))]
             public void ExIsIOExceptionAndInnerExceptionIsNotSocketException_ReturnsFalse()
             {
                 // Arrange
@@ -103,7 +103,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Theory]
+            [DisplayTheory(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             [InlineData(WebExceptionStatus.ConnectFailure)]
             [InlineData(WebExceptionStatus.SendFailure)]
             [InlineData(WebExceptionStatus.PipelineFailure)]
@@ -124,7 +124,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.True(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException), nameof(WebException.Status))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsWebExceptionAndStatusIsNotTransient_ReturnsFalse()
             {
                 // Arrange
@@ -139,7 +139,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpRequestException), nameof(HttpRequestException.InnerException), nameof(WebException))]
             public void ExIsHttpRequestExceptionAndInnerExceptionIsNotWebException_ReturnsFalse()
             {
                 // Arrange
@@ -153,7 +153,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.False(isTransient);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ReturnsFalse()
             {
                 // Arrange
@@ -169,8 +169,8 @@ namespace toofz.Steam.Tests.CommunityData
 
         public class Constructor
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamCommunityDataClient))]
+            public void ReturnsSteamCommunityDataClient()
             {
                 // Arrange
                 var handler = new MockHttpMessageHandler();
@@ -186,7 +186,7 @@ namespace toofz.Steam.Tests.CommunityData
 
         public class GetLeaderboardsAsyncMethod : SteamCommunityDataClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -200,7 +200,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -213,7 +213,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
@@ -240,7 +240,7 @@ namespace toofz.Steam.Tests.CommunityData
 
         public class GetLeaderboardEntriesAsyncMethod : SteamCommunityDataClientTests
         {
-            [Fact]
+            [DisplayFact(nameof(ObjectDisposedException))]
             public async Task Disposed_ThrowsObjectDisposedException()
             {
                 // Arrange
@@ -255,7 +255,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public async Task CommunityGameNameIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -269,7 +269,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange
@@ -299,7 +299,7 @@ namespace toofz.Steam.Tests.CommunityData
             private SimpleHttpMessageHandler handler = new SimpleHttpMessageHandler();
             private TelemetryClient telemetryClient = new TelemetryClient();
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposesHttpClient()
             {
                 // Arrange
@@ -312,7 +312,7 @@ namespace toofz.Steam.Tests.CommunityData
                 Assert.Equal(1, handler.DisposeCount);
             }
 
-            [Fact]
+            [DisplayFact(nameof(HttpClient))]
             public void DisposeMoreThanOnce_OnlyDisposesHttpClientOnce()
             {
                 // Arrange

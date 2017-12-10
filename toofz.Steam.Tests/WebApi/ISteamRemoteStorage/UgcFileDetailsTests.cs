@@ -9,7 +9,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
     {
         public class Serialization
         {
-            [Fact]
+            [DisplayFact(nameof(UgcFileDetails.FileName))]
             public void WithoutFileName_DoesNotDeserialize()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(UgcFileDetails.Url))]
             public void WithoutUrl_DoesNotDeserialize()
             {
                 // Arrange
@@ -35,7 +35,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(UgcFileDetails.Size))]
             public void WithoutSize_DoesNotDeserialize()
             {
                 // Arrange
@@ -48,7 +48,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public void Deserializes()
             {
                 // Arrange

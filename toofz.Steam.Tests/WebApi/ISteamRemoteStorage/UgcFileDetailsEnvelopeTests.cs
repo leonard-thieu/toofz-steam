@@ -9,7 +9,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
     {
         public class Serialization
         {
-            [Fact]
+            [DisplayFact(nameof(UgcFileDetailsEnvelope.Data))]
             public void WithoutData_DoesNotDeserialize()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamRemoteStorage
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public void Deserializes()
             {
                 // Arrange

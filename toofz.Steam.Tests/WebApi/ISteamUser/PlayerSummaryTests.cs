@@ -9,7 +9,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
     {
         public class Serialization
         {
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.SteamId))]
             public void WithoutSteamId_DoesNotDeserialize()
             {
                 // Arrange
@@ -22,7 +22,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.CommunityVisibilityState))]
             public void WithoutCommunityVisibilityState_DoesNotDeserialize()
             {
                 // Arrange
@@ -35,7 +35,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.PersonaName))]
             public void WithoutPersonaName_DoesNotDeserialize()
             {
                 // Arrange
@@ -48,7 +48,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.LastLogOff))]
             public void WithoutLastLogOff_DoesNotDeserialize()
             {
                 // Arrange
@@ -61,7 +61,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.ProfileUrl))]
             public void WithoutProfileUrl_DoesNotDeserialize()
             {
                 // Arrange
@@ -74,7 +74,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.Avatar))]
             public void WithoutAvatar_DoesNotDeserialize()
             {
                 // Arrange
@@ -87,7 +87,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.AvatarMedium))]
             public void WithoutAvatarMedium_DoesNotDeserialize()
             {
                 // Arrange
@@ -100,8 +100,8 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
-            public void WithoutAvatarFull_DoesNotDeserialize()
+            [DisplayFact(nameof(PlayerSummary.AvatarFull))]
+            public void WithoutAvatarFull__DoesNotDeserialize()
             {
                 // Arrange
                 var json = Resources.PlayerSummaryWithoutAvatarFull;
@@ -113,7 +113,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact(nameof(PlayerSummary.PersonaState))]
             public void WithoutPersonaState_DoesNotDeserialize()
             {
                 // Arrange
@@ -126,7 +126,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public void Deserializes()
             {
                 // Arrange

@@ -11,7 +11,7 @@ namespace toofz.Steam.Tests
     {
         public class Constructor
         {
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void PolicyIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -24,8 +24,8 @@ namespace toofz.Steam.Tests
                 });
             }
 
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(TransientFaultHandler))]
+            public void ReturnsTransientFaultHandler()
             {
                 // Arrange
                 var policy = Policy.NoOpAsync();
@@ -51,7 +51,7 @@ namespace toofz.Steam.Tests
             private readonly TransientFaultHandler transientFaultHandler;
             private readonly HttpMessageHandlerAdapter handler;
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsResponse()
             {
                 // Arrange

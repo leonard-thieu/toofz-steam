@@ -15,7 +15,7 @@ namespace toofz.Steam.Tests.CommunityData
     {
         public class GetLeaderboardsAsyncMethod
         {
-            [Fact]
+            [DisplayFact(nameof(SteamCommunityDataClient), nameof(ArgumentNullException))]
             public async Task SteamCommunityDataClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -29,7 +29,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsLeaderboards()
             {
                 // Arrange
@@ -59,7 +59,7 @@ namespace toofz.Steam.Tests.CommunityData
 
         public class GetLeaderboardEntriesAsyncMethod
         {
-            [Fact]
+            [DisplayFact(nameof(ArgumentNullException))]
             public void ClientIsNull_ThrowsArgumentNullException()
             {
                 // Arrange
@@ -74,7 +74,7 @@ namespace toofz.Steam.Tests.CommunityData
                 });
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ReturnsLeaderboardEntries()
             {
                 // Arrange

@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Xunit;
 
 namespace toofz.Steam.Tests
@@ -7,7 +8,7 @@ namespace toofz.Steam.Tests
     {
         public class MarKAsUnsuccessfulMethod
         {
-            [Fact]
+            [DisplayFact(nameof(OperationTelemetry.Success))]
             public void SetsSuccessToFalse()
             {
                 // Arrange
@@ -20,7 +21,7 @@ namespace toofz.Steam.Tests
                 Assert.False(telemetry.Success);
             }
 
-            [Fact]
+            [DisplayFact]
             public void ReturnsFalse()
             {
                 // Arrange

@@ -15,8 +15,8 @@ namespace toofz.Steam.Tests
     {
         public class Constructor
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(GZipHandler))]
+            public void ReturnsGZipHandler()
             {
                 // Arrange -> Act
                 var handler = new GZipHandler();
@@ -37,7 +37,7 @@ namespace toofz.Steam.Tests
             private readonly MockHttpMessageHandler mockHandler = new MockHttpMessageHandler();
             private readonly HttpMessageHandlerAdapter handler;
 
-            [Fact]
+            [Fact(DisplayName = "Adds Accept-Encoding: gzip to request")]
             public async Task AddsAcceptEncodingGzipToRequest()
             {
                 // Arrange
@@ -51,7 +51,7 @@ namespace toofz.Steam.Tests
                 Assert.Contains(new StringWithQualityHeaderValue("gzip"), request.Headers.AcceptEncoding.ToList());
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task NoContent_ReturnsResponse()
             {
                 // Arrange
@@ -64,7 +64,7 @@ namespace toofz.Steam.Tests
                 Assert.IsAssignableFrom<HttpResponseMessage>(response);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ContentIsNotCompressed_ReturnsUnmodifiedResponse()
             {
                 // Arrange
@@ -79,7 +79,7 @@ namespace toofz.Steam.Tests
                 Assert.Same(content, response.Content);
             }
 
-            [Fact]
+            [DisplayFact]
             public async Task ContentIsCompressed_ReturnsResponseWithDecompressedContent()
             {
                 // Arrange

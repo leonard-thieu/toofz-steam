@@ -9,8 +9,8 @@ namespace toofz.Steam.Tests.ClientApi
     {
         public class Constructor_String
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamClientApiException))]
+            public void ReturnsSteamClientApiException()
             {
                 // Arrange
                 var message = "myMessage";
@@ -26,8 +26,8 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class Constructor_String_Exception
         {
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamClientApiException))]
+            public void ReturnsSteamClientApiException()
             {
                 // Arrange
                 var message = "myMessage";
@@ -44,7 +44,7 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class Constructor_String_EResult
         {
-            [Fact]
+            [DisplayFact(nameof(SteamClientApiException.Result))]
             public void SetsResult()
             {
                 // Arrange
@@ -58,8 +58,8 @@ namespace toofz.Steam.Tests.ClientApi
                 Assert.Equal(result, ex.Result);
             }
 
-            [Fact]
-            public void ReturnsInstance()
+            [DisplayFact(nameof(SteamClientApiException))]
+            public void ReturnsSteamClientApiException()
             {
                 // Arrange
                 var message = "myMessage";
