@@ -28,7 +28,14 @@ namespace toofz.Steam.ClientApi
         {
             if (ex is SteamClientApiException scae)
             {
-                return scae.Result == null;
+                switch (scae.Result)
+                {
+                    case EResult.ServiceUnavailable:
+                        return true;
+
+                    default:
+                        return scae.Result == null;
+                }
             }
 
             return ex is TimeoutRejectedException;
