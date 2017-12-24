@@ -29,6 +29,20 @@ namespace toofz.Steam.Tests.ClientApi
 
         public class IsTransientMethod
         {
+            [DisplayTheory(nameof(SteamClientApiException), nameof(SteamClientApiException.Result))]
+            [InlineData(EResult.ServiceUnavailable)]
+            public void ExIsSteamClientApiExceptionAndResultIsTransient_ReturnsTrue(EResult result)
+            {
+                // Arrange
+                var ex = new SteamClientApiException(null, result);
+
+                // Act
+                var isTransient = SteamClientApiClient.IsTransient(ex);
+
+                // Assert
+                Assert.True(isTransient);
+            }
+
             [DisplayFact(nameof(SteamClientApiException), nameof(SteamClientApiException.Result))]
             public void ExIsSteamClientApiExceptionAndResultIsNull_ReturnsTrue()
             {
@@ -43,7 +57,7 @@ namespace toofz.Steam.Tests.ClientApi
             }
 
             [DisplayFact(nameof(SteamClientApiException), nameof(SteamClientApiException.Result))]
-            public void ExIsSteamClientApiExceptionAndResultIsNotNull_ReturnsFalse()
+            public void ExIsSteamClientApiExceptionAndResultIsNotTransient_ReturnsFalse()
             {
                 // Arrange
                 var ex = new SteamClientApiException(null, EResult.AccessDenied);
