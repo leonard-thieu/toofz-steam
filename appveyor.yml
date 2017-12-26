@@ -28,7 +28,11 @@ assembly_info:
 init:
   - git config --global core.autocrlf input
 install:
-  - ps: $env:PACKAGEVERSION = $env:VERSION + @{ $true = "-$env:VERSION_SUFFIX"; $false = '' }[(Test-Path Env:\VERSION_SUFFIX)]
+  - ps: |
+      $env:PACKAGEVERSION = $env:VERSION
+      if (Test-Path Env:\VERSION_SUFFIX) {
+          $env:PACKAGEVERSION += "-$env:VERSION_SUFFIX"
+      }
   - nuget update -Self
   
 before_build:
@@ -38,9 +42,17 @@ build:
   verbosity: minimal
 
 test_script:
-  - ps: .\Scripts\Test-Project.ps1
+  - ps: |
+      $projectPath = Resolve-Path .\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      msbuild $projectPath /verbosity:quiet /target:Coverage
 after_test:
-  - ps: .\Scripts\Submit-CodeCoverageResults.ps1
+  - ps: |
+      $projectPath = Resolve-Path .\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      msbuild $projectPath /verbosity:quiet /target:PublishCoverage
 
 deploy_script:
-  - ps: .\Scripts\Deploy-NuGetPackage.ps1
+  - ps: |
+      if ($env:APPVEYOR_REPO_TAG -eq 'true') {
+          $projectPath = Resolve-Path .\$env:PROJECT\$env:PROJECT.csproj
+          msbuild $projectPath /verbosity:quiet /target:PublishPackage
+      }
