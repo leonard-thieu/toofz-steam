@@ -39,6 +39,7 @@
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="toofz.Build" Version="1.0.1" />
     <PackageReference Include="toofz.SteamKit2" Version="4.3.3" />
   </ItemGroup>
 
