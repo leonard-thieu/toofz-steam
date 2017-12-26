@@ -39,7 +39,7 @@ before_build:
   - appveyor-retry nuget restore -Verbosity quiet
 build:
   project: $(PROJECT).sln
-  verbosity: minimal
+  verbosity: quiet
 
 test_script:
   - ps: |
