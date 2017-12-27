@@ -43,16 +43,16 @@ build:
 
 test_script:
   - ps: |
-      $projectPath = Resolve-Path .\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      $projectPath = Resolve-Path .\test\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
       msbuild $projectPath /verbosity:quiet /target:Coverage
 after_test:
   - ps: |
-      $projectPath = Resolve-Path .\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      $projectPath = Resolve-Path .\test\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
       msbuild $projectPath /verbosity:quiet /target:PublishCoverage
 
 deploy_script:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq 'true') {
-          $projectPath = Resolve-Path .\$env:PROJECT\$env:PROJECT.csproj
+          $projectPath = Resolve-Path .\src\$env:PROJECT\$env:PROJECT.csproj
           msbuild $projectPath /verbosity:quiet /target:PublishPackage
       }

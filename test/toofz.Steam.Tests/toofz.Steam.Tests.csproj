@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\toofz.Steam\toofz.Steam.csproj" />
+    <ProjectReference Include="..\..\src\toofz.Steam\toofz.Steam.csproj" />
   </ItemGroup>
 
   <ItemGroup>

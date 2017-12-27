@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.0
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C32925A-98CE-478E-9F1C-7F78B233EEFC}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,9 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "toofz.Steam", "toofz.Steam\toofz.Steam.csproj", "{BA8E2502-4028-41C0-A437-8CC34EA33C8E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{03126070-BC09-4576-9CD1-0FB8F8C5BCD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "toofz.Steam.Tests", "toofz.Steam.Tests\toofz.Steam.Tests.csproj", "{719FE4EF-3D16-464D-BC07-904066FB4814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "toofz.Steam", "src\toofz.Steam\toofz.Steam.csproj", "{8D0A82F7-DC45-45DB-9A18-478B10FD4409}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E58E4CE9-D2F3-4E93-987A-086560258318}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "toofz.Steam.Tests", "test\toofz.Steam.Tests\toofz.Steam.Tests.csproj", "{B676F373-0839-4275-9922-8423BEF46295}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,17 +24,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA8E2502-4028-41C0-A437-8CC34EA33C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA8E2502-4028-41C0-A437-8CC34EA33C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA8E2502-4028-41C0-A437-8CC34EA33C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA8E2502-4028-41C0-A437-8CC34EA33C8E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{719FE4EF-3D16-464D-BC07-904066FB4814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{719FE4EF-3D16-464D-BC07-904066FB4814}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{719FE4EF-3D16-464D-BC07-904066FB4814}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{719FE4EF-3D16-464D-BC07-904066FB4814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D0A82F7-DC45-45DB-9A18-478B10FD4409}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0A82F7-DC45-45DB-9A18-478B10FD4409}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0A82F7-DC45-45DB-9A18-478B10FD4409}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D0A82F7-DC45-45DB-9A18-478B10FD4409}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B676F373-0839-4275-9922-8423BEF46295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B676F373-0839-4275-9922-8423BEF46295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B676F373-0839-4275-9922-8423BEF46295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B676F373-0839-4275-9922-8423BEF46295}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8D0A82F7-DC45-45DB-9A18-478B10FD4409} = {03126070-BC09-4576-9CD1-0FB8F8C5BCD4}
+		{B676F373-0839-4275-9922-8423BEF46295} = {E58E4CE9-D2F3-4E93-987A-086560258318}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2418D6A-F0E3-4398-8E14-850FA2EE5ED6}
