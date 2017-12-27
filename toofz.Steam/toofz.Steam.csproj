@@ -12,7 +12,7 @@
       .pdb;
       .xml
     </AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PackageVersion Condition=" '$(PackageVersion)' == '' ">0.0.0-dev</PackageVersion>
+    <PackageVersion Condition="'$(PackageVersion)' == ''">0.0.0-dev</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Steam</Title>
     <Description>.NET library designed for retrieving leaderboards, players, and user-generated content from Steam.</Description>
@@ -24,7 +24,7 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <DocumentationFile>bin\Release\netstandard2.0\toofz.NecroDancer.Leaderboards.xml</DocumentationFile>
