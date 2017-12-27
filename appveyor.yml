@@ -9,7 +9,6 @@ skip_commits:
 configuration:
   - Release
 environment:
-  PROJECT: toofz.Steam
   VERSION: 0.0.0
   VERSION_SUFFIX: dev
   MYGET_API_KEY:
@@ -38,21 +37,21 @@ install:
 before_build:
   - appveyor-retry nuget restore -Verbosity quiet
 build:
-  project: $(PROJECT).sln
+  project: toofz.Steam.sln
   verbosity: quiet
 
 test_script:
   - ps: |
-      $projectPath = Resolve-Path .\test\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      $projectPath = Resolve-Path .\test\toofz.Steam.Tests\toofz.Steam.Tests.csproj
       msbuild $projectPath /verbosity:quiet /target:Coverage
 after_test:
   - ps: |
-      $projectPath = Resolve-Path .\test\$env:PROJECT.Tests\$env:PROJECT.Tests.csproj
+      $projectPath = Resolve-Path .\test\toofz.Steam.Tests\toofz.Steam.Tests.csproj
       msbuild $projectPath /verbosity:quiet /target:PublishCoverage
 
 deploy_script:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq 'true') {
-          $projectPath = Resolve-Path .\src\$env:PROJECT\$env:PROJECT.csproj
+          $projectPath = Resolve-Path .\src\toofz.Steam\toofz.Steam.csproj
           msbuild $projectPath /verbosity:quiet /target:PublishPackage
       }
