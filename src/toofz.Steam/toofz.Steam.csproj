@@ -1,18 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>
-      $(AllowedOutputExtensionsInPackageBuildOutputFolder);
-      .pdb;
-      .xml
-    </AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PackageVersion Condition="'$(PackageVersion)' == ''">0.0.0-dev</PackageVersion>
     <Authors>Leonard Thieu</Authors>
     <Title>toofz Steam</Title>
     <Description>.NET library designed for retrieving leaderboards, players, and user-generated content from Steam.</Description>
@@ -36,11 +28,9 @@
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Polly" Version="5.5.0" />
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0">
-      <PrivateAssets>all</PrivateAssets>
+    <PackageReference Include="toofz.Build" Version="1.1.1">
+      <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="toofz.Build" Version="1.0.1" />
     <PackageReference Include="toofz.SteamKit2" Version="4.3.3" />
   </ItemGroup>
-
 </Project>
