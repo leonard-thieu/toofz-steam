@@ -39,7 +39,5 @@ after_test:
 
 deploy_script:
   - ps: |
-      if ($env:APPVEYOR_REPO_TAG -eq 'true') {
-          $projectPath = Resolve-Path .\src\toofz.Steam\toofz.Steam.csproj
-          msbuild $projectPath /verbosity:quiet /target:PublishPackage
-      }
+      $projectPath = Resolve-Path .\src\toofz.Steam\toofz.Steam.csproj
+      msbuild $projectPath /verbosity:quiet /target:PublishPackage /property:IsPackagePublishable=$env:APPVEYOR_REPO_TAG
