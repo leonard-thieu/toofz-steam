@@ -31,13 +31,9 @@ build:
 test_script:
   - ps: |
       $projectPath = Resolve-Path .\test\toofz.Steam.Tests\toofz.Steam.Tests.csproj
-      msbuild $projectPath /verbosity:quiet /target:Coverage
-after_test:
-  - ps: |
-      $projectPath = Resolve-Path .\test\toofz.Steam.Tests\toofz.Steam.Tests.csproj
-      msbuild $projectPath /verbosity:quiet /target:PublishCoverage
+      msbuild $projectPath /nologo /verbosity:minimal /target:Test
 
 deploy_script:
   - ps: |
       $projectPath = Resolve-Path .\src\toofz.Steam\toofz.Steam.csproj
-      msbuild $projectPath /verbosity:quiet /target:PublishPackage /property:IsPackagePublishable=$env:APPVEYOR_REPO_TAG
+      msbuild $projectPath /nologo /verbosity:minimal /target:Pack /property:PublishPackage=$env:APPVEYOR_REPO_TAG
