@@ -29,6 +29,6 @@
     <PackageReference Include="toofz.Build" Version="2.3.1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="toofz.SteamKit2" Version="4.3.3" />
+    <PackageReference Include="toofz.SteamKit2" Version="4.5.0" />
   </ItemGroup>
 </Project>
