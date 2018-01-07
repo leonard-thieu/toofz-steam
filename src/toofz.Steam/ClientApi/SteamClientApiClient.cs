@@ -13,6 +13,9 @@ using static SteamKit2.SteamUserStats;
 
 namespace toofz.Steam.ClientApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class SteamClientApiClient : ISteamClientApiClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SteamClientApiClient));

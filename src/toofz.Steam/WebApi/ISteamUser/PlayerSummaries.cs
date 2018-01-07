@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace toofz.Steam.WebApi.ISteamUser
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [DataContract]
     public sealed class PlayerSummaries
     {

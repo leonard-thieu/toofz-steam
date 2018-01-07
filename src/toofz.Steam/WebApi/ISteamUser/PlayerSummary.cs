@@ -88,6 +88,9 @@ namespace toofz.Steam.WebApi.ISteamUser
         /// </summary>
         [DataMember(Name = "timecreated")]
         public int TimeCreated { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [DataMember(Name = "personastateflags")]
         public int PersonaStateFlags { get; set; }
         /// <summary>

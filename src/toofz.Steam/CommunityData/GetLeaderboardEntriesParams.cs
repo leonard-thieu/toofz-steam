@@ -5,7 +5,13 @@
     /// </summary>
     public sealed class GetLeaderboardEntriesParams
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public int? StartRange { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public int? EndRange { get; set; }
     }
 }

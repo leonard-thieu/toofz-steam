@@ -2,6 +2,9 @@
 
 namespace toofz.Steam.WebApi.ISteamRemoteStorage
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [DataContract]
     public sealed class UgcFileDetailsEnvelope
     {

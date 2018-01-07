@@ -85,10 +85,20 @@ namespace toofz.Steam.CommunityData
 
         private readonly ProgressReporterHttpClient http;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsCacheBustingEnabled { get; set; }
 
         #region GetLeaderboards
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="communityGameName"></param>
+        /// <param name="progress"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<LeaderboardsEnvelope> GetLeaderboardsAsync(
             string communityGameName,
             IProgress<long> progress = default,
@@ -120,6 +130,15 @@ namespace toofz.Steam.CommunityData
         /// </summary>
         public const int MaxLeaderboardEntriesPerRequest = 5001;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="communityGameName"></param>
+        /// <param name="leaderboardId"></param>
+        /// <param name="params"></param>
+        /// <param name="progress"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<LeaderboardEntriesEnvelope> GetLeaderboardEntriesAsync(
             string communityGameName,
             int leaderboardId,

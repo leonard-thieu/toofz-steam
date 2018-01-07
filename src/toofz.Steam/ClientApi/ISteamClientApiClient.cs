@@ -5,6 +5,9 @@ using static SteamKit2.SteamUserStats;
 
 namespace toofz.Steam.ClientApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface ISteamClientApiClient : IDisposable
     {
         /// <summary>
