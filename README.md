@@ -7,13 +7,35 @@
 ## Overview
 
 **toofz Steam** is a .NET library designed for retrieving leaderboards, players, and user-generated content from [Steam](http://store.steampowered.com/about/). 
-It includes clients for [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
-[Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and Steam Client API.
+It includes clients for Steam Client API, [Steam Community Data](https://partner.steamgames.com/documentation/community_data), 
+[Steam Web API](https://partner.steamgames.com/doc/webapi_overview), and Steam Workshop.
 
 ---
 
 **toofz Steam** is a component of **toofz**. 
 Information about other projects that support **toofz** can be found in the [meta-repository](https://github.com/leonard-thieu/toofz-necrodancer).
+
+## Description
+
+toofz Steam implements clients for various Steam APIs. Only the APIs used by toofz projects are implemented. More APIs may be implemented if there is a 
+demand for it. All clients have support for transient fault handling, telemetry, and cancellation.
+
+## Installing via NuGet
+
+Add a NuGet.Config to your solution directory with the following content:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="toofz" value="https://www.myget.org/F/toofz/api/v3/index.json" />
+  </packageSources>
+</configuration>
+```
+
+```powershell
+Install-Package toofz.Steam
+```
 
 ### Dependencies
 
