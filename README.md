@@ -15,6 +15,10 @@ It includes clients for [Steam Community Data](https://partner.steamgames.com/do
 **toofz Steam** is a component of **toofz**. 
 Information about other projects that support **toofz** can be found in the [meta-repository](https://github.com/leonard-thieu/toofz-necrodancer).
 
+### Dependencies
+
+* [toofz Build](https://github.com/leonard-thieu/toofz-build)
+
 ### Dependents
 
 * [toofz Leaderboards Service](https://github.com/leonard-thieu/leaderboards-service)
@@ -29,9 +33,31 @@ Information about other projects that support **toofz** can be found in the [met
   * .NET Framework 4.6.1
   * Mono 5.4
 
-## Building and testing
+## Contributing
 
-Visual Studio 2017 (version 15.3 or later) can be used to build and run tests.
+Contributions are welcome for toofz Steam.
+
+* Want to report a bug or request a feature? [File a new issue](https://github.com/leonard-thieu/toofz-steam/issues).
+* Join in design conversations.
+* Fix an issue or add a new feature.
+  * Aside from trivial issues, please raise a discussion before submitting a pull request.
+
+### Development
+
+#### Requirements
+
+* Visual Studio 2017
+
+#### Getting started
+
+Open the solution file and build. Use Test Explorer to run tests.
+
+#### Repository layout
+
+* [`ClientApi`](src/toofz.Steam/ClientApi) - Steam Client API client (wrapper around [SteamKit](https://github.com/SteamRE/SteamKit))
+* [`CommunityData`](src/toofz.Steam/CommunityData) - [Steam Community Data](https://partner.steamgames.com/documentation/community_data) client
+* [`WebApi`](src/toofz.Steam/WebApi) - [Steam Web API](https://partner.steamgames.com/doc/webapi_overview) client
+* [`Workshop`](src/toofz.Steam/Workshop) - Steam Workshop client
 
 ## License
 
