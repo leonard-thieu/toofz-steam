@@ -34,7 +34,7 @@ Add a NuGet.Config to your solution directory with the following content:
 ```
 
 ```powershell
-Install-Package toofz.Steam
+Install-Package 'toofz.Steam'
 ```
 
 ### Dependencies
