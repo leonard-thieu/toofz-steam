@@ -236,6 +236,24 @@ namespace toofz.Steam.Tests.WebApi
                 // Assert
                 Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
             }
+
+            [Fact]
+            public async Task Something()
+            {
+                // Arrange
+                var steamIds = new long[] { 76561197960435530 };
+                handler
+                    .When(HttpMethod.Get, "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002")
+                    .WithQueryString("key", client.SteamWebApiKey)
+                    .WithQueryString("steamids", string.Join(",", steamIds))
+                    .Respond(new StringContent(Resources.PlayerSummariesWithoutLastLogOff, Encoding.Default, "application/json"));
+
+                // Act
+                var playerSummariesEnvelope = await client.GetPlayerSummariesAsync(steamIds);
+
+                // Assert
+                Assert.IsAssignableFrom<PlayerSummariesEnvelope>(playerSummariesEnvelope);
+            }
         }
 
         public class GetUgcFileDetailsAsync : SteamWebApiClientTests

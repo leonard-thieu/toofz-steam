@@ -50,16 +50,9 @@ namespace toofz.Steam
             if (httpContent == null)
                 throw new ArgumentNullException(nameof(httpContent));
 
-            try
-            {
-                var value = await httpContent.ReadAsStringAsync().ConfigureAwait(false);
+            var value = await httpContent.ReadAsStringAsync().ConfigureAwait(false);
 
-                return JsonConvert.DeserializeObject<T>(value);
-            }
-            catch (JsonSerializationException)
-            {
-                return default;
-            }
+            return JsonConvert.DeserializeObject<T>(value);
         }
     }
 }

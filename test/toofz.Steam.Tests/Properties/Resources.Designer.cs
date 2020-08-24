@@ -157,6 +157,24 @@ namespace toofz.Steam.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///  &quot;response&quot;: {
+        ///    &quot;players&quot;: [
+        ///      {
+        ///        &quot;steamid&quot;: &quot;76561197960435530&quot;,
+        ///        &quot;communityvisibilitystate&quot;: 3,
+        ///        &quot;personaname&quot;: &quot;Robin&quot;,
+        ///        &quot;profileurl&quot;: &quot;http://steamcommunity.com/id/robinwalker/&quot;,
+        ///        &quot;avatar&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4.jpg&quot;,
+        ///        &quot;avatarmedium&quot;: &quot;https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f1/f1dd60a188883caf82d0cbfccfe6aba0af1732d4_medium [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSummariesWithoutLastLogOff {
+            get {
+                return ResourceManager.GetString("PlayerSummariesWithoutLastLogOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
         ///
         ///}.
         /// </summary>
