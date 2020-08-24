@@ -47,20 +47,7 @@ namespace toofz.Steam.Tests.WebApi.ISteamUser
                     JsonConvert.DeserializeObject<PlayerSummary>(json);
                 });
             }
-
-            [DisplayFact(nameof(PlayerSummary.LastLogOff))]
-            public void WithoutLastLogOff_DoesNotDeserialize()
-            {
-                // Arrange
-                var json = Resources.PlayerSummaryWithoutLastLogOff;
-
-                // Act -> Assert
-                Assert.Throws<JsonSerializationException>(() =>
-                {
-                    JsonConvert.DeserializeObject<PlayerSummary>(json);
-                });
-            }
-
+            
             [DisplayFact(nameof(PlayerSummary.ProfileUrl))]
             public void WithoutProfileUrl_DoesNotDeserialize()
             {

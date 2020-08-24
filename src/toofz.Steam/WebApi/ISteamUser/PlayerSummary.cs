@@ -37,8 +37,8 @@ namespace toofz.Steam.WebApi.ISteamUser
         /// <summary>
         /// The last time the user was online, in unix time.
         /// </summary>
-        [DataMember(Name = "lastlogoff", IsRequired = true)]
-        public int LastLogOff { get; set; }
+        [DataMember(Name = "lastlogoff")]
+        public int? LastLogOff { get; set; }
         /// <summary>
         /// The full URL of the player's Steam Community profile.
         /// </summary>

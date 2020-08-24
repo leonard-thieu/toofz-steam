@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace toofz.Steam.Tests
@@ -95,16 +96,16 @@ namespace toofz.Steam.Tests
             }
 
             [DisplayFact]
-            public async Task DeserializationError_ReturnsDefault()
+            public async Task DeserializationError_ThrowsJsonSerializationException()
             {
                 // Arrange
                 var httpContent = new StringContent("{\"NotMyProperty\":\"MyValue\"}");
 
-                // Act
-                var content = await httpContent.ReadAsAsync<TestDto>();
-
-                // Assert
-                Assert.Null(content);
+                // Act -> Assert
+                await Assert.ThrowsAsync<JsonSerializationException>(() =>
+                {
+                    return httpContent.ReadAsAsync<TestDto>();
+                });
             }
 
             [DataContract]
