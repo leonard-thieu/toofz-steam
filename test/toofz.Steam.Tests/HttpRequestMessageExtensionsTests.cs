@@ -32,7 +32,7 @@ namespace toofz.Steam.Tests
                 var clone = await request.CloneAsync();
 
                 // Assert
-                Assert.Equal(new Version("2.0"), clone.Version);
+                Assert.Equal(request.Version, clone.Version);
             }
 
             [DisplayFact(nameof(HttpRequestMessage.Content))]
