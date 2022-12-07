@@ -24,7 +24,7 @@
     <PackageReference Include="Flurl" Version="2.5.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Polly" Version="5.5.0" />
     <PackageReference Include="toofz.Build" Version="2.4.3">
       <PrivateAssets>All</PrivateAssets>
